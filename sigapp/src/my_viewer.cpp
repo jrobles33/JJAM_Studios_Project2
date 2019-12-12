@@ -58,7 +58,7 @@ void MyViewer::add_model(SnShape* s, GsVec p)
 	//g->add(t);
 	//t->set(manip->mat());
 	manip->child(g);
-	manip->visible(false); // call this to turn off mouse interaction
+	manip->visible(true); // call this to turn off mouse interaction
 
 	rootg()->add(manip);
 }
@@ -67,19 +67,20 @@ void MyViewer::build_scene()
 {
 	SnModel* floor[10];
 
-	float floorX, floorY, floorZ;
+	float floorX, floorY, floorZP, floorZN;
 
-	floorX = 10.0f;
+	floorX = 100.0f;
 	floorY = 0.0f;
-	floorZ = 0.0f;
+	floorZP = 20.0f;
+	floorZN = 0.0f;
 
 
 
 	for (int i = 0; i < 10; i++) {
-		GsPnt p0 = GsVec(-floorX, floorY, floorZ+10.0f);
-		GsPnt p1 = GsVec(-floorX, floorY, floorZ-10.0f);
-		GsPnt p2 = GsVec(floorX, floorY, floorZ-10.0f);
-		GsPnt p3 = GsVec(floorX, floorY, floorZ+10.0f);
+		GsPnt p0 = GsVec(-floorX, floorY, floorZP);
+		GsPnt p1 = GsVec(-floorX, floorY, floorZN);
+		GsPnt p2 = GsVec(floorX, floorY, floorZN);
+		GsPnt p3 = GsVec(floorX, floorY, floorZP);
 		floor[i] = new SnModel;
 		floor[i]->model()->V.push() = p0;
 		floor[i]->model()->V.push() = p1;
@@ -91,8 +92,9 @@ void MyViewer::build_scene()
 		floor[i]->model()->N.push() = GsVec(0, 1, 0);
 		floor[i]->model()->N.push() = GsVec(0, 1, 0);
 		floor[i]->model()->N.push() = GsVec(0, 1, 0);
-		floorX = floorX + 10.0f;
-		floorZ = floorZ + 10.0f;
+		floorY = floorY + 0.5f;
+		floorZP = floorZP + 20.0f;
+		floorZN = floorZN + 20.0f;
 	}
 
 	GsModel& m0 = *floor[0]->model();
@@ -108,23 +110,59 @@ void MyViewer::build_scene()
 
 	GsModel::Group& floorgroupGrass = *m0.G.push();
 	GsModel::Group& floorgroupRoad = *m1.G.push();
-	floorgroupGrass = *m2.G.push();
-	floorgroupRoad = *m3.G.push();
-	floorgroupGrass = *m4.G.push();
-	floorgroupRoad = *m5.G.push();
-	floorgroupGrass = *m6.G.push();
-	floorgroupRoad = *m7.G.push();
-	floorgroupRoad = *m8.G.push();
-	floorgroupGrass = *m9.G.push();
+	GsModel::Group& floorgroupGrass1 = *m2.G.push();
+	GsModel::Group& floorgroupRoad1 = *m3.G.push();
+	GsModel::Group& floorgroupGrass2 = *m4.G.push();
+	GsModel::Group& floorgroupRoad2 = *m5.G.push();
+	GsModel::Group& floorgroupGrass3 = *m6.G.push();
+	GsModel::Group& floorgroupRoad3 = *m7.G.push();
+	GsModel::Group& floorgroupGrass4 = *m8.G.push();
+	GsModel::Group& floorgroupRoad4 = *m9.G.push();
 
 	floorgroupGrass.fi = 0;
 	floorgroupRoad.fi = 0;
 	floorgroupGrass.fn = m0.F.size();
-	floorgroupRoad.fn = m0.F.size();
+	floorgroupRoad.fn = m1.F.size();
 	floorgroupGrass.dmap = new GsModel::Texture;
 	floorgroupRoad.dmap = new GsModel::Texture;
 	floorgroupGrass.dmap->fname.set("../src/Floor/grass.png");
 	floorgroupRoad.dmap->fname.set("../src/Floor/road.jpg");
+
+	floorgroupGrass1.fi = 0;
+	floorgroupRoad1.fi = 0;
+	floorgroupGrass1.fn = m2.F.size();
+	floorgroupRoad1.fn = m3.F.size();
+	floorgroupGrass1.dmap = new GsModel::Texture;
+	floorgroupRoad1.dmap = new GsModel::Texture;
+	floorgroupGrass1.dmap->fname.set("../src/Floor/grass.png");
+	floorgroupRoad1.dmap->fname.set("../src/Floor/road.jpg");
+
+	floorgroupGrass2.fi = 0;
+	floorgroupRoad2.fi = 0;
+	floorgroupGrass2.fn = m4.F.size();
+	floorgroupRoad2.fn = m5.F.size();
+	floorgroupGrass2.dmap = new GsModel::Texture;
+	floorgroupRoad2.dmap = new GsModel::Texture;
+	floorgroupGrass2.dmap->fname.set("../src/Floor/grass.png");
+	floorgroupRoad2.dmap->fname.set("../src/Floor/road.jpg");
+
+	floorgroupGrass3.fi = 0;
+	floorgroupRoad3.fi = 0;
+	floorgroupGrass3.fn = m6.F.size();
+	floorgroupRoad3.fn = m7.F.size();
+	floorgroupGrass3.dmap = new GsModel::Texture;
+	floorgroupRoad3.dmap = new GsModel::Texture;
+	floorgroupGrass3.dmap->fname.set("../src/Floor/grass.png");
+	floorgroupRoad3.dmap->fname.set("../src/Floor/road.jpg");
+	
+	floorgroupGrass4.fi = 0;
+	floorgroupRoad4.fi = 0;
+	floorgroupGrass4.fn = m8.F.size();
+	floorgroupRoad4.fn = m9.F.size();
+	floorgroupGrass4.dmap = new GsModel::Texture;
+	floorgroupRoad4.dmap = new GsModel::Texture;
+	floorgroupGrass4.dmap->fname.set("../src/Floor/grass.png");
+	floorgroupRoad4.dmap->fname.set("../src/Floor/road.jpg");
 
 	m0.M.push().init();
 	m1.M.push().init();
@@ -167,10 +205,10 @@ void MyViewer::build_scene()
 	m0.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 	m0.textured = true;
 
-	m1.T[0].set(1, 0);
-	m1.T[1].set(0, 0);
-	m1.T[2].set(0, 1);
-	m1.T[3].set(1, 1);
+	m1.T[0].set(0, 0);
+	m1.T[1].set(0, 1);
+	m1.T[2].set(1, 1);
+	m1.T[3].set(1, 0);
 	m1.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 	m1.textured = true;
 
@@ -181,10 +219,10 @@ void MyViewer::build_scene()
 	m2.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 	m2.textured = true;
 
-	m3.T[0].set(1, 0);
-	m3.T[1].set(0, 0);
-	m3.T[2].set(0, 1);
-	m3.T[3].set(1, 1);
+	m3.T[0].set(0, 0);
+	m3.T[1].set(0, 1);
+	m3.T[2].set(1, 1);
+	m3.T[3].set(1, 0);
 	m3.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 	m3.textured = true;
 
@@ -195,10 +233,10 @@ void MyViewer::build_scene()
 	m4.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 	m4.textured = true;
 
-	m5.T[0].set(1, 0);
-	m5.T[1].set(0, 0);
-	m5.T[2].set(0, 1);
-	m5.T[3].set(1, 1);
+	m5.T[0].set(0, 0);
+	m5.T[1].set(0, 1);
+	m5.T[2].set(1, 1);
+	m5.T[3].set(1, 0);
 	m5.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 	m5.textured = true;
 
@@ -209,10 +247,10 @@ void MyViewer::build_scene()
 	m6.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 	m6.textured = true;
 
-	m7.T[0].set(1, 0);
-	m7.T[1].set(0, 0);
-	m7.T[2].set(0, 1);
-	m7.T[3].set(1, 1);
+	m7.T[0].set(0, 0);
+	m7.T[1].set(0, 1);
+	m7.T[2].set(1, 1);
+	m7.T[3].set(1, 0);
 	m7.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 	m7.textured = true;
 
@@ -223,10 +261,10 @@ void MyViewer::build_scene()
 	m8.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 	m8.textured = true;
 
-	m9.T[0].set(1, 0);
-	m9.T[1].set(0, 0);
-	m9.T[2].set(0, 1);
-	m9.T[3].set(1, 1);
+	m9.T[0].set(0, 0);
+	m9.T[1].set(0, 1);
+	m9.T[2].set(1, 1);
+	m9.T[3].set(1, 0);
 	m9.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 	m9.textured = true;
 
