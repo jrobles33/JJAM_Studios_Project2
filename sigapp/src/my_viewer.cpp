@@ -58,7 +58,7 @@ void MyViewer::add_model(SnShape* s, GsVec p)
 	//g->add(t);
 	//t->set(manip->mat());
 	manip->child(g);
-	manip->visible(true); // call this to turn off mouse interaction
+	manip->visible(false); // call this to turn off mouse interaction
 
 	rootg()->add(manip);
 }
@@ -74,7 +74,11 @@ void MyViewer::build_scene()
 	floorZP = 20.0f;
 	floorZN = 0.0f;
 
-
+	SnTransform* global = new SnTransform;
+	GsMat m;
+	m.roty(gspi);
+	global->set(m);
+	rootg()->add(global);
 
 	for (int i = 0; i < 10; i++) {
 		GsPnt p0 = GsVec(-floorX, floorY, floorZP);
@@ -92,7 +96,7 @@ void MyViewer::build_scene()
 		floor[i]->model()->N.push() = GsVec(0, 1, 0);
 		floor[i]->model()->N.push() = GsVec(0, 1, 0);
 		floor[i]->model()->N.push() = GsVec(0, 1, 0);
-		floorY = floorY + 0.5f;
+		//floorY = floorY + 0.5f;
 		floorZP = floorZP + 20.0f;
 		floorZN = floorZN + 20.0f;
 	}
@@ -116,8 +120,8 @@ void MyViewer::build_scene()
 	GsModel::Group& floorgroupRoad2 = *m5.G.push();
 	GsModel::Group& floorgroupGrass3 = *m6.G.push();
 	GsModel::Group& floorgroupRoad3 = *m7.G.push();
-	GsModel::Group& floorgroupGrass4 = *m8.G.push();
-	GsModel::Group& floorgroupRoad4 = *m9.G.push();
+	GsModel::Group& floorgroupGrass4 = *m9.G.push();
+	GsModel::Group& floorgroupRoad4 = *m8.G.push();
 
 	floorgroupGrass.fi = 0;
 	floorgroupRoad.fi = 0;
@@ -254,23 +258,41 @@ void MyViewer::build_scene()
 	m7.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 	m7.textured = true;
 
-	m8.T[0].set(1, 0);
-	m8.T[1].set(0, 0);
-	m8.T[2].set(0, 1);
-	m8.T[3].set(1, 1);
+	m8.T[0].set(0, 0);
+	m8.T[1].set(0, 1);
+	m8.T[2].set(1, 1);
+	m8.T[3].set(1, 0);
 	m8.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 	m8.textured = true;
 
-	m9.T[0].set(0, 0);
-	m9.T[1].set(0, 1);
-	m9.T[2].set(1, 1);
-	m9.T[3].set(1, 0);
+	m9.T[0].set(1, 0);
+	m9.T[1].set(0, 0);
+	m9.T[2].set(0, 1);
+	m9.T[3].set(1, 1);
 	m9.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 	m9.textured = true;
 
 	for (int i = 0; i < 10; i++) {
 		rootg()->add(floor[i]);
 	}
+
+	GsBox b1, b2;
+
+	SnModel* tree1 = new SnModel;
+	tree1->model()->load_obj("../src/Lowpoly_tree_sample.obj");
+	tree1->model()->centralize();
+	tree1->model()->get_bounding_box(b1);
+	tree1->model()->translate(GsVec(-40, (b1.dy() / 2), 50));
+	rootg()->add(tree1);
+
+	SnModel* tree2 = new SnModel;
+	tree2->model()->load_obj("../src/Lowpoly_tree_sample.obj");
+	tree2->model()->centralize();
+	tree2->model()->get_bounding_box(b2);
+	tree2->model()->rotate(GsQuat(GsVec::j, gspi));
+	tree2->model()->translate(GsVec(50, (b2.dy() / 2), 130));
+	
+	rootg()->add(tree2);
 
 	
 	/*//GsModel* ground = new GsModel;
