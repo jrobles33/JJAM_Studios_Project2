@@ -286,11 +286,14 @@ void MyViewer::build_scene()
 	rootg()->add(tree1);
 
 	SnModel* tree2 = new SnModel;
-	tree2->model()->load_obj("../src/Lowpoly_tree_sample.obj");
+	tree2->model()->load_obj("../src/LowPolyNature.obj");
 	tree2->model()->centralize();
 	tree2->model()->get_bounding_box(b2);
-	tree2->model()->rotate(GsQuat(GsVec::j, gspi));
-	tree2->model()->translate(GsVec(50, (b2.dy() / 2), 130));
+	tree2->model()->scale(2);
+	tree2->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
+	tree2->model()->rotate(GsQuat(GsVec::j, -gspidiv2));
+	tree2->model()->translate(GsVec(50, (b2.dy() / 2) - 6, 130));
+	
 	
 	rootg()->add(tree2);
 
