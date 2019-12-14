@@ -304,7 +304,8 @@ void MyViewer::build_scene()
 	BirdT = new SnTransform;
 	Bird->model()->scale(5);
 	birdX, birdZ = 0;
-	birdY, startingbirdY = ((birdBox.dy() / 2) + 5);
+	birdY = ( 5 * (birdBox.dy() / 2));
+	startingbirdY = (5 * (birdBox.dy() / 2));
 	BirdM.translation(GsVec(birdX, birdY, birdZ));
 	BirdT->set(BirdM);
 	BirdGroup->add(BirdT);
