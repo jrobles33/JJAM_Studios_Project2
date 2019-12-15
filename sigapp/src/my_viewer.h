@@ -35,14 +35,18 @@ public:
 	SnTransform* BirdT; // our bird transformations
 	SnTransform* floorT;//floor global translation
 	SnTransform* floormoveT[10]; //individual floor translations
-	SnTransform* flyT; // flying bird transformation
-	GsMat BirdM, floorM, flyM, wingM;
-	GsMat rot, flyTrans;
+	GsMat BirdM, floorM, wingM;
 	GsMat floormoveM[10];
 	bool SceneMoving;
-	bool forward;
+	bool forward, left, right;
 	SnTransform* leftWT;
 	SnTransform* rightWT;
+
+	//flying bird stuff
+	SnTransform* flyT, * flyMidT, * flyLeftT, * flyRightT;
+	GsMat flyM, flyMidM, flyLeftM, flyRightM;
+	GsMat rot, flyTo, flyBack;
+
 	MyViewer(int x, int y, int w, int h, const char* l);
 	void build_ui();
 	void add_model(SnShape* s, GsVec p);

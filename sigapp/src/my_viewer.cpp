@@ -379,27 +379,60 @@ void MyViewer::build_scene()
 	BirdGroup->add(rightwingGroup);
 
 
+	flyT = new SnTransform;
+	flyMidT = new SnTransform;
+	flyLeftT = new SnTransform;
+	flyRightT = new SnTransform;
+
+	SnGroup* flyWhole = new SnGroup;
+	SnGroup* flyMidG = new SnGroup;
+	SnGroup* flyLeftG = new SnGroup;
+	SnGroup* flyRightG = new SnGroup;
 
 	//Flying bird for scene
-	SnModel * fly = new SnModel;
-	SnGroup * flyG = new SnGroup;
-	flyG->separator(true);
-	fly->model()->load_obj("../src/Models_and_Textures/flyer.obj");
-	fly->model()->centralize();
-	fly->model()->get_bounding_box(birdBox);
-	flyT = new SnTransform;
-	fly->model()->scale((float)0.5);
-	flyM.translation(GsVec(40.0f, 80.0f, 60.0f));
-	flyT->set(flyM);
-	flyG->add(flyT);
-	flyG->add(fly);
+	GsModel* flyMid = new GsModel;
+	SnModel* flyMidS = new SnModel;
+	flyMid->load("../src/Models_and_Textures/flyerMid.obj");
+	flyMid->scale((float)0.5);
+	flyMid->translate(GsVec(40.0f, 80.0f, 60.0f));
+	flyMidS->model(flyMid);
+
+	GsModel* flyLeft = new GsModel;
+	SnModel* flyLeftS = new SnModel;
+	flyLeft->load("../src/Models_and_Textures/flyerLeft.obj");
+	flyLeft->scale((float)0.5);
+	flyLeft->translate(GsVec(40.0f, 80.0f, 60.0f));
+	flyLeftS->model(flyLeft);
+
+	GsModel* flyRight = new GsModel;
+	SnModel* flyRightS = new SnModel;
+	flyRight->load("../src/Models_and_Textures/flyerRight.obj");
+	flyRight->scale((float)0.5);
+	flyRight->translate(GsVec(40.0f, 80.0f, 60.0f));
+	flyRightS->model(flyRight);
+
+	flyMidG->separator(true);
+	flyMidG->add(flyMidT);
+	flyMidG->add(flyMidS);
+	flyWhole->add(flyMidG);
+
+	flyLeftG->separator(true);
+	flyLeftG->add(flyLeftT);
+	flyLeftG->add(flyLeftS);
+	flyWhole->add(flyLeftG);
+
+	flyRightG->separator(true);
+	flyRightG->add(flyRightT);
+	flyRightG->add(flyRightS);
+	flyWhole->add(flyRightG);
 
 	//Add everything to rootg in order
 	rootg()->add(global);
 	rootg()->add(BirdGroup);
 	rootg()->add(nature);
 	rootg()->add(floorG);
-	rootg()->add(flyG);
+	rootg()->add(flyT);
+	rootg()->add(flyWhole);
 
 
 	/*//GsModel* ground = new GsModel;
@@ -928,11 +961,24 @@ void MyViewer::SceneMovement() {
 	double ti = 0, lt = 0, t0 = gs_time();
 	float increment = gs2pi / 60;
 	while (forward == false) {
-		rot.roty(-1 * float(GS_2PI) / 30.0f);
+		rot.roty(0.25f * (-1 * float(GS_2PI) / 30.0f));
 		flyM = flyT->get() * rot;
-		flyTrans.translation(GsVec(5.0f, 0, 5.0f));
-		flyM = flyM * flyTrans;
 		flyT->set(flyM);
+
+		rot.rotz(0.25f * (float(GS_2PI) / 30.0f));
+		flyTo.translation(GsVec(40.0f, 80.0f, 60.0f));
+		flyLeftM = flyLeftT->get() * flyTo;
+		flyLeftM = flyLeftM * rot;
+		flyBack.translation(GsVec(-40.0f, -80.0f, -60.0f));
+		flyLeftM = flyLeftM * flyBack;
+		flyLeftT->set(flyLeftM);
+
+		rot.rotz(0.25f * (-1 * float(GS_2PI) / 30.0f));
+		flyRightM = flyRightT->get() * flyTo;
+		flyRightM = flyRightM * rot;
+		flyRightM = flyRightM * flyBack;
+		flyRightT->set(flyRightM);
+		flyRightT->set(flyRightM);
 	}
 }
 
@@ -1022,11 +1068,58 @@ void MyViewer::run_animation()
 			floorT->set(floorM);
 
 
-			rot.roty(-1 * float(GS_2PI) / 30.0f);
+			rot.roty(0.25f * (-1 * float(GS_2PI) / 30.0f));
 			flyM = flyT->get() * rot;
-			flyTrans.translation(GsVec(5.0f, 0, 5.0f));
-			flyM = flyM * flyTrans;
 			flyT->set(flyM);
+
+			rot.rotz(0.25f * (float(GS_2PI) / 30.0f));
+			flyTo.translation(GsVec(40.0f, 80.0f, 60.0f));
+			flyLeftM = flyLeftT->get() * flyTo;
+			flyLeftM = flyLeftM * rot;
+			flyBack.translation(GsVec(-40.0f, -80.0f, -60.0f));
+			flyLeftM = flyLeftM * flyBack;
+			flyLeftT->set(flyLeftM);
+
+			rot.rotz(0.25f * (-1 * float(GS_2PI) / 30.0f));
+			flyRightM = flyRightT->get() * flyTo;
+			flyRightM = flyRightM * rot;
+			flyRightM = flyRightM * flyBack;
+			flyRightT->set(flyRightM);
+			flyRightT->set(flyRightM);
+
+			//if ((int)t % 2 == 0) {
+			//	rot.rotz(0.25f * (-1 * float(GS_2PI) / 30.0f));
+			//	flyTo.translation(GsVec(40.0f, 80.0f, 60.0f));
+			//	flyLeftM = flyLeftT->get() * flyTo;
+			//	flyLeftM = flyLeftM * rot;
+			//	flyBack.translation(GsVec(-40.0f, -80.0f, -60.0f));
+			//	flyLeftM = flyLeftM * flyBack;
+			//	flyLeftT->set(flyLeftM);
+
+			//	rot.rotz(0.25f * (-1 * float(GS_2PI) / 30.0f));
+			//	flyRightM = flyRightT->get() * flyTo;
+			//	flyRightM = flyRightM * rot;
+			//	flyRightM = flyRightM * flyBack;
+			//	flyRightT->set(flyRightM);
+			//	flyRightT->set(flyRightM);
+			//}
+
+			//if ((int)t % 2 != 0) {
+			//	rot.rotz(0.25f * (float(GS_2PI) / 30.0f));
+			//	flyTo.translation(GsVec(40.0f, 80.0f, 60.0f));
+			//	flyLeftM = flyLeftT->get() * flyTo;
+			//	flyLeftM = flyLeftM * rot;
+			//	flyBack.translation(GsVec(-40.0f, -80.0f, -60.0f));
+			//	flyLeftM = flyLeftM * flyBack;
+			//	flyLeftT->set(flyLeftM);
+
+			//	rot.rotz(0.25f * (float(GS_2PI) / 30.0f));
+			//	flyRightM = flyRightT->get() * flyTo;
+			//	flyRightM = flyRightM * rot;
+			//	flyRightM = flyRightM * flyBack;
+			//	flyRightT->set(flyRightM);
+			//	flyRightT->set(flyRightM);
+			//}
 
 			render(); // notify it needs redraw
 			ws_check(); // redraw now
@@ -1197,11 +1290,59 @@ void MyViewer::run_animation()
 		while (t - lt < frdt) { ws_check(); t = gs_time() - t0; } // wait until it is time for next frame
 		lt = t;
 
-		rot.roty(-1 * float(GS_2PI) / 30.0f);
+		rot.roty(0.25f* (-1 * float(GS_2PI) / 30.0f));
 		flyM = flyT->get() * rot;
-		flyTrans.translation(GsVec(5.0f, 0, 5.0f));
-		flyM = flyM * flyTrans;
 		flyT->set(flyM);
+
+		rot.rotz(0.25f* (float(GS_2PI) / 30.0f));
+		flyTo.translation(GsVec(40.0f, 80.0f, 60.0f));
+		flyLeftM = flyLeftT->get() * flyTo;
+		flyLeftM = flyLeftM * rot;
+		flyBack.translation(GsVec(-40.0f, -80.0f, -60.0f));
+		flyLeftM = flyLeftM * flyBack;
+		flyLeftT->set(flyLeftM);
+
+		rot.rotz(0.25f* (-1 * float(GS_2PI) / 30.0f));
+		flyRightM = flyRightT->get() * flyTo;
+		flyRightM = flyRightM * rot;
+		flyRightM = flyRightM * flyBack;
+		flyRightT->set(flyRightM);
+		flyRightT->set(flyRightM);
+
+		/*if ((int)t % 2 == 0) {
+			rot.rotz(0.25f * (-1 * float(GS_2PI) / 30.0f));
+			flyTo.translation(GsVec(40.0f, 80.0f, 60.0f));
+			flyLeftM = flyLeftT->get() * flyTo;
+			flyLeftM = flyLeftM * rot;
+			flyBack.translation(GsVec(-40.0f, -80.0f, -60.0f));
+			flyLeftM = flyLeftM * flyBack;
+			flyLeftT->set(flyLeftM);
+
+			rot.rotz(0.25f * (-1 * float(GS_2PI) / 30.0f));
+			flyRightM = flyRightT->get() * flyTo;
+			flyRightM = flyRightM * rot;
+			flyRightM = flyRightM * flyBack;
+			flyRightT->set(flyRightM);
+			flyRightT->set(flyRightM);
+		}
+
+		if ((int)t % 2 != 0) {
+			rot.rotz(0.25f * (float(GS_2PI) / 30.0f));
+			flyTo.translation(GsVec(40.0f, 80.0f, 60.0f));
+			flyLeftM = flyLeftT->get() * flyTo;
+			flyLeftM = flyLeftM * rot;
+			flyBack.translation(GsVec(-40.0f, -80.0f, -60.0f));
+			flyLeftM = flyLeftM * flyBack;
+			flyLeftT->set(flyLeftM);
+
+			rot.rotz(0.25f * (float(GS_2PI) / 30.0f));
+			flyRightM = flyRightT->get() * flyTo;
+			flyRightM = flyRightM * rot;
+			flyRightM = flyRightM * flyBack;
+			flyRightT->set(flyRightM);
+			flyRightT->set(flyRightM);
+		}*/
+
 		render();
 		ws_check();
 	} while (forward == false);
