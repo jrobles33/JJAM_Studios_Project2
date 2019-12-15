@@ -34,7 +34,7 @@ void MyViewer::build_ui()
 	p->add(new UiButton("Exit", EvExit)); p->top()->separate();
 }
 
-void MyViewer::add_model(SnShape* s, GsVec p)
+void MyViewer::add_model(SnShape * s, GsVec p)
 {
 	// This method demonstrates how to add some elements to our scene graph: lines,
 	// and a shape, and all in a group under a SnManipulator.
@@ -65,20 +65,18 @@ void MyViewer::add_model(SnShape* s, GsVec p)
 
 void MyViewer::build_scene()
 {
+
+	//The floor of the scene
 	SnModel* floor[10];
-
 	float floorX, floorY, floorZP, floorZN;
-
 	floorX = 100.0f;
 	floorY = 0.0f;
 	floorZP = 20.0f;
 	floorZN = 0.0f;
-
 	SnTransform* global = new SnTransform;
 	GsMat m;
 	m.roty(gspi);
 	global->set(m);
-	rootg()->add(global);
 
 	for (int i = 0; i < 10; i++) {
 		GsPnt p0 = GsVec(-floorX, floorY, floorZP);
@@ -96,7 +94,6 @@ void MyViewer::build_scene()
 		floor[i]->model()->N.push() = GsVec(0, 1, 0);
 		floor[i]->model()->N.push() = GsVec(0, 1, 0);
 		floor[i]->model()->N.push() = GsVec(0, 1, 0);
-		//floorY = floorY + 0.5f;
 		floorZP = floorZP + 20.0f;
 		floorZN = floorZN + 20.0f;
 	}
@@ -120,8 +117,8 @@ void MyViewer::build_scene()
 	GsModel::Group& floorgroupRoad2 = *m5.G.push();
 	GsModel::Group& floorgroupGrass3 = *m6.G.push();
 	GsModel::Group& floorgroupRoad3 = *m7.G.push();
-	GsModel::Group& floorgroupGrass4 = *m9.G.push();
-	GsModel::Group& floorgroupRoad4 = *m8.G.push();
+	GsModel::Group& floorgroupGrass4 = *m8.G.push();
+	GsModel::Group& floorgroupRoad4 = *m9.G.push();
 
 	floorgroupGrass.fi = 0;
 	floorgroupRoad.fi = 0;
@@ -158,7 +155,7 @@ void MyViewer::build_scene()
 	floorgroupRoad3.dmap = new GsModel::Texture;
 	floorgroupGrass3.dmap->fname.set("../src/Models_and_Textures/grass.png");
 	floorgroupRoad3.dmap->fname.set("../src/Models_and_Textures/road.jpg");
-	
+
 	floorgroupGrass4.fi = 0;
 	floorgroupRoad4.fi = 0;
 	floorgroupGrass4.fn = m8.F.size();
@@ -258,33 +255,43 @@ void MyViewer::build_scene()
 	m7.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 	m7.textured = true;
 
-	m8.T[0].set(0, 0);
-	m8.T[1].set(0, 1);
-	m8.T[2].set(1, 1);
-	m8.T[3].set(1, 0);
+	m8.T[0].set(1, 0);
+	m8.T[1].set(0, 0);
+	m8.T[2].set(0, 1);
+	m8.T[3].set(1, 1);
 	m8.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 	m8.textured = true;
 
-	m9.T[0].set(1, 0);
-	m9.T[1].set(0, 0);
-	m9.T[2].set(0, 1);
-	m9.T[3].set(1, 1);
+	m9.T[0].set(0, 0);
+	m9.T[1].set(0, 1);
+	m9.T[2].set(1, 1);
+	m9.T[3].set(1, 0);
 	m9.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 	m9.textured = true;
 
+	SnGroup* floorG = new SnGroup;
+	floorG->separator(true);
+
+	floorz = 0.0f;
+	floorT = new SnTransform;
+	floorM.translation(GsVec(0.0f, 0.0f, floorz));
+	floorT->set(floorM);
+	floorG->add(floorT);
+
 	for (int i = 0; i < 10; i++) {
-		rootg()->add(floor[i]);
-	}
+		floorG->add(floor[i]);
+	}	
 
-
+	//Nature and other objects in scene
+	SnGroup* nature = new SnGroup;
+	nature->separator(true);
 	SnModel* tree1 = new SnModel;
 	tree1->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
 	tree1->model()->centralize();
 	tree1->model()->get_bounding_box(b1);
 	tree1->model()->translate(GsVec(-40, (b1.dy() / 2), 50));
-	rootg()->add(tree1);
-
-	SnModel* tree2 = new SnModel;
+	nature->add(tree1);
+	SnModel * tree2 = new SnModel;
 	tree2->model()->load_obj("../src/Models_and_Textures/LowPolyNature.obj");
 	tree2->model()->centralize();
 	tree2->model()->get_bounding_box(b2);
@@ -292,94 +299,83 @@ void MyViewer::build_scene()
 	tree2->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	tree2->model()->rotate(GsQuat(GsVec::j, -gspidiv2));
 	tree2->model()->translate(GsVec(50, (b2.dy() / 2) - 6, 130));
-	
-	
-	rootg()->add(tree2);
+	nature->add(tree2);
 
+	//Bird that acts as the player
 	SnModel* Bird = new SnModel;
 	SnGroup* BirdGroup = new SnGroup;
+	BirdGroup->separator(true);
 	Bird->model()->load_obj("../src/Models_and_Textures/bird.obj");
 	Bird->model()->centralize();
 	Bird->model()->get_bounding_box(birdBox);
 	BirdT = new SnTransform;
 	Bird->model()->scale(5);
-	birdX, birdZ = 0;
-	birdY = ( 5 * (birdBox.dy() / 2));
+	birdX = 0;
+	birdZ = 10;
+	birdY = (5 * (birdBox.dy() / 2));
 	startingbirdY = (5 * (birdBox.dy() / 2));
 	BirdM.translation(GsVec(birdX, birdY, birdZ));
 	BirdT->set(BirdM);
 	BirdGroup->add(BirdT);
 	BirdGroup->add(Bird);
-	rootg()->add(BirdGroup);
-
 	
+	//Add everything to rootg in order
+	rootg()->add(global);
+	rootg()->add(BirdGroup);
+	rootg()->add(nature);
+	rootg()->add(floorG);
+
+
 	/*//GsModel* ground = new GsModel;
 	//GsBox floor;
 	//SnShape
 	update = true;
-
 	GsPnt p0 = GsVec(-100.0f, -13.0f, 100.0f); //top left
 	GsPnt p1 = GsVec(-100.0f, -13.0f, -100.0f); //bottom left
 	GsPnt p2 = GsVec(100.0f, -13.0f, -100.0f); //bottom right
 	GsPnt p3 = GsVec(100.0f, -13.0f, 100.0f); //top right
-
 	//floor.a = p0;
 	//floor.b = p2;
-
 	//ground->make_box(floor);
-
 	SnModel* daground = new SnModel;
 	daground->model()->V.push() = p0;
 	daground->model()->V.push() = p1;
 	daground->model()->V.push() = p2;
 	daground->model()->V.push() = p3;
-
 	daground->model()->F.push() = GsModel::Face(0, 2, 1);
 	daground->model()->F.push() = GsModel::Face(0, 3, 2);
-
 	daground->model()->N.push() = GsVec(0, 1, 0);
 	daground->model()->N.push() = GsVec(0, 1, 0);
 	daground->model()->N.push() = GsVec(0, 1, 0);
 	daground->model()->N.push() = GsVec(0, 1, 0);
-
 	GsModel& sans = *daground->model();
-
 	GsModel::Group& bruh = *sans.G.push();
 	bruh.fi = 0;
 	bruh.fn = sans.F.size();
 	bruh.dmap = new GsModel::Texture;
 	bruh.dmap->fname.set("../src/Snake/eh.jpg");
 	sans.M.push().init();
-
 	int nv = sans.V.size();
 	sans.T.size(nv);
-
 	sans.T[0].set(1, 0);
 	sans.T[1].set(0, 0);
 	sans.T[2].set(0, 1);
 	sans.T[3].set(1, 1);
-
 	sans.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 	sans.textured = true;
-
-
 	rootg()->add(daground);
-
 	globalT = new SnTransform;
-	
-	
+
+
 	GsMat globalRot;
 	globalRot.rotx((float)-GS_PIDIV2);
 	globalT->set(globalRot);
 
-	
 	SnGroup* g = new SnGroup; //to hold all the models and transformations
 	SnModel* model[19]; //to hold all the models
 	SnModel* sModel[19];
 	GsMat initialRot;
 	SnTransform* globalST = new SnTransform;
-
-
 	//Our Light Ball
 	SnPrimitive* s = new SnPrimitive;
 	s->color(GsColor::yellow);
@@ -388,16 +384,14 @@ void MyViewer::build_scene()
 	_gLight->get<SnTransform>(0)->get().setrans(lightPos);
 	//_gLight->get<SnTransform>(0)->get().rotx((float)-GS_PIDIV2);
 	//_gLight->get<SnTransform>(0)->get().mult(_gLight->get<SnTransform>(0)->get(), globalRot);
-
 	//our shadow material
 	SnMaterial* snm = new SnMaterial;
 	GsMaterial mtl;
 	mtl.diffuse = GsColor::black;
 	rootg()->add(_gLight);
 	g->add(globalT);
-	
-	globalST->set(globalRot);
 
+	globalST->set(globalRot);
 	model[0] = new SnModel;
 	if (!model[0]->model()->load_obj("../src/Snake/Snake_Head.obj"))
 	{
@@ -413,7 +407,6 @@ void MyViewer::build_scene()
 	//t[0]->get().mult(t[0]->get(), initialRot);
 	g->add(t[0]);
 	g->add(model[0]);
-
 	model[1] = new SnModel;
 	if (!model[1]->model()->load_obj("../src/Snake/sphere.obj")) {
 		gsout << "body1 was not loaded" << gsnl;
@@ -425,7 +418,6 @@ void MyViewer::build_scene()
 	t[1]->set(m[1]);
 	g->add(t[1]);
 	g->add(model[1]);
-
 	model[2] = new SnModel;
 	if (!model[2]->model()->load_obj("../src/Snake/Snake_Body1.obj")) {
 		gsout << "body1 was not loaded" << gsnl;
@@ -437,7 +429,6 @@ void MyViewer::build_scene()
 	t[2]->set(m[2]);
 	g->add(t[2]);
 	g->add(model[2]);
-
 	model[3] = new SnModel;
 	if (!model[3]->model()->load_obj("../src/Snake/sphere.obj")) {
 		gsout << "sphere2 was not loaded" << gsnl;
@@ -449,7 +440,6 @@ void MyViewer::build_scene()
 	t[3]->set(m[3]);
 	g->add(t[3]);
 	g->add(model[3]);
-
 	model[4] = new SnModel;
 	if (!model[4]->model()->load_obj("../src/Snake/Snake_Body2.obj")) {
 		gsout << "body2 was not loaded" << gsnl;
@@ -461,7 +451,6 @@ void MyViewer::build_scene()
 	t[4]->set(m[4]);
 	g->add(t[4]);
 	g->add(model[4]);
-
 	model[5] = new SnModel;
 	if (!model[5]->model()->load_obj("../src/Snake/sphere.obj")) {
 		gsout << "body1 was not loaded" << gsnl;
@@ -473,7 +462,6 @@ void MyViewer::build_scene()
 	t[5]->set(m[5]);
 	g->add(t[5]);
 	g->add(model[5]);
-
 	model[6] = new SnModel;
 	if (!model[6]->model()->load_obj("../src/Snake/Snake_Body3.obj")) {
 		gsout << "body3 was not loaded" << gsnl;
@@ -485,7 +473,6 @@ void MyViewer::build_scene()
 	t[6]->set(m[6]);
 	g->add(t[6]);
 	g->add(model[6]);
-
 	model[7] = new SnModel;
 	if (!model[7]->model()->load_obj("../src/Snake/sphere.obj")) {
 		gsout << "body1 was not loaded" << gsnl;
@@ -497,7 +484,6 @@ void MyViewer::build_scene()
 	t[7]->set(m[7]);
 	g->add(t[7]);
 	g->add(model[7]);
-
 	model[8] = new SnModel;
 	if (!model[8]->model()->load_obj("../src/Snake/Snake_Body4.obj")) {
 		gsout << "body4 was not loaded" << gsnl;
@@ -509,7 +495,6 @@ void MyViewer::build_scene()
 	t[8]->set(m[8]);
 	g->add(t[8]);
 	g->add(model[8]);
-
 	model[9] = new SnModel;
 	if (!model[9]->model()->load_obj("../src/Snake/sphere.obj")) {
 		gsout << "body1 was not loaded" << gsnl;
@@ -521,7 +506,6 @@ void MyViewer::build_scene()
 	t[9]->set(m[9]);
 	g->add(t[9]);
 	g->add(model[9]);
-
 	model[10] = new SnModel;
 	if (!model[10]->model()->load_obj("../src/Snake/Snake_Body5.obj")) {
 		gsout << "body5 was not loaded" << gsnl;
@@ -533,7 +517,6 @@ void MyViewer::build_scene()
 	t[10]->set(m[10]);
 	g->add(t[10]);
 	g->add(model[10]);
-
 	model[11] = new SnModel;
 	if (!model[11]->model()->load_obj("../src/Snake/sphere.obj")) {
 		gsout << "body1 was not loaded" << gsnl;
@@ -545,7 +528,6 @@ void MyViewer::build_scene()
 	t[11]->set(m[11]);
 	g->add(t[11]);
 	g->add(model[11]);
-
 	model[12] = new SnModel;
 	if (!model[12]->model()->load_obj("../src/Snake/Snake_Body6.obj")) {
 		gsout << "body6 was not loaded" << gsnl;
@@ -557,7 +539,6 @@ void MyViewer::build_scene()
 	t[12]->set(m[12]);
 	g->add(t[12]);
 	g->add(model[12]);
-
 	model[13] = new SnModel;
 	if (!model[13]->model()->load_obj("../src/Snake/sphere.obj")) {
 		gsout << "body1 was not loaded" << gsnl;
@@ -569,7 +550,6 @@ void MyViewer::build_scene()
 	t[13]->set(m[13]);
 	g->add(t[13]);
 	g->add(model[13]);
-
 	model[14] = new SnModel;
 	if (!model[14]->model()->load_obj("../src/Snake/Snake_Body7.obj")) {
 		gsout << "body7 was not loaded" << gsnl;
@@ -581,7 +561,6 @@ void MyViewer::build_scene()
 	t[14]->set(m[14]);
 	g->add(t[14]);
 	g->add(model[14]);
-
 	model[15] = new SnModel;
 	if (!model[15]->model()->load_obj("../src/Snake/sphere.obj")) {
 		gsout << "body1 was not loaded" << gsnl;
@@ -593,8 +572,6 @@ void MyViewer::build_scene()
 	t[15]->set(m[15]);
 	g->add(t[15]);
 	g->add(model[15]);
-
-
 	model[16] = new SnModel;
 	if (!model[16]->model()->load_obj("../src/Snake/Snake_Tail.obj")) {
 		gsout << "tail was not loaded" << gsnl;
@@ -606,20 +583,12 @@ void MyViewer::build_scene()
 	t[16]->set(m[16]);
 	g->add(t[16]);
 	g->add(model[16]);
-
-
-
-
-
-
 	SnGroup* dshadowg = new SnGroup;
 	dshadowg->separator(true);
 	dshadowg->add(_tShadow1 = new SnTransform);
 	//globalST->get().rotx((float)GS_PIDIV2);
-	
 
 	//dshadowg->add(globalST);
-
 	sModel[0] = new SnModel;
 	if (!sModel[0]->model()->load_obj("../src/Snake/Snake_Head.obj"))
 	{
@@ -634,7 +603,6 @@ void MyViewer::build_scene()
 	//sT[0]->get().mult(sT[0]->get(), initialRot);
 	dshadowg->add(sT[0]);
 	dshadowg->add(sModel[0]);
-
 	sModel[1] = new SnModel;
 	if (!sModel[1]->model()->load_obj("../src/Snake/sphere.obj")) {
 		gsout << "body1 was not loaded" << gsnl;
@@ -646,7 +614,6 @@ void MyViewer::build_scene()
 	sT[1]->set(sM[1]);
 	dshadowg->add(sT[1]);
 	dshadowg->add(sModel[1]);
-
 	sModel[2] = new SnModel;
 	if (!sModel[2]->model()->load_obj("../src/Snake/Snake_Body1.obj")) {
 		gsout << "body1 was not loaded" << gsnl;
@@ -658,7 +625,6 @@ void MyViewer::build_scene()
 	sT[2]->set(sM[2]);
 	dshadowg->add(sT[2]);
 	dshadowg->add(sModel[2]);
-
 	sModel[3] = new SnModel;
 	if (!sModel[3]->model()->load_obj("../src/Snake/sphere.obj")) {
 		gsout << "sphere2 was not loaded" << gsnl;
@@ -670,7 +636,6 @@ void MyViewer::build_scene()
 	sT[3]->set(sM[3]);
 	dshadowg->add(sT[3]);
 	dshadowg->add(sModel[3]);
-
 	sModel[4] = new SnModel;
 	if (!sModel[4]->model()->load_obj("../src/Snake/Snake_Body2.obj")) {
 		gsout << "body2 was not loaded" << gsnl;
@@ -682,7 +647,6 @@ void MyViewer::build_scene()
 	sT[4]->set(sM[4]);
 	dshadowg->add(sT[4]);
 	dshadowg->add(sModel[4]);
-
 	sModel[5] = new SnModel;
 	if (!sModel[5]->model()->load_obj("../src/Snake/sphere.obj")) {
 		gsout << "body1 was not loaded" << gsnl;
@@ -694,7 +658,6 @@ void MyViewer::build_scene()
 	sT[5]->set(sM[5]);
 	dshadowg->add(sT[5]);
 	dshadowg->add(sModel[5]);
-
 	sModel[6] = new SnModel;
 	if (!sModel[6]->model()->load_obj("../src/Snake/Snake_Body3.obj")) {
 		gsout << "body3 was not loaded" << gsnl;
@@ -706,7 +669,6 @@ void MyViewer::build_scene()
 	sT[6]->set(sM[6]);
 	dshadowg->add(sT[6]);
 	dshadowg->add(sModel[6]);
-
 	sModel[7] = new SnModel;
 	if (!sModel[7]->model()->load_obj("../src/Snake/sphere.obj")) {
 		gsout << "body1 was not loaded" << gsnl;
@@ -718,7 +680,6 @@ void MyViewer::build_scene()
 	sT[7]->set(sM[7]);
 	dshadowg->add(sT[7]);
 	dshadowg->add(sModel[7]);
-
 	sModel[8] = new SnModel;
 	if (!sModel[8]->model()->load_obj("../src/Snake/Snake_Body4.obj")) {
 		gsout << "body4 was not loaded" << gsnl;
@@ -730,7 +691,6 @@ void MyViewer::build_scene()
 	sT[8]->set(sM[8]);
 	dshadowg->add(sT[8]);
 	dshadowg->add(sModel[8]);
-
 	sModel[9] = new SnModel;
 	if (!sModel[9]->model()->load_obj("../src/Snake/sphere.obj")) {
 		gsout << "body1 was not loaded" << gsnl;
@@ -742,7 +702,6 @@ void MyViewer::build_scene()
 	sT[9]->set(sM[9]);
 	dshadowg->add(sT[9]);
 	dshadowg->add(sModel[9]);
-
 	sModel[10] = new SnModel;
 	if (!sModel[10]->model()->load_obj("../src/Snake/Snake_Body5.obj")) {
 		gsout << "body5 was not loaded" << gsnl;
@@ -754,7 +713,6 @@ void MyViewer::build_scene()
 	sT[10]->set(sM[10]);
 	dshadowg->add(sT[10]);
 	dshadowg->add(sModel[10]);
-
 	sModel[11] = new SnModel;
 	if (!sModel[11]->model()->load_obj("../src/Snake/sphere.obj")) {
 		gsout << "body1 was not loaded" << gsnl;
@@ -766,7 +724,6 @@ void MyViewer::build_scene()
 	sT[11]->set(sM[11]);
 	dshadowg->add(sT[11]);
 	dshadowg->add(sModel[11]);
-
 	sModel[12] = new SnModel;
 	if (!sModel[12]->model()->load_obj("../src/Snake/Snake_Body6.obj")) {
 		gsout << "body6 was not loaded" << gsnl;
@@ -778,7 +735,6 @@ void MyViewer::build_scene()
 	sT[12]->set(sM[12]);
 	dshadowg->add(sT[12]);
 	dshadowg->add(sModel[12]);
-
 	sModel[13] = new SnModel;
 	if (!sModel[13]->model()->load_obj("../src/Snake/sphere.obj")) {
 		gsout << "body1 was not loaded" << gsnl;
@@ -790,7 +746,6 @@ void MyViewer::build_scene()
 	sT[13]->set(sM[13]);
 	dshadowg->add(sT[13]);
 	dshadowg->add(sModel[13]);
-
 	sModel[14] = new SnModel;
 	if (!sModel[14]->model()->load_obj("../src/Snake/Snake_Body7.obj")) {
 		gsout << "body7 was not loaded" << gsnl;
@@ -802,7 +757,6 @@ void MyViewer::build_scene()
 	sT[14]->set(sM[14]);
 	dshadowg->add(sT[14]);
 	dshadowg->add(sModel[14]);
-
 	sModel[15] = new SnModel;
 	if (!sModel[15]->model()->load_obj("../src/Snake/sphere.obj")) {
 		gsout << "body1 was not loaded" << gsnl;
@@ -814,8 +768,6 @@ void MyViewer::build_scene()
 	sT[15]->set(sM[15]);
 	dshadowg->add(sT[15]);
 	dshadowg->add(sModel[15]);
-
-
 	sModel[16] = new SnModel;
 	if (!sModel[16]->model()->load_obj("../src/Snake/Snake_Tail.obj")) {
 		gsout << "tail was not loaded" << gsnl;
@@ -828,9 +780,6 @@ void MyViewer::build_scene()
 	dshadowg->add(sT[16]);
 	dshadowg->add(sModel[16]);
 
-
-
-	
 	/*dshadowg->add(model[0]);
 	dshadowg->add(model[1]);
 	dshadowg->add(model[2]);
@@ -852,8 +801,8 @@ void MyViewer::build_scene()
 	rootg()->add(dshadowg);
 	rootg()->add(snm);
 	*/
-	
-	
+
+
 
 }
 
@@ -875,7 +824,7 @@ void MyViewer::build_scene()
 
 void MyViewer::update_camera() {
 
-	 
+
 	//lt, t0 = gs_time();
 	//if (spaceCount == 2) {
 	//	do
@@ -946,24 +895,47 @@ void MyViewer::run_animation()
 		}
 		/*SnManipulator* manip = rootg()->get<SnManipulator>(12);
 		GsMat m = manip->mat();*/
-		double frdt = 1.0 / 30.0; // delta time to reach given number of frames per second
+		double frdt = 1.0 / 60.0; // delta time to reach given number of frames per second
 		double v = 4; // target velocity is 1 unit per second
 		double t = 0, lt = 0, t0 = gs_time();
+		float count = 0.0f;
 		do // run for a while:
 		{
 			while (t - lt < frdt) { ws_check(); t = gs_time() - t0; } // wait until it is time for next frame
 			double yinc = 0.5f;
-			if (t > 0.5) yinc = -yinc; // after 2 secs: go down
+			if (count >= 10.0f) yinc = -yinc; // after 2 secs: go down
 			lt = t;
-			birdY = birdY + (float)yinc;
+			if (birdY >= startingbirdY)
+				birdY = birdY + (float)yinc;
 			BirdM.translation(GsVec(birdX, birdY, birdZ));
 			BirdT->set(BirdM);
-			/*m.e24 += (float)yinc;
-			if (m.e24 < 0) m.e24 = 0; // make sure it does not go below 0
-			manip->initial_mat(m);*/
+			count += 0.5f;
+			floorz = floorz - 0.5f;
+			floorM.translation(GsVec(0, 0, floorz));
+			floorT->set(floorM);
 			render(); // notify it needs redraw
 			ws_check(); // redraw now
-		} while ( birdY > startingbirdY);
+		} while (/*birdY > startingbirdY &&*/ count < 20);
+
+
+		//double frdt1 = 1.0 / 60.0; // delta time to reach given number of frames per second
+		//double v1 = 4; // target velocity is 1 unit per second
+		//double t1 = 0, lt1 = 0, t01 = gs_time();
+		//float count = 0.0f;
+		//do // run for a while:
+		//{
+		//	while (t1 - lt1 < frdt1) { ws_check(); t1 = gs_time() - t01; } // wait until it is time for next frame
+		//	//if (t > 0.5) count = -count; // after 2 secs: go down
+		//	lt1 = t1;
+		//	count += 0.5f;
+		//	floorz = floorz - 0.5f;
+		//	floorM.translation(GsVec(0, 0, floorz));
+		//	floorT->set(floorM);
+		//	render(); // notify it needs redraw
+		//	ws_check(); // redraw now
+		//} while (count < 20);
+
+
 		_animating = false;
 		//sM[0].rotx((float)GS_PIDIV2);
 		////ANIMATION IMPLEMENTATION
@@ -1094,7 +1066,7 @@ void MyViewer::run_animation()
 
 }
 
-	
+
 
 
 void MyViewer::show_normals(bool view)
@@ -1121,14 +1093,14 @@ void MyViewer::show_normals(bool view)
 			for (int i = 0; i < m.F.size(); i++)
 			{
 				const GsVec& a = m.V[m.F[i].a]; l->push(a, a + (*n++) * f);
-				const GsVec& b = m.V[m.F[i].b]; l->push(b, b + (*n++) * f);
-				const GsVec& c = m.V[m.F[i].c]; l->push(c, c + (*n++) * f);
+				const GsVec & b = m.V[m.F[i].b]; l->push(b, b + (*n++) * f);
+				const GsVec & c = m.V[m.F[i].c]; l->push(c, c + (*n++) * f);
 			}
 		}
 	}
 }
 
-int MyViewer::handle_keyboard(const GsEvent& e)
+int MyViewer::handle_keyboard(const GsEvent & e)
 {
 	int ret = WsViewer::handle_keyboard(e); // 1st let system check events
 	if (ret) return ret;

@@ -18,7 +18,7 @@ protected:
 	GsVec lightPos = GsVec(0, 5, 5);
 	SnGroup* _gLight;
 	GsBox b1, b2, birdBox;
-	float birdX, birdY, birdZ;
+	float birdX, birdY, birdZ, floorz;
 	float startingbirdY;
 	//SnTransform* globalT;
 	//SnTransform* sT[19];
@@ -29,7 +29,8 @@ protected:
 	//GsMat currRot;
 public:
 	SnTransform* BirdT; // our bird transformations
-	GsMat BirdM;
+	SnTransform* floorT; //floor translations
+	GsMat BirdM, floorM;
 	MyViewer(int x, int y, int w, int h, const char* l);
 	void build_ui();
 	void add_model(SnShape* s, GsVec p);
