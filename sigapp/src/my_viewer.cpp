@@ -13,6 +13,7 @@ double tmd = 0;
 float i = 0.0001f;
 MyViewer::MyViewer(int x, int y, int w, int h, const char* l) : WsViewer(x, y, w, h, l)
 {
+	SceneMoving = true;
 	_nbut = 0;
 	_animating = false;
 	build_ui();
@@ -339,6 +340,7 @@ void MyViewer::build_scene()
 	rootg()->add(nature);
 	rootg()->add(floorG);
 	rootg()->add(flyG);
+
 
 	/*//GsModel* ground = new GsModel;
 	//GsBox floor;
@@ -866,6 +868,19 @@ void MyViewer::update_camera() {
 
 }
 
+void MyViewer::SceneMovement() {
+	double frdt = 1.0 / 60.0; // delta time to reach given number of frames per second
+	double v = 4; // target velocity is 1 unit per second
+	double ti = 0, lt = 0, t0 = gs_time();
+	float increment = gs2pi / 60;
+	while (forward == false) {
+		rot.roty(-1 * float(GS_2PI) / 30.0f);
+		flyM = flyT->get() * rot;
+		flyTrans.translation(GsVec(5.0f, 0, 5.0f));
+		flyM = flyM * flyTrans;
+		flyT->set(flyM);
+	} 
+}
 
 // Below is an example of how to control the main loop of an animation:
 void MyViewer::run_animation()
@@ -890,200 +905,220 @@ void MyViewer::run_animation()
 	SnManipulator* SmallManip = rootg()->get<SnManipulator>(2); // access little hand manipulator
 	GsMat SmallMat = SmallManip->mat();
 	*/
-
-
-	do // run for a while:
-	{
-		while (ti - lt < frdt) { ws_check(); ti = gs_time() - t0; } // wait until it is time for next frame
-		lt = ti;
-		int cnt = 0;
-
-		tsd = tsd + increment;
-		if (tsd - (gs2pi) >= 0) {
-
-
-			tmd = tmd + increment;
-			if (tmd - gs2pi >= 0) {
-				tmd = 0;
-			}
-		}
-		/*SnManipulator* manip = rootg()->get<SnManipulator>(12);
-		GsMat m = manip->mat();*/
-		double frdt = 1.0 / 60.0; // delta time to reach given number of frames per second
-		double v = 4; // target velocity is 1 unit per second
-		double t = 0, lt = 0, t0 = gs_time();
-		float count = 0.0f;
+	
+	
 		do // run for a while:
 		{
+			while (ti - lt < frdt) { ws_check(); ti = gs_time() - t0; } // wait until it is time for next frame
+			lt = ti;
+			int cnt = 0;
+
+			tsd = tsd + increment;
+			if (tsd - (gs2pi) >= 0) {
+
+
+				tmd = tmd + increment;
+				if (tmd - gs2pi >= 0) {
+					tmd = 0;
+				}
+			}
+			/*SnManipulator* manip = rootg()->get<SnManipulator>(12);
+			GsMat m = manip->mat();*/
+			double frdt = 1.0 / 60.0; // delta time to reach given number of frames per second
+			double v = 4; // target velocity is 1 unit per second
+			double t = 0, lt = 0, t0 = gs_time();
+			float count = 0.0f;
+			do // run for a while:
+			{
+				while (t - lt < frdt) { ws_check(); t = gs_time() - t0; } // wait until it is time for next frame
+				double yinc = 0.5f;
+				if (count >= 10.0f) yinc = -yinc; // after 2 secs: go down
+				lt = t;
+				if (birdY >= startingbirdY)
+					birdY = birdY + (float)yinc;
+				BirdM.translation(GsVec(birdX, birdY, birdZ));
+				BirdT->set(BirdM);
+				count += 0.5f;
+				floorz = floorz - 0.5f;
+				floorM.translation(GsVec(0, 0, floorz));
+				floorT->set(floorM);
+
+				rot.roty(-1 * float(GS_2PI) / 30.0f);
+				flyM = flyT->get() * rot;
+				flyTrans.translation(GsVec(5.0f, 0, 5.0f));
+				flyM = flyM * flyTrans;
+				flyT->set(flyM);
+
+				render(); // notify it needs redraw
+				ws_check(); // redraw now
+			} while (/*birdY > startingbirdY &&*/ count < 20);
+			_animating = false;
+			forward = false;
+			
+			//double frdt1 = 1.0 / 60.0; // delta time to reach given number of frames per second
+			//double v1 = 4; // target velocity is 1 unit per second
+			//double t1 = 0, lt1 = 0, t01 = gs_time();
+			//float count = 0.0f;
+			//do // run for a while:
+			//{
+			//	while (t1 - lt1 < frdt1) { ws_check(); t1 = gs_time() - t01; } // wait until it is time for next frame
+			//	//if (t > 0.5) count = -count; // after 2 secs: go down
+			//	lt1 = t1;
+			//	count += 0.5f;
+			//	floorz = floorz - 0.5f;
+			//	floorM.translation(GsVec(0, 0, floorz));
+			//	floorT->set(floorM);
+			//	render(); // notify it needs redraw
+			//	ws_check(); // redraw now
+			//} while (count < 20);
+
+
+
+			//sM[0].rotx((float)GS_PIDIV2);
+			////ANIMATION IMPLEMENTATION
+			//if (animatestart == true) {
+			//	if (tsd <= 3) {
+			//		GsMat TMH; //translation matrix
+			//		GsMat RMH; //rotation matrix
+			//		GsMat TBH; //translate back matrix
+			//		GsMat ChangedMatH;
+			//		//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
+			//		RMH.rotx((float)tsd * -gspi / 60);
+			//		//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
+			//		//ChangedMatH = TMH * RMH * TBH;
+			//		t[0]->get().mult(t[0]->get(), RMH);
+			//		t[1]->get().mult(t[1]->get(), RMH);
+			//		//t[2]->set(ChangedMatH);
+			//	if (tsd >= 5 && tsd <= 10) {
+			//		GsMat TMH; //translation matrix
+			//		GsMat RMH; //rotation matrix
+			//		GsMat TBH; //translate back matrix
+			//		GsMat ChangedMatH;
+			//		//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
+			//		RMH.rotx(gspi / 90);
+			//		TMH.rotx(gspi / 70);
+			//		//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
+			//		//ChangedMatH = TMH * RMH * TBH;
+			//		t[0]->get().mult(t[0]->get(), RMH);
+			//		t[1]->get().mult(t[1]->get(), TMH);
+			//		sT[0]->get().mult(sT[0]->get(), RMH);
+			//		sT[1]->get().mult(sT[1]->get(), TMH);
+			//		//t[2]->set(ChangedMatH);
+			//		render();
+			//		ws_check();
+			//	}
+			//	if (tsd > 11 && tsd < 15) {
+			//		GsMat TMH; //translation matrix
+			//		GsMat RMH; //rotation matrix
+			//		GsMat TBH; //translate back matrix
+			//		GsMat ChangedMatH;
+			//		//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
+			//		RMH.rotx(gspi / 100);
+			//		TMH.rotx(-gspi / 100);
+			//		TBH.rotx(-gspi / 200);
+			//		//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
+			//		//ChangedMatH = TMH * RMH * TBH;
+			//		t[0]->get().mult(t[0]->get(), RMH);
+			//		t[1]->get().mult(t[1]->get(), TMH);
+			//		t[2]->get().mult(t[2]->get(), TBH);
+			//		//t[2]->set(ChangedMatH);
+			//		render();
+			//		ws_check();
+			//	}
+			//}
+			////ARTICULATION IMPLEMENTATION
+			////shoulder up
+			//if (body2up == true) {
+			//	GsMat TMH; //translation matrix
+			//	GsMat RMH; //rotation matrix
+			//	GsMat TBH; //translate back matrix
+			//	GsMat ChangedMatH;
+			//	//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
+			//	RMH.rotz(-gspi / 120);
+			//	//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
+			//	//ChangedMatH = TMH * RMH * TBH;
+			//	t[3]->get().mult(t[3]->get(), RMH);
+			//	sT[3]->get().mult(sT[3]->get(), RMH);
+			//	//t[2]->set(ChangedMatH);
+			//	render();
+			//	ws_check();
+			//	body2up = false;
+			//	body2down = false;
+			//}
+			//if (body2down == true) {
+			//	GsMat TMH; //translation matrix
+			//	GsMat RMH; //rotation matrix
+			//	GsMat TBH; //translate back matrix
+			//	GsMat ChangedMatH;
+			//	//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
+			//	RMH.rotz(gspi / 120);
+			//	//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
+			//	//ChangedMatH = TMH * RMH * TBH;
+			//	t[3]->get().mult(t[3]->get(), RMH);
+			//	sT[3]->get().mult(sT[3]->get(), RMH);
+			//	//t[2]->set(ChangedMatH);
+			//	render();
+			//	ws_check();
+			//	body2up = false;
+			//	body2down = false;
+			//}
+			////shoulderup = false;
+			////shoulderdown = false;
+			////forearm up
+			//if (body1up == true) {
+			//	GsMat TMH; //translation matrix
+			//	GsMat RMH; //rotation matrix
+			//	GsMat TBH; //translate back matrix
+			//	GsMat ChangedMatH;
+			//	//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
+			//	RMH.rotz(-gspi / 120);
+			//	//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
+			//	ChangedMatH = TMH * RMH * TBH;
+			//	t[1]->get().mult(t[1]->get(), RMH);
+			//	sT[1]->get().mult(sT[1]->get(), RMH);
+			//	//t[2]->set(ChangedMatH)
+			//	render();
+			//	ws_check();
+			//	body1up = false;
+			//	body1down = false;
+			//}
+			//if (forward == true) {
+			//	//gsout << "move forward" << gsnl;
+			//	GsMat RM;
+			//	RM.rotx((float)-GS_PIDIV2);
+			//	startingY = startingY - 0.3f;
+			//	//globalT->get().translation(GsVec(startingX, 0.0f, startingZ));
+			//	//t[0]->get().mult(t[0]->get(), R);
+			//	//t[0]->get().translation(GsVec(startingX, 0.0f, startingZ));
+			//	//globalT->get().translation(GsVec(startingX, 0.0f, startingZ));
+			//	m[0].translation(GsVec(startingX, startingY, 0.0f));
+			//	t[0]->set(m[0]);
+			//	sM[0].translation(GsVec(startingX, startingY, 0.0f));
+			//	sT[0]->set(sM[0]);
+			//	//t[0]->get().mult(t[0]->get(), RM);
+			//	forward = false;
+			//	render();
+		} while (_animating);
+		_animating = false; forward = false;
+
+		do {
+			double frdt = 1.0 / 60.0; // delta time to reach given number of frames per second
+			double v = 4; // target velocity is 1 unit per second
+			double t = 0, lt = 0, t0 = gs_time();
+
 			while (t - lt < frdt) { ws_check(); t = gs_time() - t0; } // wait until it is time for next frame
-			double yinc = 0.5f;
-			if (count >= 10.0f) yinc = -yinc; // after 2 secs: go down
 			lt = t;
-			if (birdY >= startingbirdY)
-				birdY = birdY + (float)yinc;
-			BirdM.translation(GsVec(birdX, birdY, birdZ));
-			BirdT->set(BirdM);
-			count += 0.5f;
-			floorz = floorz - 0.5f;
-			floorM.translation(GsVec(0, 0, floorz));
-			floorT->set(floorM);
 
 			rot.roty(-1 * float(GS_2PI) / 30.0f);
 			flyM = flyT->get() * rot;
 			flyTrans.translation(GsVec(5.0f, 0, 5.0f));
 			flyM = flyM * flyTrans;
 			flyT->set(flyM);
-
-			render(); // notify it needs redraw
-			ws_check(); // redraw now
-		} while (/*birdY > startingbirdY &&*/ count < 20);
-
-
-		//double frdt1 = 1.0 / 60.0; // delta time to reach given number of frames per second
-		//double v1 = 4; // target velocity is 1 unit per second
-		//double t1 = 0, lt1 = 0, t01 = gs_time();
-		//float count = 0.0f;
-		//do // run for a while:
-		//{
-		//	while (t1 - lt1 < frdt1) { ws_check(); t1 = gs_time() - t01; } // wait until it is time for next frame
-		//	//if (t > 0.5) count = -count; // after 2 secs: go down
-		//	lt1 = t1;
-		//	count += 0.5f;
-		//	floorz = floorz - 0.5f;
-		//	floorM.translation(GsVec(0, 0, floorz));
-		//	floorT->set(floorM);
-		//	render(); // notify it needs redraw
-		//	ws_check(); // redraw now
-		//} while (count < 20);
-
-
-		_animating = false;
-		//sM[0].rotx((float)GS_PIDIV2);
-		////ANIMATION IMPLEMENTATION
-		//if (animatestart == true) {
-		//	if (tsd <= 3) {
-		//		GsMat TMH; //translation matrix
-		//		GsMat RMH; //rotation matrix
-		//		GsMat TBH; //translate back matrix
-		//		GsMat ChangedMatH;
-		//		//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
-		//		RMH.rotx((float)tsd * -gspi / 60);
-		//		//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
-		//		//ChangedMatH = TMH * RMH * TBH;
-		//		t[0]->get().mult(t[0]->get(), RMH);
-		//		t[1]->get().mult(t[1]->get(), RMH);
-		//		//t[2]->set(ChangedMatH);
-		//	if (tsd >= 5 && tsd <= 10) {
-		//		GsMat TMH; //translation matrix
-		//		GsMat RMH; //rotation matrix
-		//		GsMat TBH; //translate back matrix
-		//		GsMat ChangedMatH;
-		//		//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
-		//		RMH.rotx(gspi / 90);
-		//		TMH.rotx(gspi / 70);
-		//		//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
-		//		//ChangedMatH = TMH * RMH * TBH;
-		//		t[0]->get().mult(t[0]->get(), RMH);
-		//		t[1]->get().mult(t[1]->get(), TMH);
-		//		sT[0]->get().mult(sT[0]->get(), RMH);
-		//		sT[1]->get().mult(sT[1]->get(), TMH);
-		//		//t[2]->set(ChangedMatH);
-		//		render();
-		//		ws_check();
-		//	}
-		//	if (tsd > 11 && tsd < 15) {
-		//		GsMat TMH; //translation matrix
-		//		GsMat RMH; //rotation matrix
-		//		GsMat TBH; //translate back matrix
-		//		GsMat ChangedMatH;
-		//		//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
-		//		RMH.rotx(gspi / 100);
-		//		TMH.rotx(-gspi / 100);
-		//		TBH.rotx(-gspi / 200);
-		//		//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
-		//		//ChangedMatH = TMH * RMH * TBH;
-		//		t[0]->get().mult(t[0]->get(), RMH);
-		//		t[1]->get().mult(t[1]->get(), TMH);
-		//		t[2]->get().mult(t[2]->get(), TBH);
-		//		//t[2]->set(ChangedMatH);
-		//		render();
-		//		ws_check();
-		//	}
-		//}
-		////ARTICULATION IMPLEMENTATION
-		////shoulder up
-		//if (body2up == true) {
-		//	GsMat TMH; //translation matrix
-		//	GsMat RMH; //rotation matrix
-		//	GsMat TBH; //translate back matrix
-		//	GsMat ChangedMatH;
-		//	//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
-		//	RMH.rotz(-gspi / 120);
-		//	//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
-		//	//ChangedMatH = TMH * RMH * TBH;
-		//	t[3]->get().mult(t[3]->get(), RMH);
-		//	sT[3]->get().mult(sT[3]->get(), RMH);
-		//	//t[2]->set(ChangedMatH);
-		//	render();
-		//	ws_check();
-		//	body2up = false;
-		//	body2down = false;
-		//}
-		//if (body2down == true) {
-		//	GsMat TMH; //translation matrix
-		//	GsMat RMH; //rotation matrix
-		//	GsMat TBH; //translate back matrix
-		//	GsMat ChangedMatH;
-		//	//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
-		//	RMH.rotz(gspi / 120);
-		//	//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
-		//	//ChangedMatH = TMH * RMH * TBH;
-		//	t[3]->get().mult(t[3]->get(), RMH);
-		//	sT[3]->get().mult(sT[3]->get(), RMH);
-		//	//t[2]->set(ChangedMatH);
-		//	render();
-		//	ws_check();
-		//	body2up = false;
-		//	body2down = false;
-		//}
-		////shoulderup = false;
-		////shoulderdown = false;
-		////forearm up
-		//if (body1up == true) {
-		//	GsMat TMH; //translation matrix
-		//	GsMat RMH; //rotation matrix
-		//	GsMat TBH; //translate back matrix
-		//	GsMat ChangedMatH;
-		//	//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
-		//	RMH.rotz(-gspi / 120);
-		//	//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
-		//	ChangedMatH = TMH * RMH * TBH;
-		//	t[1]->get().mult(t[1]->get(), RMH);
-		//	sT[1]->get().mult(sT[1]->get(), RMH);
-		//	//t[2]->set(ChangedMatH)
-		//	render();
-		//	ws_check();
-		//	body1up = false;
-		//	body1down = false;
-		//}
-		//if (forward == true) {
-		//	//gsout << "move forward" << gsnl;
-		//	GsMat RM;
-		//	RM.rotx((float)-GS_PIDIV2);
-		//	startingY = startingY - 0.3f;
-		//	//globalT->get().translation(GsVec(startingX, 0.0f, startingZ));
-		//	//t[0]->get().mult(t[0]->get(), R);
-		//	//t[0]->get().translation(GsVec(startingX, 0.0f, startingZ));
-		//	//globalT->get().translation(GsVec(startingX, 0.0f, startingZ));
-		//	m[0].translation(GsVec(startingX, startingY, 0.0f));
-		//	t[0]->set(m[0]);
-		//	sM[0].translation(GsVec(startingX, startingY, 0.0f));
-		//	sT[0]->set(sM[0]);
-		//	//t[0]->get().mult(t[0]->get(), RM);
-		//	forward = false;
-		//	render();
-	} while (_animating);
-	_animating = false;
+			render();
+			ws_check();
+		} while (forward == false);
+	
+	
 
 }
 
@@ -1129,7 +1164,7 @@ int MyViewer::handle_keyboard(const GsEvent & e)
 	switch (e.key)
 	{
 	case GsEvent::KeyEsc: gs_exit(); return 1;
-	case 65362: run_animation(); render(); break;
+	case 65362: forward = true; run_animation(); render(); break;
 	default: gsout << "Key pressed: " << e.key << gsnl;
 
 
@@ -1150,7 +1185,7 @@ int MyViewer::uievent(int e)
 	switch (e)
 	{
 	case EvNormals: show_normals(_nbut->value()); return 1;
-	case EvAnimate: run_animation(); return 1;
+	case EvAnimate: forward = true; run_animation(); return 1;
 	case EvExit: gs_exit();
 	}
 	return WsViewer::uievent(e);

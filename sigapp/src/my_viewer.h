@@ -20,6 +20,7 @@ protected:
 	GsBox b1, b2, birdBox;
 	float birdX, birdY, birdZ, floorz;
 	float startingbirdY;
+	bool bird2moving;
 	//SnTransform* globalT;
 	//SnTransform* sT[19];
 	//SnTransform* t[19]; //to hold all transformations 
@@ -33,12 +34,15 @@ public:
 	SnTransform* flyT; // flying bird transformation
 	GsMat BirdM, floorM, flyM;
 	GsMat rot, flyTrans;
+	bool SceneMoving;
+	bool forward;
 	MyViewer(int x, int y, int w, int h, const char* l);
 	void build_ui();
 	void add_model(SnShape* s, GsVec p);
 	void build_scene();
 	//void update_shadow();
 	void update_camera();
+	void SceneMovement();
 	void show_normals(bool view);
 	void run_animation();
 	virtual int handle_keyboard(const GsEvent& e) override;
