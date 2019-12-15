@@ -21,19 +21,24 @@ protected:
 	float birdX, birdY, birdZ, floorz;
 	float startingbirdY;
 	bool bird2moving;
+	int moveCount = -2;
+	int zmove = 0;
 	//SnTransform* globalT;
 	//SnTransform* sT[19];
-	//SnTransform* t[19]; //to hold all transformations 
-	//GsMat m[19]; //to hold all the transformation matrices
+	SnTransform* t[10]; //to hold all transformations 
+	GsMat m[10]; //to hold all the transformation matrices
 	//GsMat sM[19];
 	//bool update = true;
 	//GsMat currRot;
 public:
+
 	SnTransform* BirdT; // our bird transformations
-	SnTransform* floorT; //floor translations
+	SnTransform* floorT;//floor global translation
+	SnTransform* floormoveT[10]; //individual floor translations
 	SnTransform* flyT; // flying bird transformation
 	GsMat BirdM, floorM, flyM, wingM;
 	GsMat rot, flyTrans;
+	GsMat floormoveM[10];
 	bool SceneMoving;
 	bool forward;
 	SnTransform* leftWT;

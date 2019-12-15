@@ -69,6 +69,7 @@ void MyViewer::build_scene()
 
 	//The floor of the scene
 	SnModel* floor[10];
+	SnGroup* floortrans[10];
 	float floorX, floorY, floorZP, floorZN;
 	floorX = 100.0f;
 	floorY = 0.0f;
@@ -85,6 +86,9 @@ void MyViewer::build_scene()
 		GsPnt p2 = GsVec(floorX, floorY, floorZN);
 		GsPnt p3 = GsVec(floorX, floorY, floorZP);
 		floor[i] = new SnModel;
+		floortrans[i] = new SnGroup;
+		floortrans[i]->separator(true);
+		floormoveT[i] = new SnTransform;
 		floor[i]->model()->V.push() = p0;
 		floor[i]->model()->V.push() = p1;
 		floor[i]->model()->V.push() = p2;
@@ -120,6 +124,7 @@ void MyViewer::build_scene()
 	GsModel::Group& floorgroupRoad3 = *m7.G.push();
 	GsModel::Group& floorgroupGrass4 = *m8.G.push();
 	GsModel::Group& floorgroupRoad4 = *m9.G.push();
+
 
 	floorgroupGrass.fi = 0;
 	floorgroupRoad.fi = 0;
@@ -280,8 +285,12 @@ void MyViewer::build_scene()
 	floorG->add(floorT);
 
 	for (int i = 0; i < 10; i++) {
-		floorG->add(floor[i]);
-	}	
+		floormoveM[i].translation(GsVec(0, 0, 0));
+		floormoveT[i]->set(floormoveM[i]);
+		floortrans[i]->add(floormoveT[i]);
+		floortrans[i]->add(floor[i]);
+		floorG->add(floortrans[i]);
+	}
 
 	//Nature and other objects in scene
 	SnGroup* nature = new SnGroup;
@@ -303,8 +312,8 @@ void MyViewer::build_scene()
 	nature->add(tree2);
 
 	//Bird that acts as the player
-	SnModel* Bird = new SnModel;
-	SnGroup* BirdGroup = new SnGroup;
+	SnModel * Bird = new SnModel;
+	SnGroup * BirdGroup = new SnGroup;
 	BirdGroup->separator(true);
 	Bird->model()->load_obj("../src/Models_and_Textures/birdbody.obj");
 	Bird->model()->centralize();
@@ -339,8 +348,8 @@ void MyViewer::build_scene()
 	BirdT->set(BirdM);
 	*/
 
-	SnModel* leftwing = new SnModel();
-	SnGroup* leftwingGroup = new SnGroup;
+	SnModel * leftwing = new SnModel();
+	SnGroup * leftwingGroup = new SnGroup;
 	leftwing->model()->load("../src/Models_and_Textures/leftwing.obj");
 	leftwing->model()->centralize();
 	leftWT = new SnTransform;
@@ -352,8 +361,8 @@ void MyViewer::build_scene()
 	leftwingGroup->add(leftwing);
 	leftwingGroup->separator(true);
 
-	SnModel* rightwing = new SnModel();
-	SnGroup* rightwingGroup = new SnGroup;
+	SnModel * rightwing = new SnModel();
+	SnGroup * rightwingGroup = new SnGroup;
 	rightwing->model()->load("../src/Models_and_Textures/rightwing.obj");
 	rightwing->model()->centralize();
 	rightwing->model()->scale(1);
@@ -372,8 +381,8 @@ void MyViewer::build_scene()
 
 
 	//Flying bird for scene
-	SnModel* fly = new SnModel;
-	SnGroup* flyG = new SnGroup;
+	SnModel * fly = new SnModel;
+	SnGroup * flyG = new SnGroup;
 	flyG->separator(true);
 	fly->model()->load_obj("../src/Models_and_Textures/flyer.obj");
 	fly->model()->centralize();
@@ -384,7 +393,7 @@ void MyViewer::build_scene()
 	flyT->set(flyM);
 	flyG->add(flyT);
 	flyG->add(fly);
-	
+
 	//Add everything to rootg in order
 	rootg()->add(global);
 	rootg()->add(BirdGroup);
@@ -432,12 +441,9 @@ void MyViewer::build_scene()
 	sans.textured = true;
 	rootg()->add(daground);
 	globalT = new SnTransform;
-
-
 	GsMat globalRot;
 	globalRot.rotx((float)-GS_PIDIV2);
 	globalT->set(globalRot);
-
 	SnGroup* g = new SnGroup; //to hold all the models and transformations
 	SnModel* model[19]; //to hold all the models
 	SnModel* sModel[19];
@@ -457,7 +463,6 @@ void MyViewer::build_scene()
 	mtl.diffuse = GsColor::black;
 	rootg()->add(_gLight);
 	g->add(globalT);
-
 	globalST->set(globalRot);
 	model[0] = new SnModel;
 	if (!model[0]->model()->load_obj("../src/Snake/Snake_Head.obj"))
@@ -654,7 +659,6 @@ void MyViewer::build_scene()
 	dshadowg->separator(true);
 	dshadowg->add(_tShadow1 = new SnTransform);
 	//globalST->get().rotx((float)GS_PIDIV2);
-
 	//dshadowg->add(globalST);
 	sModel[0] = new SnModel;
 	if (!sModel[0]->model()->load_obj("../src/Snake/Snake_Head.obj"))
@@ -846,7 +850,6 @@ void MyViewer::build_scene()
 	sT[16]->set(sM[16]);
 	dshadowg->add(sT[16]);
 	dshadowg->add(sModel[16]);
-
 	/*dshadowg->add(model[0]);
 	dshadowg->add(model[1]);
 	dshadowg->add(model[2]);
@@ -930,7 +933,7 @@ void MyViewer::SceneMovement() {
 		flyTrans.translation(GsVec(5.0f, 0, 5.0f));
 		flyM = flyM * flyTrans;
 		flyT->set(flyM);
-	} 
+	}
 }
 
 // Below is an example of how to control the main loop of an animation:
@@ -956,244 +959,254 @@ void MyViewer::run_animation()
 	SnManipulator* SmallManip = rootg()->get<SnManipulator>(2); // access little hand manipulator
 	GsMat SmallMat = SmallManip->mat();
 	*/
-	
-	
+
+
+	do // run for a while:
+	{
+		while (ti - lt < frdt) { ws_check(); ti = gs_time() - t0; } // wait until it is time for next frame
+		lt = ti;
+		int cnt = 0;
+
+		tsd = tsd + increment;
+		if (tsd - (gs2pi) >= 0) {
+
+
+			tmd = tmd + increment;
+			if (tmd - gs2pi >= 0) {
+				tmd = 0;
+			}
+		}
+		/*SnManipulator* manip = rootg()->get<SnManipulator>(12);
+		GsMat m = manip->mat();*/
+		double frdt = 1.0 / 60.0; // delta time to reach given number of frames per second
+		double v = 4; // target velocity is 1 unit per second
+		double t = 0, lt = 0, t0 = gs_time();
+		float count = 0.0f;
+		float winginc = 0.0f;
+		GsMat wingtemp, rightwingt;
 		do // run for a while:
 		{
-			while (ti - lt < frdt) { ws_check(); ti = gs_time() - t0; } // wait until it is time for next frame
-			lt = ti;
-			int cnt = 0;
-
-			tsd = tsd + increment;
-			if (tsd - (gs2pi) >= 0) {
-
-
-				tmd = tmd + increment;
-				if (tmd - gs2pi >= 0) {
-					tmd = 0;
-				}
-			}
-			/*SnManipulator* manip = rootg()->get<SnManipulator>(12);
-			GsMat m = manip->mat();*/
-			double frdt = 1.0 / 60.0; // delta time to reach given number of frames per second
-			double v = 4; // target velocity is 1 unit per second
-			double t = 0, lt = 0, t0 = gs_time();
-			float count = 0.0f;
-			float winginc = 0.0f;
-			GsMat wingtemp, rightwingt;
-			do // run for a while:
-			{
-				while (t - lt < frdt) { ws_check(); t = gs_time() - t0; } // wait until it is time for next frame
-				double yinc = 0.5f;
-				if (count >= 10.0f) {
-					yinc = -yinc; // after 2 secs: go down
-					wingtemp.translation(GsVec(4, 3, 1));
-					rightwingt.translation(GsVec(-4, 3, 0));
-					winginc = (GS_2PI / 20.0);
-					wingM.rotz(winginc);
-					leftWT->get().mult(wingtemp, wingM);
-					winginc = (-GS_2PI / 20.0);
-					wingM.rotz(winginc);
-					rightWT->get().mult(rightwingt, wingM);
-					//leftWT->get().mult(leftWT->get(), wingM);
-				}
-				else {
-					wingtemp.translation(GsVec(4, 2.5f, 1));
-					rightwingt.translation(GsVec(-4, 2.5f, 0));
-					winginc = -(GS_2PI / 15);
-					wingM.rotz(winginc);
-					leftWT->get().mult(wingtemp, wingM);
-					winginc = (GS_2PI / 15);
-					wingM.rotz(winginc);
-					rightWT->get().mult(rightwingt, wingM);
-				}
-				
-				lt = t;
-				if (birdY >= startingbirdY)
-					birdY = birdY + (float)yinc;
-				BirdM.translation(GsVec(birdX, birdY, birdZ));
-				BirdT->set(BirdM);
-				count += 0.5f;
-				floorz = floorz - 0.5f;
-				floorM.translation(GsVec(0, 0, floorz));
-				floorT->set(floorM);
-
-				rot.roty(-1 * float(GS_2PI) / 30.0f);
-				flyM = flyT->get() * rot;
-				flyTrans.translation(GsVec(5.0f, 0, 5.0f));
-				flyM = flyM * flyTrans;
-				flyT->set(flyM);
-
-				render(); // notify it needs redraw
-				ws_check(); // redraw now
-			} while (/*birdY > startingbirdY &&*/ count < 20);
-			_animating = false;
-			forward = false;
-			
-			//double frdt1 = 1.0 / 60.0; // delta time to reach given number of frames per second
-			//double v1 = 4; // target velocity is 1 unit per second
-			//double t1 = 0, lt1 = 0, t01 = gs_time();
-			//float count = 0.0f;
-			//do // run for a while:
-			//{
-			//	while (t1 - lt1 < frdt1) { ws_check(); t1 = gs_time() - t01; } // wait until it is time for next frame
-			//	//if (t > 0.5) count = -count; // after 2 secs: go down
-			//	lt1 = t1;
-			//	count += 0.5f;
-			//	floorz = floorz - 0.5f;
-			//	floorM.translation(GsVec(0, 0, floorz));
-			//	floorT->set(floorM);
-			//	render(); // notify it needs redraw
-			//	ws_check(); // redraw now
-			//} while (count < 20);
-
-
-
-			//sM[0].rotx((float)GS_PIDIV2);
-			////ANIMATION IMPLEMENTATION
-			//if (animatestart == true) {
-			//	if (tsd <= 3) {
-			//		GsMat TMH; //translation matrix
-			//		GsMat RMH; //rotation matrix
-			//		GsMat TBH; //translate back matrix
-			//		GsMat ChangedMatH;
-			//		//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
-			//		RMH.rotx((float)tsd * -gspi / 60);
-			//		//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
-			//		//ChangedMatH = TMH * RMH * TBH;
-			//		t[0]->get().mult(t[0]->get(), RMH);
-			//		t[1]->get().mult(t[1]->get(), RMH);
-			//		//t[2]->set(ChangedMatH);
-			//	if (tsd >= 5 && tsd <= 10) {
-			//		GsMat TMH; //translation matrix
-			//		GsMat RMH; //rotation matrix
-			//		GsMat TBH; //translate back matrix
-			//		GsMat ChangedMatH;
-			//		//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
-			//		RMH.rotx(gspi / 90);
-			//		TMH.rotx(gspi / 70);
-			//		//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
-			//		//ChangedMatH = TMH * RMH * TBH;
-			//		t[0]->get().mult(t[0]->get(), RMH);
-			//		t[1]->get().mult(t[1]->get(), TMH);
-			//		sT[0]->get().mult(sT[0]->get(), RMH);
-			//		sT[1]->get().mult(sT[1]->get(), TMH);
-			//		//t[2]->set(ChangedMatH);
-			//		render();
-			//		ws_check();
-			//	}
-			//	if (tsd > 11 && tsd < 15) {
-			//		GsMat TMH; //translation matrix
-			//		GsMat RMH; //rotation matrix
-			//		GsMat TBH; //translate back matrix
-			//		GsMat ChangedMatH;
-			//		//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
-			//		RMH.rotx(gspi / 100);
-			//		TMH.rotx(-gspi / 100);
-			//		TBH.rotx(-gspi / 200);
-			//		//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
-			//		//ChangedMatH = TMH * RMH * TBH;
-			//		t[0]->get().mult(t[0]->get(), RMH);
-			//		t[1]->get().mult(t[1]->get(), TMH);
-			//		t[2]->get().mult(t[2]->get(), TBH);
-			//		//t[2]->set(ChangedMatH);
-			//		render();
-			//		ws_check();
-			//	}
-			//}
-			////ARTICULATION IMPLEMENTATION
-			////shoulder up
-			//if (body2up == true) {
-			//	GsMat TMH; //translation matrix
-			//	GsMat RMH; //rotation matrix
-			//	GsMat TBH; //translate back matrix
-			//	GsMat ChangedMatH;
-			//	//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
-			//	RMH.rotz(-gspi / 120);
-			//	//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
-			//	//ChangedMatH = TMH * RMH * TBH;
-			//	t[3]->get().mult(t[3]->get(), RMH);
-			//	sT[3]->get().mult(sT[3]->get(), RMH);
-			//	//t[2]->set(ChangedMatH);
-			//	render();
-			//	ws_check();
-			//	body2up = false;
-			//	body2down = false;
-			//}
-			//if (body2down == true) {
-			//	GsMat TMH; //translation matrix
-			//	GsMat RMH; //rotation matrix
-			//	GsMat TBH; //translate back matrix
-			//	GsMat ChangedMatH;
-			//	//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
-			//	RMH.rotz(gspi / 120);
-			//	//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
-			//	//ChangedMatH = TMH * RMH * TBH;
-			//	t[3]->get().mult(t[3]->get(), RMH);
-			//	sT[3]->get().mult(sT[3]->get(), RMH);
-			//	//t[2]->set(ChangedMatH);
-			//	render();
-			//	ws_check();
-			//	body2up = false;
-			//	body2down = false;
-			//}
-			////shoulderup = false;
-			////shoulderdown = false;
-			////forearm up
-			//if (body1up == true) {
-			//	GsMat TMH; //translation matrix
-			//	GsMat RMH; //rotation matrix
-			//	GsMat TBH; //translate back matrix
-			//	GsMat ChangedMatH;
-			//	//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
-			//	RMH.rotz(-gspi / 120);
-			//	//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
-			//	ChangedMatH = TMH * RMH * TBH;
-			//	t[1]->get().mult(t[1]->get(), RMH);
-			//	sT[1]->get().mult(sT[1]->get(), RMH);
-			//	//t[2]->set(ChangedMatH)
-			//	render();
-			//	ws_check();
-			//	body1up = false;
-			//	body1down = false;
-			//}
-			//if (forward == true) {
-			//	//gsout << "move forward" << gsnl;
-			//	GsMat RM;
-			//	RM.rotx((float)-GS_PIDIV2);
-			//	startingY = startingY - 0.3f;
-			//	//globalT->get().translation(GsVec(startingX, 0.0f, startingZ));
-			//	//t[0]->get().mult(t[0]->get(), R);
-			//	//t[0]->get().translation(GsVec(startingX, 0.0f, startingZ));
-			//	//globalT->get().translation(GsVec(startingX, 0.0f, startingZ));
-			//	m[0].translation(GsVec(startingX, startingY, 0.0f));
-			//	t[0]->set(m[0]);
-			//	sM[0].translation(GsVec(startingX, startingY, 0.0f));
-			//	sT[0]->set(sM[0]);
-			//	//t[0]->get().mult(t[0]->get(), RM);
-			//	forward = false;
-			//	render();
-		} while (_animating);
-		_animating = false; forward = false;
-
-		do {
-			double frdt = 1.0 / 60.0; // delta time to reach given number of frames per second
-			double v = 4; // target velocity is 1 unit per second
-			double t = 0, lt = 0, t0 = gs_time();
-
 			while (t - lt < frdt) { ws_check(); t = gs_time() - t0; } // wait until it is time for next frame
+			double yinc = 0.5f;
+			if (count >= 10.0f) {
+				yinc = -yinc; // after 2 secs: go down
+				wingtemp.translation(GsVec(4, 3, 1));
+				rightwingt.translation(GsVec(-4, 3, 0));
+				winginc = float(GS_2PI / 20.0);
+				wingM.rotz(winginc);
+				leftWT->get().mult(wingtemp, wingM);
+				winginc = float(-GS_2PI / 20.0);
+				wingM.rotz(winginc);
+				rightWT->get().mult(rightwingt, wingM);
+				//leftWT->get().mult(leftWT->get(), wingM);
+			}
+			else {
+				wingtemp.translation(GsVec(4, 2.5f, 1));
+				rightwingt.translation(GsVec(-4, 2.5f, 0));
+				winginc = -float(GS_2PI / 15);
+				wingM.rotz(winginc);
+				leftWT->get().mult(wingtemp, wingM);
+				winginc = float(GS_2PI / 15);
+				wingM.rotz(winginc);
+				rightWT->get().mult(rightwingt, wingM);
+			}
+
 			lt = t;
+			if (birdY >= startingbirdY)
+				birdY = birdY + (float)yinc;
+			BirdM.translation(GsVec(birdX, birdY, birdZ));
+			BirdT->set(BirdM);
+			count += 0.5f;
+			floorz = floorz - 0.5f;
+			floorM.translation(GsVec(0, 0, floorz));
+			floorT->set(floorM);
+
 
 			rot.roty(-1 * float(GS_2PI) / 30.0f);
 			flyM = flyT->get() * rot;
 			flyTrans.translation(GsVec(5.0f, 0, 5.0f));
 			flyM = flyM * flyTrans;
 			flyT->set(flyM);
-			render();
-			ws_check();
-		} while (forward == false);
-	
-	
+
+			render(); // notify it needs redraw
+			ws_check(); // redraw now
+		} while (count < 20);
+		_animating = false;
+		forward = false;
+
+		//double frdt1 = 1.0 / 60.0; // delta time to reach given number of frames per second
+		//double v1 = 4; // target velocity is 1 unit per second
+		//double t1 = 0, lt1 = 0, t01 = gs_time();
+		//float count = 0.0f;
+		//do // run for a while:
+		//{
+		//	while (t1 - lt1 < frdt1) { ws_check(); t1 = gs_time() - t01; } // wait until it is time for next frame
+		//	//if (t > 0.5) count = -count; // after 2 secs: go down
+		//	lt1 = t1;
+		//	count += 0.5f;
+		//	floorz = floorz - 0.5f;
+		//	floorM.translation(GsVec(0, 0, floorz));
+		//	floorT->set(floorM);
+		//	render(); // notify it needs redraw
+		//	ws_check(); // redraw now
+		//} while (count < 20);
+
+
+
+		//sM[0].rotx((float)GS_PIDIV2);
+		////ANIMATION IMPLEMENTATION
+		//if (animatestart == true) {
+		//	if (tsd <= 3) {
+		//		GsMat TMH; //translation matrix
+		//		GsMat RMH; //rotation matrix
+		//		GsMat TBH; //translate back matrix
+		//		GsMat ChangedMatH;
+		//		//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
+		//		RMH.rotx((float)tsd * -gspi / 60);
+		//		//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
+		//		//ChangedMatH = TMH * RMH * TBH;
+		//		t[0]->get().mult(t[0]->get(), RMH);
+		//		t[1]->get().mult(t[1]->get(), RMH);
+		//		//t[2]->set(ChangedMatH);
+		//	if (tsd >= 5 && tsd <= 10) {
+		//		GsMat TMH; //translation matrix
+		//		GsMat RMH; //rotation matrix
+		//		GsMat TBH; //translate back matrix
+		//		GsMat ChangedMatH;
+		//		//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
+		//		RMH.rotx(gspi / 90);
+		//		TMH.rotx(gspi / 70);
+		//		//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
+		//		//ChangedMatH = TMH * RMH * TBH;
+		//		t[0]->get().mult(t[0]->get(), RMH);
+		//		t[1]->get().mult(t[1]->get(), TMH);
+		//		sT[0]->get().mult(sT[0]->get(), RMH);
+		//		sT[1]->get().mult(sT[1]->get(), TMH);
+		//		//t[2]->set(ChangedMatH);
+		//		render();
+		//		ws_check();
+		//	}
+		//	if (tsd > 11 && tsd < 15) {
+		//		GsMat TMH; //translation matrix
+		//		GsMat RMH; //rotation matrix
+		//		GsMat TBH; //translate back matrix
+		//		GsMat ChangedMatH;
+		//		//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
+		//		RMH.rotx(gspi / 100);
+		//		TMH.rotx(-gspi / 100);
+		//		TBH.rotx(-gspi / 200);
+		//		//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
+		//		//ChangedMatH = TMH * RMH * TBH;
+		//		t[0]->get().mult(t[0]->get(), RMH);
+		//		t[1]->get().mult(t[1]->get(), TMH);
+		//		t[2]->get().mult(t[2]->get(), TBH);
+		//		//t[2]->set(ChangedMatH);
+		//		render();
+		//		ws_check();
+		//	}
+		//}
+		////ARTICULATION IMPLEMENTATION
+		////shoulder up
+		//if (body2up == true) {
+		//	GsMat TMH; //translation matrix
+		//	GsMat RMH; //rotation matrix
+		//	GsMat TBH; //translate back matrix
+		//	GsMat ChangedMatH;
+		//	//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
+		//	RMH.rotz(-gspi / 120);
+		//	//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
+		//	//ChangedMatH = TMH * RMH * TBH;
+		//	t[3]->get().mult(t[3]->get(), RMH);
+		//	sT[3]->get().mult(sT[3]->get(), RMH);
+		//	//t[2]->set(ChangedMatH);
+		//	render();
+		//	ws_check();
+		//	body2up = false;
+		//	body2down = false;
+		//}
+		//if (body2down == true) {
+		//	GsMat TMH; //translation matrix
+		//	GsMat RMH; //rotation matrix
+		//	GsMat TBH; //translate back matrix
+		//	GsMat ChangedMatH;
+		//	//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
+		//	RMH.rotz(gspi / 120);
+		//	//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
+		//	//ChangedMatH = TMH * RMH * TBH;
+		//	t[3]->get().mult(t[3]->get(), RMH);
+		//	sT[3]->get().mult(sT[3]->get(), RMH);
+		//	//t[2]->set(ChangedMatH);
+		//	render();
+		//	ws_check();
+		//	body2up = false;
+		//	body2down = false;
+		//}
+		////shoulderup = false;
+		////shoulderdown = false;
+		////forearm up
+		//if (body1up == true) {
+		//	GsMat TMH; //translation matrix
+		//	GsMat RMH; //rotation matrix
+		//	GsMat TBH; //translate back matrix
+		//	GsMat ChangedMatH;
+		//	//	TMH.translation(GsVec(0.0f, 0.0f, -b2.dz() / 2.0f + b1.dz()));
+		//	RMH.rotz(-gspi / 120);
+		//	//TBH.translation(GsVec(0.0f, 0.0f, b2.dz() / 2.0f + b1.dz()));
+		//	ChangedMatH = TMH * RMH * TBH;
+		//	t[1]->get().mult(t[1]->get(), RMH);
+		//	sT[1]->get().mult(sT[1]->get(), RMH);
+		//	//t[2]->set(ChangedMatH)
+		//	render();
+		//	ws_check();
+		//	body1up = false;
+		//	body1down = false;
+		//}
+		//if (forward == true) {
+		//	//gsout << "move forward" << gsnl;
+		//	GsMat RM;
+		//	RM.rotx((float)-GS_PIDIV2);
+		//	startingY = startingY - 0.3f;
+		//	//globalT->get().translation(GsVec(startingX, 0.0f, startingZ));
+		//	//t[0]->get().mult(t[0]->get(), R);
+		//	//t[0]->get().translation(GsVec(startingX, 0.0f, startingZ));
+		//	//globalT->get().translation(GsVec(startingX, 0.0f, startingZ));
+		//	m[0].translation(GsVec(startingX, startingY, 0.0f));
+		//	t[0]->set(m[0]);
+		//	sM[0].translation(GsVec(startingX, startingY, 0.0f));
+		//	sT[0]->set(sM[0]);
+		//	//t[0]->get().mult(t[0]->get(), RM);
+		//	forward = false;
+		//	render();
+	} while (_animating);
+	_animating = false; forward = false;
+
+
+	if (moveCount >= 0) {
+		if (moveCount == 0) {
+			zmove += 200;
+		}
+		floormoveM[moveCount].translation(GsVec(0, 0, zmove));
+		floormoveT[moveCount]->set(floormoveM[moveCount]);
+	}
+
+	do {
+		double frdt = 1.0 / 60.0; // delta time to reach given number of frames per second
+		double v = 4; // target velocity is 1 unit per second
+		double t = 0, lt = 0, t0 = gs_time();
+
+		while (t - lt < frdt) { ws_check(); t = gs_time() - t0; } // wait until it is time for next frame
+		lt = t;
+
+		rot.roty(-1 * float(GS_2PI) / 30.0f);
+		flyM = flyT->get() * rot;
+		flyTrans.translation(GsVec(5.0f, 0, 5.0f));
+		flyM = flyM * flyTrans;
+		flyT->set(flyM);
+		render();
+		ws_check();
+	} while (forward == false);
+
+
 
 }
 
@@ -1239,7 +1252,7 @@ int MyViewer::handle_keyboard(const GsEvent & e)
 	switch (e.key)
 	{
 	case GsEvent::KeyEsc: gs_exit(); return 1;
-	case 65362: forward = true; run_animation(); render(); break;
+	case 65362: {forward = true; if (moveCount == 9) { moveCount = 0; } else { moveCount++; } run_animation(); render(); break; }
 	default: gsout << "Key pressed: " << e.key << gsnl;
 
 
