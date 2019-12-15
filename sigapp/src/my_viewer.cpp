@@ -318,13 +318,27 @@ void MyViewer::build_scene()
 	BirdT->set(BirdM);
 	BirdGroup->add(BirdT);
 	BirdGroup->add(Bird);
+
+	//Flying bird for scene
+	SnModel* fly = new SnModel;
+	SnGroup* flyG = new SnGroup;
+	flyG->separator(true);
+	fly->model()->load_obj("../src/Models_and_Textures/flyer.obj");
+	fly->model()->centralize();
+	fly->model()->get_bounding_box(birdBox);
+	flyT = new SnTransform;
+	fly->model()->scale((float)0.5);
+	flyM.translation(GsVec(40.0f, 80.0f, 60.0f));
+	flyT->set(flyM);
+	flyG->add(flyT);
+	flyG->add(fly);
 	
 	//Add everything to rootg in order
 	rootg()->add(global);
 	rootg()->add(BirdGroup);
 	rootg()->add(nature);
 	rootg()->add(floorG);
-
+	rootg()->add(flyG);
 
 	/*//GsModel* ground = new GsModel;
 	//GsBox floor;
@@ -913,6 +927,13 @@ void MyViewer::run_animation()
 			floorz = floorz - 0.5f;
 			floorM.translation(GsVec(0, 0, floorz));
 			floorT->set(floorM);
+
+			rot.roty(-1 * float(GS_2PI) / 30.0f);
+			flyM = flyT->get() * rot;
+			flyTrans.translation(GsVec(5.0f, 0, 5.0f));
+			flyM = flyM * flyTrans;
+			flyT->set(flyM);
+
 			render(); // notify it needs redraw
 			ws_check(); // redraw now
 		} while (/*birdY > startingbirdY &&*/ count < 20);

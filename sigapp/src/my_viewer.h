@@ -30,7 +30,9 @@ protected:
 public:
 	SnTransform* BirdT; // our bird transformations
 	SnTransform* floorT; //floor translations
-	GsMat BirdM, floorM;
+	SnTransform* flyT; // flying bird transformation
+	GsMat BirdM, floorM, flyM;
+	GsMat rot, flyTrans;
 	MyViewer(int x, int y, int w, int h, const char* l);
 	void build_ui();
 	void add_model(SnShape* s, GsVec p);
