@@ -306,6 +306,26 @@ void MyViewer::build_scene()
 	SnModel* Bird = new SnModel;
 	SnGroup* BirdGroup = new SnGroup;
 	BirdGroup->separator(true);
+	Bird->model()->load_obj("../src/Models_and_Textures/birdbody.obj");
+	Bird->model()->centralize();
+	Bird->color(GsColor::lightblue);
+	Bird->model()->get_bounding_box(birdBox);
+	BirdT = new SnTransform;
+	//Bird->model()->scale(5);
+	birdX = 0;
+	birdZ = 10;
+	//birdY = (5 * (birdBox.dy() / 2));
+	birdY = birdBox.dy() / 2;
+	//startingbirdY = (5 * (birdBox.dy() / 2));
+	BirdM.translation(GsVec(birdX, birdY, birdZ));
+	BirdT->set(BirdM);
+
+
+	//OLD MODEL
+	/*
+	SnModel* Bird = new SnModel;
+	SnGroup* BirdGroup = new SnGroup;
+	BirdGroup->separator(true);
 	Bird->model()->load_obj("../src/Models_and_Textures/bird.obj");
 	Bird->model()->centralize();
 	Bird->model()->get_bounding_box(birdBox);
@@ -317,8 +337,39 @@ void MyViewer::build_scene()
 	startingbirdY = (5 * (birdBox.dy() / 2));
 	BirdM.translation(GsVec(birdX, birdY, birdZ));
 	BirdT->set(BirdM);
+	*/
+
+	SnModel* leftwing = new SnModel();
+	SnGroup* leftwingGroup = new SnGroup;
+	leftwing->model()->load("../src/Models_and_Textures/leftwing.obj");
+	leftwing->model()->centralize();
+	leftWT = new SnTransform;
+	leftwing->model()->scale(1);
+	leftwing->color(GsColor::lightblue);
+	wingM.translation(GsVec(4, 3, 0));
+	leftWT->set(wingM);
+	leftwingGroup->add(leftWT);
+	leftwingGroup->add(leftwing);
+	leftwingGroup->separator(true);
+
+	SnModel* rightwing = new SnModel();
+	SnGroup* rightwingGroup = new SnGroup;
+	rightwing->model()->load("../src/Models_and_Textures/rightwing.obj");
+	rightwing->model()->centralize();
+	rightwing->model()->scale(1);
+	rightwing->color(GsColor::lightblue);
+	rightWT = new SnTransform;
+	wingM.translation(GsVec(-4, 3, 0));
+	rightWT->set(wingM);
+	rightwingGroup->add(rightWT);
+	rightwingGroup->add(rightwing);
+
 	BirdGroup->add(BirdT);
 	BirdGroup->add(Bird);
+	BirdGroup->add(leftwingGroup);
+	BirdGroup->add(rightwingGroup);
+
+
 
 	//Flying bird for scene
 	SnModel* fly = new SnModel;
@@ -928,11 +979,35 @@ void MyViewer::run_animation()
 			double v = 4; // target velocity is 1 unit per second
 			double t = 0, lt = 0, t0 = gs_time();
 			float count = 0.0f;
+			float winginc = 0.0f;
+			GsMat wingtemp, rightwingt;
 			do // run for a while:
 			{
 				while (t - lt < frdt) { ws_check(); t = gs_time() - t0; } // wait until it is time for next frame
 				double yinc = 0.5f;
-				if (count >= 10.0f) yinc = -yinc; // after 2 secs: go down
+				if (count >= 10.0f) {
+					yinc = -yinc; // after 2 secs: go down
+					wingtemp.translation(GsVec(4, 3, 1));
+					rightwingt.translation(GsVec(-4, 3, 0));
+					winginc = (GS_2PI / 20.0);
+					wingM.rotz(winginc);
+					leftWT->get().mult(wingtemp, wingM);
+					winginc = (-GS_2PI / 20.0);
+					wingM.rotz(winginc);
+					rightWT->get().mult(rightwingt, wingM);
+					//leftWT->get().mult(leftWT->get(), wingM);
+				}
+				else {
+					wingtemp.translation(GsVec(4, 2.5f, 1));
+					rightwingt.translation(GsVec(-4, 2.5f, 0));
+					winginc = -(GS_2PI / 15);
+					wingM.rotz(winginc);
+					leftWT->get().mult(wingtemp, wingM);
+					winginc = (GS_2PI / 15);
+					wingM.rotz(winginc);
+					rightWT->get().mult(rightwingt, wingM);
+				}
+				
 				lt = t;
 				if (birdY >= startingbirdY)
 					birdY = birdY + (float)yinc;

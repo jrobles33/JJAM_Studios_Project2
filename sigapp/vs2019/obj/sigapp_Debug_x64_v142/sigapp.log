@@ -1,3 +1,7 @@
 ﻿  my_viewer.cpp
-  sigapp.vcxproj -> C:\Users\josed\Desktop\CSE170\Project2\sigapp\vs2019\\obj\sigapp_Debug_x64_v142\sigapp64mdd.exe
+C:\Users\Johny Xiong\Desktop\CSE170\Project2test3\sigapp\src\my_viewer.cpp(992,31): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\Johny Xiong\Desktop\CSE170\Project2test3\sigapp\src\my_viewer.cpp(995,32): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\Johny Xiong\Desktop\CSE170\Project2test3\sigapp\src\my_viewer.cpp(1003,30): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\Johny Xiong\Desktop\CSE170\Project2test3\sigapp\src\my_viewer.cpp(1006,29): warning C4305: '=': truncation from 'double' to 'float'
+  sigapp.vcxproj -> C:\Users\Johny Xiong\Desktop\CSE170\Project2test3\sigapp\vs2019\\obj\sigapp_Debug_x64_v142\sigapp64mdd.exe
           1 file(s) copied.
