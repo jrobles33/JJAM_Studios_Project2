@@ -299,17 +299,78 @@ void MyViewer::build_scene()
 	tree1->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
 	tree1->model()->centralize();
 	tree1->model()->get_bounding_box(b1);
-	tree1->model()->translate(GsVec(-40, (b1.dy() / 2), 50));
+	tree1->model()->translate(GsVec(30, (b1.dy() / 2), 10));
 	nature->add(tree1);
-	SnModel * tree2 = new SnModel;
-	tree2->model()->load_obj("../src/Models_and_Textures/LowPolyNature.obj");
+	SnModel* tree2 = new SnModel;
+	tree2->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
 	tree2->model()->centralize();
-	tree2->model()->get_bounding_box(b2);
-	tree2->model()->scale(2);
-	tree2->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
-	tree2->model()->rotate(GsQuat(GsVec::j, -gspidiv2));
-	tree2->model()->translate(GsVec(50, (b2.dy() / 2) - 6, 130));
+	tree2->model()->get_bounding_box(b1);
+	tree2->model()->rotate(GsQuat(GsVec::j, gspidiv2));
+	tree2->model()->translate(GsVec(-40, (b1.dy() / 2), 50));
 	nature->add(tree2);
+	SnModel* tree3 = new SnModel;
+	tree3->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
+	tree3->model()->centralize();
+	tree3->model()->get_bounding_box(b1);
+	tree3->model()->translate(GsVec(60, (b1.dy() / 2), 90));
+	nature->add(tree3);
+	SnModel* tree4 = new SnModel;
+	tree4->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
+	tree4->model()->centralize();
+	tree4->model()->get_bounding_box(b1);
+	tree4->model()->translate(GsVec(-60, (b1.dy() / 2), 90));
+	nature->add(tree4);
+	SnModel* tree5 = new SnModel;
+	tree5->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
+	tree5->model()->centralize();
+	tree5->model()->get_bounding_box(b1);
+	tree5->model()->translate(GsVec(60, (b1.dy() / 2), 170));
+	nature->add(tree5);
+	SnModel* rand1 = new SnModel;
+	rand1->model()->load_obj("../src/Models_and_Textures/LowPolyNature.obj");
+	rand1->model()->centralize();
+	rand1->model()->get_bounding_box(b2);
+	rand1->model()->scale(2);
+	rand1->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
+	rand1->model()->rotate(GsQuat(GsVec::j, gspidiv2));
+	rand1->model()->translate(GsVec(-50, (b2.dy() / 2) - 6, 10));
+	nature->add(rand1);
+	SnModel* rand2 = new SnModel;
+	rand2->model()->load_obj("../src/Models_and_Textures/LowPolyNature.obj");
+	rand2->model()->centralize();
+	rand2->model()->get_bounding_box(b2);
+	rand2->model()->scale(2);
+	rand2->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
+	rand2->model()->rotate(GsQuat(GsVec::j, -gspidiv2));
+	rand2->model()->translate(GsVec(50, (b2.dy() / 2) - 6, 50));
+	nature->add(rand2);
+	SnModel * rand3 = new SnModel;
+	rand3->model()->load_obj("../src/Models_and_Textures/LowPolyNature.obj");
+	rand3->model()->centralize();
+	rand3->model()->get_bounding_box(b2);
+	rand3->model()->scale(2);
+	rand3->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
+	rand3->model()->rotate(GsQuat(GsVec::j, gspidiv2));
+	rand3->model()->translate(GsVec(50, (b2.dy() / 2) - 6, 130));
+	nature->add(rand3);
+	SnModel* rand4 = new SnModel;
+	rand4->model()->load_obj("../src/Models_and_Textures/LowPolyNature.obj");
+	rand4->model()->centralize();
+	rand4->model()->get_bounding_box(b2);
+	rand4->model()->scale(2);
+	rand4->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
+	rand4->model()->rotate(GsQuat(GsVec::j, -gspidiv2));
+	rand4->model()->translate(GsVec(-50, (b2.dy() / 2) - 6, 170));
+	nature->add(rand4);
+	SnModel* rand5 = new SnModel;
+	rand5->model()->load_obj("../src/Models_and_Textures/LowPolyNature.obj");
+	rand5->model()->centralize();
+	rand5->model()->get_bounding_box(b2);
+	rand5->model()->scale(2);
+	rand5->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
+	rand5->model()->rotate(GsQuat(GsVec::j, gspidiv2));
+	rand5->model()->translate(GsVec(-50, (b2.dy() / 2) - 6, 130));
+	nature->add(rand5);
 
 	//Bird that acts as the player
 	SnModel * Bird = new SnModel;
@@ -1068,11 +1129,11 @@ void MyViewer::run_animation()
 			floorT->set(floorM);
 
 
-			rot.roty(0.25f * (-1 * float(GS_2PI) / 30.0f));
+			rot.roty(0.1f * (-1 * float(GS_2PI) / 30.0f));
 			flyM = flyT->get() * rot;
 			flyT->set(flyM);
 
-			rot.rotz(0.25f * (float(GS_2PI) / 30.0f));
+			rot.rotz(0.1f * (float(GS_2PI) / 30.0f));
 			flyTo.translation(GsVec(40.0f, 80.0f, 60.0f));
 			flyLeftM = flyLeftT->get() * flyTo;
 			flyLeftM = flyLeftM * rot;
@@ -1080,7 +1141,7 @@ void MyViewer::run_animation()
 			flyLeftM = flyLeftM * flyBack;
 			flyLeftT->set(flyLeftM);
 
-			rot.rotz(0.25f * (-1 * float(GS_2PI) / 30.0f));
+			rot.rotz(0.1f * (-1 * float(GS_2PI) / 30.0f));
 			flyRightM = flyRightT->get() * flyTo;
 			flyRightM = flyRightM * rot;
 			flyRightM = flyRightM * flyBack;
@@ -1290,11 +1351,11 @@ void MyViewer::run_animation()
 		while (t - lt < frdt) { ws_check(); t = gs_time() - t0; } // wait until it is time for next frame
 		lt = t;
 
-		rot.roty(0.25f* (-1 * float(GS_2PI) / 30.0f));
+		rot.roty(0.1f* (-1 * float(GS_2PI) / 30.0f));
 		flyM = flyT->get() * rot;
 		flyT->set(flyM);
 
-		rot.rotz(0.25f* (float(GS_2PI) / 30.0f));
+		rot.rotz(0.1f* (float(GS_2PI) / 30.0f));
 		flyTo.translation(GsVec(40.0f, 80.0f, 60.0f));
 		flyLeftM = flyLeftT->get() * flyTo;
 		flyLeftM = flyLeftM * rot;
@@ -1302,7 +1363,7 @@ void MyViewer::run_animation()
 		flyLeftM = flyLeftM * flyBack;
 		flyLeftT->set(flyLeftM);
 
-		rot.rotz(0.25f* (-1 * float(GS_2PI) / 30.0f));
+		rot.rotz(0.1f* (-1 * float(GS_2PI) / 30.0f));
 		flyRightM = flyRightT->get() * flyTo;
 		flyRightM = flyRightM * rot;
 		flyRightM = flyRightM * flyBack;
