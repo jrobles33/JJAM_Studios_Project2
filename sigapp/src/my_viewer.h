@@ -32,7 +32,22 @@ public:
 	GsMat BirdM, wingM;
 	GsBox birdBox;
 	float birdX, birdY, birdZ;
+	float shadowbirdx, shadowbirdy, shadowbirdz; //SHADOW POSITIONS
 	bool forward, left, right;
+
+
+
+	//SHADOW STUFF
+	SnTransform* ShadowBT;
+	SnTransform* leftWTShadow;
+	SnTransform* rightWTShadow;
+	GsMat Shadowmat;
+	GsMat Shadowmat2;
+	GsMat perspective_trans;
+	GsMat perspective_trans2;
+	GsVec Ls;
+	GsVec Shadow_origin;
+
 
 	//flying bird stuff
 	SnTransform* flyT, *flyMidT, *flyLeftT, *flyRightT;

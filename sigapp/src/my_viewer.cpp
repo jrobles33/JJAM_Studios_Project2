@@ -15,6 +15,18 @@ MyViewer::MyViewer(int x, int y, int w, int h, const char* l) : WsViewer(x, y, w
 {
 	_nbut = 0;
 	_animating = false;
+	perspective_trans.e12 = -(lightPos.x / lightPos.y);
+	perspective_trans.e32 = -(lightPos.z / lightPos.y);
+	perspective_trans.e22 = 0; // e24
+	perspective_trans.e24 = 0.0;
+	perspective_trans.e33 = 1;
+	perspective_trans.e34 = 0;
+	perspective_trans.e44 = 1;
+	Shadow_origin.x = -0.025;
+	Shadow_origin.y = 0.05;
+	Shadow_origin.z = -0.02f;
+
+
 	build_ui();
 	build_scene();
 
@@ -587,6 +599,68 @@ void MyViewer::build_scene()
 	rightwingGroup->add(rightWT);
 	rightwingGroup->add(rightwing);
 
+	//SHADOW STUFF
+	SnGroup* ShadowBirdg = new SnGroup;
+	SnModel* BirdShadow = new SnModel;
+
+	//SHADOW FOR THE BIRD'S BODY
+	BirdShadow->model()->load_obj("../src/Models_and_Textures/birdbody.obj");
+	BirdShadow->model()->centralize();
+	BirdShadow->color(GsColor::black);
+	BirdShadow->model()->get_bounding_box(birdBox);
+	ShadowBT = new SnTransform;
+	//Bird->model()->scale(5);
+	birdX = 0;
+	birdZ = 10;
+	//birdY = (5 * (birdBox.dy() / 2));
+	birdY = birdBox.dy() / 2;
+	//startingbirdY = (5 * (birdBox.dy() / 2));
+	shadowbirdx = birdX - 0.0f;
+	shadowbirdy = birdY - 4.25f;
+	shadowbirdz = birdZ - 5;
+	Shadowmat.translation(GsVec(birdX - 0.0f, birdY - 4.25f, birdZ - 5));
+	ShadowBT->set(Shadowmat);
+	ShadowBT->get().mult(ShadowBT->get(), perspective_trans);
+
+	//SHADOW FOR BIRD'S LEFT WING
+	SnModel* leftwingshadow = new SnModel;
+	SnGroup* leftwingshadowGroup = new SnGroup;
+	leftwingshadow->model()->load("../src/Models_and_Textures/leftwing.obj");
+	leftwingshadow->model()->centralize();
+	leftWTShadow = new SnTransform;
+	leftwingshadow->model()->scale(1);
+	leftwingshadow->color(GsColor::black);
+	Shadowmat2.translation(GsVec(4, 3, 3));
+	leftWTShadow->set(Shadowmat2);
+	leftWTShadow->get().mult(leftWTShadow->get(), perspective_trans2);
+	leftwingshadowGroup->add(leftWTShadow);
+	leftwingshadowGroup->add(leftwingshadow);
+	leftwingGroup->separator(true);
+
+	//SHADOW FOR BIRD'S RIGHT WING
+	SnModel* rightwingshadow = new SnModel;
+	SnGroup* rightwingshadowGroup = new SnGroup;
+	rightwingshadow->model()->load("../src/Models_and_Textures/rightwing.obj");
+	rightwingshadow->model()->centralize();
+	rightWTShadow = new SnTransform;
+	rightwingshadow->model()->scale(1);
+	rightwingshadow->color(GsColor::black);
+	Shadowmat2.translation(GsVec(-7, 4, 5));
+	rightWTShadow->set(Shadowmat2);
+	rightWTShadow->get().mult(rightWTShadow->get(), perspective_trans2);
+	rightwingshadowGroup->add(rightWTShadow);
+	rightwingshadowGroup->add(rightwingshadow);
+	rightwingshadowGroup->separator(true);
+
+
+
+	ShadowBirdg->add(ShadowBT);
+	ShadowBirdg->add(BirdShadow);
+	ShadowBirdg->add(leftwingshadowGroup);
+	ShadowBirdg->add(rightwingshadowGroup);
+	ShadowBirdg->separator(true);
+
+
 	BirdGroup->add(BirdT);
 	BirdGroup->add(Bird);
 	BirdGroup->add(leftwingGroup);
@@ -645,6 +719,7 @@ void MyViewer::build_scene()
 	//Add everything to rootg in order
 	rootg()->add(global);
 	rootg()->add(BirdGroup);
+	rootg()->add(ShadowBirdg);
 	rootg()->add(nature);
 	rootg()->add(floorG);
 	rootg()->add(flyT);
@@ -730,7 +805,8 @@ void MyViewer::run_animation()
 		double t = 0, lt = 0, t0 = gs_time();
 		float count = 0.0f;
 		float winginc = 0.0f;
-		GsMat wingtemp, rightwingt;
+		float winginc2 = 0.0f;
+		GsMat wingtemp, rightwingt, shadowrightwingt, shadowleftwingt;
 		do // run for a while:
 		{
 			while (t - lt < frdt) { ws_check(); t = gs_time() - t0; } // wait until it is time for next frame
@@ -739,30 +815,73 @@ void MyViewer::run_animation()
 			//animating the bird model of the player
 			if (count >= 10.0f) {
 				yinc = -yinc; // after 2 secs: go down
-				wingtemp.translation(GsVec(4, 3, 1));
-				rightwingt.translation(GsVec(-4, 3, 0));
+				//GOING DOWN
+				//LEFT WING
+				wingtemp.translation(GsVec(4, 3, 1)); //LEFT WING
 				winginc = float(GS_2PI / 20.0);
 				wingM.rotz(winginc);
 				leftWT->get().mult(wingtemp, wingM);
+
+
+
+				//RIGHT WING
+				rightwingt.translation(GsVec(-4, 3, 1));
 				winginc = float(-GS_2PI / 20.0);
 				wingM.rotz(winginc);
 				rightWT->get().mult(rightwingt, wingM);
+
+
+				//SHADOW ANIMATION FOR LEFT WING
+				shadowleftwingt.translation(4, 3, 2);
+				winginc2 = (GS_2PI / 20);
+				wingM.rotz(winginc2);
+				leftWTShadow->get().mult(shadowleftwingt, wingM);
+
+
+				//SHADOW ANIMATION FOR RIGHT WING
+				shadowrightwingt.translation(GsVec(-7, 4, 1.75f));
+				winginc2 = (-GS_2PI / 10);
+				wingM.rotz(winginc2);
+				rightWTShadow->get().mult(shadowrightwingt, wingM);
 			}
 			else {
+				//GOING UP
+				//BIRD ANIMATION
 				wingtemp.translation(GsVec(4, 2.5f, 1));
-				rightwingt.translation(GsVec(-4, 2.5f, 0));
 				winginc = -float(GS_2PI / 15);
 				wingM.rotz(winginc);
 				leftWT->get().mult(wingtemp, wingM);
+
+				//RIGHT WING
+				rightwingt.translation(GsVec(-4, 2.5f, 1));
 				winginc = float(GS_2PI / 15);
 				wingM.rotz(winginc);
 				rightWT->get().mult(rightwingt, wingM);
+
+				//SHADOW ANIMATION FOR LEFT WING
+				shadowleftwingt.translation(4, 3, 4);
+				winginc2 = (-GS_2PI / 15);
+				wingM.rotz(winginc2);
+				leftWTShadow->get().mult(shadowleftwingt, wingM);
+
+				//SHADOW ANIMATION FOR RIGHT WING
+				shadowrightwingt.translation(GsVec(-10, 3.5f, 7));
+				winginc2 = (GS_2PI / 10);
+				wingM.rotz(winginc2);
+				rightWTShadow->get().mult(shadowrightwingt, wingM);
 			}
 			lt = t;
-			if (birdY >= 0)
+			if (birdY >= 0) {
 				birdY = birdY + (float)yinc;
+				shadowbirdz = shadowbirdz - (float)yinc;
+			}
 			BirdM.translation(GsVec(birdX, birdY, birdZ));
 			BirdT->set(BirdM);
+
+
+			//MOVING THE BIRD'S SHADOW
+			Shadowmat.translation(GsVec(shadowbirdx, shadowbirdy, shadowbirdz));
+			ShadowBT->get().mult(Shadowmat, perspective_trans);
 
 			//when player presses forward, move the entire block of all scene objects backward
 			count += 0.5f;
