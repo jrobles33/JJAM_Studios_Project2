@@ -307,7 +307,7 @@ void MyViewer::build_scene()
 	tree2->model()->get_bounding_box(b1);
 	tree2->model()->rotate(GsQuat(GsVec::j, gspidiv2));
 	tree2->model()->translate(GsVec(-40, (b1.dy() / 2), 50));
-	floortrans[3]->add(tree2);
+	floortrans[2]->add(tree2);
 	SnModel* tree3 = new SnModel;
 	tree3->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
 	tree3->model()->centralize();
@@ -343,7 +343,7 @@ void MyViewer::build_scene()
 	rand2->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	rand2->model()->rotate(GsQuat(GsVec::j, -gspidiv2));
 	rand2->model()->translate(GsVec(50, (b2.dy() / 2) - 6, 50));
-	floortrans[3]->add(rand2);
+	floortrans[2]->add(rand2);
 	SnModel * rand3 = new SnModel;
 	rand3->model()->load_obj("../src/Models_and_Textures/LowPolyNature.obj");
 	rand3->model()->centralize();
@@ -1046,6 +1046,13 @@ void MyViewer::SceneMovement() {
 // Below is an example of how to control the main loop of an animation:
 void MyViewer::run_animation()
 {
+	camera().center.x = 0;
+	camera().center.y = 0;
+	camera().center.z = -35;
+
+	camera().eye.x = 0;
+	camera().eye.y = 35;
+	camera().eye.z = 10;
 
 	if (_animating) return; // avoid recursive calls
 	_animating = true;
