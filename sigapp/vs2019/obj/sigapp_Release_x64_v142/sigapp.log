@@ -1,4 +1,0 @@
-﻿  my_viewer.cpp
-C:\Users\jxion\Desktop\CSE170\Project2\sigapp\src\my_viewer.cpp(973,27): warning C4305:  'argument': truncation from 'double' to 'float'
-  sigapp.vcxproj -> C:\Users\jxion\Desktop\CSE170\Project2\sigapp\vs2019\\obj\sigapp_Release_x64_v142\sigapp64mt.exe
-          1 file(s) copied.

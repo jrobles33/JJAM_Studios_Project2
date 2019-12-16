@@ -300,7 +300,7 @@ void MyViewer::build_scene()
 	tree1->model()->centralize();
 	tree1->model()->get_bounding_box(b1);
 	tree1->model()->translate(GsVec(30, (b1.dy() / 2), 10));
-	nature->add(tree1);
+	floortrans[0]->add(tree1);
 	SnModel* tree2 = new SnModel;
 	tree2->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
 	tree2->model()->centralize();
