@@ -13,7 +13,6 @@ double tmd = 0;
 float i = 0.0001f;
 MyViewer::MyViewer(int x, int y, int w, int h, const char* l) : WsViewer(x, y, w, h, l)
 {
-	SceneMoving = true;
 	_nbut = 0;
 	_animating = false;
 	build_ui();
@@ -487,10 +486,6 @@ void MyViewer::build_scene()
 //	_tShadow1->get().mult(_tShadow1->get(), rot);*/
 //	render();
 //}
-
-void MyViewer::update_camera() {
-
-}
 
 void MyViewer::SceneMovement() {
 	double frdt = 1.0 / 60.0; // delta time to reach given number of frames per second
