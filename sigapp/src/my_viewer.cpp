@@ -1054,6 +1054,8 @@ void MyViewer::run_animation()
 	camera().eye.y = 35;
 	camera().eye.z = 10;
 
+	camera().fovy = gspidiv2;
+
 	if (_animating) return; // avoid recursive calls
 	_animating = true;
 
@@ -1461,7 +1463,7 @@ int MyViewer::handle_keyboard(const GsEvent & e)
 	switch (e.key)
 	{
 	case GsEvent::KeyEsc: gs_exit(); return 1;
-	case 65362: {forward = true; if (moveCount == 9) { moveCount = 0; } else { moveCount++; } run_animation(); render(); break; }
+	case 65362: {if (_animating == false) { forward = true; if (moveCount == 9) { moveCount = 0; } else { moveCount++; } run_animation(); render(); } break; }
 	default: gsout << "Key pressed: " << e.key << gsnl;
 
 
