@@ -26,6 +26,7 @@ public:
 	GsBox b1, b2;
 	float floorz;
 	int moveCount = -2, zmove = 0;
+	float floorX = 350.0f, floorY = 0.0f, floorZP = 20.0f, floorZN = 0.0f;
 
 	//player bird stuff
 	SnTransform* BirdT, *leftWT, *rightWT;
@@ -34,8 +35,6 @@ public:
 	float birdX, birdY, birdZ;
 	float shadowbirdx, shadowbirdy, shadowbirdz; //SHADOW POSITIONS
 	bool forward, left, right;
-
-
 
 	//SHADOW STUFF
 	SnTransform* ShadowBT;
@@ -47,7 +46,6 @@ public:
 	GsMat perspective_trans2;
 	GsVec Ls;
 	GsVec Shadow_origin;
-
 
 	//flying bird stuff
 	SnTransform* flyT, *flyMidT, *flyLeftT, *flyRightT;

@@ -18,14 +18,15 @@ MyViewer::MyViewer(int x, int y, int w, int h, const char* l) : WsViewer(x, y, w
 	perspective_trans.e12 = -(lightPos.x / lightPos.y);
 	perspective_trans.e32 = -(lightPos.z / lightPos.y);
 	perspective_trans.e22 = 0; // e24
-	perspective_trans.e24 = 0.0;
+	perspective_trans.e24 = 0;
 	perspective_trans.e33 = 1;
 	perspective_trans.e34 = 0;
 	perspective_trans.e44 = 1;
-	Shadow_origin.x = -0.025;
-	Shadow_origin.y = 0.05;
+	Shadow_origin.x = -0.025f;
+	Shadow_origin.y = 0.05f;
 	Shadow_origin.z = -0.02f;
 
+	WsViewer::background(GsColor::GsColor(135, 206, 235));
 
 	build_ui();
 	build_scene();
@@ -35,15 +36,15 @@ MyViewer::MyViewer(int x, int y, int w, int h, const char* l) : WsViewer(x, y, w
 
 void MyViewer::build_ui()
 {
-	UiPanel* p, * sp;
-	UiManager* uim = WsWindow::uim();
-	p = uim->add_panel("", UiPanel::HorizLeft);
-	p->add(new UiButton("View", sp = new UiPanel()));
-	{	UiPanel* p = sp;
-	p->add(_nbut = new UiCheckButton("Normals", EvNormals));
-	}
-	p->add(new UiButton("Animate", EvAnimate));
-	p->add(new UiButton("Exit", EvExit)); p->top()->separate();
+	//UiPanel* p, * sp;
+	//UiManager* uim = WsWindow::uim();
+	//p = uim->add_panel("", UiPanel::HorizLeft);
+	//p->add(new UiButton("View", sp = new UiPanel()));
+	//{	UiPanel* p = sp;
+	//p->add(_nbut = new UiCheckButton("Normals", EvNormals));
+	//}
+	//p->add(new UiButton("Animate", EvAnimate));
+	//p->add(new UiButton("Exit", EvExit)); p->top()->separate();
 }
 
 void MyViewer::add_model(SnShape * s, GsVec p)
@@ -77,11 +78,6 @@ void MyViewer::build_scene()
 	//The floor of the scene
 	SnModel* floor[10];
 	SnGroup* floortrans[10];
-	float floorX, floorY, floorZP, floorZN;
-	floorX = 100.0f;
-	floorY = 0.0f;
-	floorZP = 20.0f;
-	floorZN = 0.0f;
 	SnTransform* global = new SnTransform;
 	GsMat m;
 	m.roty(gspi);
@@ -138,7 +134,10 @@ void MyViewer::build_scene()
 	floorgroupRoad.fn = m1.F.size();
 	floorgroupGrass.dmap = new GsModel::Texture;
 	floorgroupRoad.dmap = new GsModel::Texture;
-	floorgroupGrass.dmap->fname.set("../src/Models_and_Textures/grass.png");
+	if (moveCount < 5)
+		floorgroupGrass.dmap->fname.set("../src/Models_and_Textures/grass.png");
+	if (moveCount >= 5)
+		floorgroupGrass.dmap->fname.set("../src/Models_and_Textures/Netherrack.png");
 	floorgroupRoad.dmap->fname.set("../src/Models_and_Textures/road.jpg");
 
 	floorgroupGrass1.fi = 0;
@@ -303,7 +302,7 @@ void MyViewer::build_scene()
 	fence1->model()->load_obj("../src/Models_and_Textures/fence.obj");
 	fence1->model()->centralize();
 	fence1->model()->get_bounding_box(b2);
-	fence1->model()->scale(1.9);
+	fence1->model()->scale(1.9f);
 	fence1->color(GsColor::yellow);
 	fence1->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fence1->model()->rotate(GsQuat(GsVec::j, gspi));
@@ -313,7 +312,7 @@ void MyViewer::build_scene()
 	fence2->model()->load_obj("../src/Models_and_Textures/fence.obj");
 	fence2->model()->centralize();
 	fence2->model()->get_bounding_box(b2);
-	fence2->model()->scale(1.9);
+	fence2->model()->scale(1.9f);
 	fence2->color(GsColor::yellow);
 	fence2->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fence2->model()->rotate(GsQuat(GsVec::j, gs2pi));
@@ -323,7 +322,7 @@ void MyViewer::build_scene()
 	fence3->model()->load_obj("../src/Models_and_Textures/fence.obj");
 	fence3->model()->centralize();
 	fence3->model()->get_bounding_box(b2);
-	fence3->model()->scale(1.9);
+	fence3->model()->scale(1.9f);
 	fence3->color(GsColor::yellow);
 	fence3->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fence3->model()->rotate(GsQuat(GsVec::j, gspi));
@@ -333,7 +332,7 @@ void MyViewer::build_scene()
 	fence4->model()->load_obj("../src/Models_and_Textures/fence.obj");
 	fence4->model()->centralize();
 	fence4->model()->get_bounding_box(b2);
-	fence4->model()->scale(1.9);
+	fence4->model()->scale(1.9f);
 	fence4->color(GsColor::yellow);
 	fence4->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fence4->model()->rotate(GsQuat(GsVec::j, gs2pi));
@@ -343,7 +342,7 @@ void MyViewer::build_scene()
 	fence5->model()->load_obj("../src/Models_and_Textures/fence.obj");
 	fence5->model()->centralize();
 	fence5->model()->get_bounding_box(b2);
-	fence5->model()->scale(1.9);
+	fence5->model()->scale(1.9f);
 	fence5->color(GsColor::yellow);
 	fence5->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fence5->model()->rotate(GsQuat(GsVec::j, gspi));
@@ -353,7 +352,7 @@ void MyViewer::build_scene()
 	fence6->model()->load_obj("../src/Models_and_Textures/fence.obj");
 	fence6->model()->centralize();
 	fence6->model()->get_bounding_box(b2);
-	fence6->model()->scale(1.9);
+	fence6->model()->scale(1.9f);
 	fence6->color(GsColor::yellow);
 	fence6->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fence6->model()->rotate(GsQuat(GsVec::j, gs2pi));
@@ -363,7 +362,7 @@ void MyViewer::build_scene()
 	fence7->model()->load_obj("../src/Models_and_Textures/fence.obj");
 	fence7->model()->centralize();
 	fence7->model()->get_bounding_box(b2);
-	fence7->model()->scale(1.9);
+	fence7->model()->scale(1.9f);
 	fence7->color(GsColor::yellow);
 	fence7->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fence7->model()->rotate(GsQuat(GsVec::j, gspi));
@@ -373,7 +372,7 @@ void MyViewer::build_scene()
 	fence8->model()->load_obj("../src/Models_and_Textures/fence.obj");
 	fence8->model()->centralize();
 	fence8->model()->get_bounding_box(b2);
-	fence8->model()->scale(1.9);
+	fence8->model()->scale(1.9f);
 	fence8->color(GsColor::yellow);
 	fence8->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fence8->model()->rotate(GsQuat(GsVec::j, gs2pi));
@@ -384,7 +383,7 @@ void MyViewer::build_scene()
 	fence9->model()->centralize();
 	fence9->model()->get_bounding_box(b2);
 	fence9->color(GsColor::yellow);
-	fence9->model()->scale(1.9);
+	fence9->model()->scale(1.9f);
 	fence9->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fence9->model()->rotate(GsQuat(GsVec::j, gspi));
 	fence9->model()->translate(GsVec(-90, (b2.dy() / 2) - 1, 170));
@@ -393,7 +392,7 @@ void MyViewer::build_scene()
 	fence10->model()->load_obj("../src/Models_and_Textures/fence.obj");
 	fence10->model()->centralize();
 	fence10->model()->get_bounding_box(b2);
-	fence10->model()->scale(1.9);
+	fence10->model()->scale(1.9f);
 	fence10->color(GsColor::yellow);
 	fence10->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fence10->model()->rotate(GsQuat(GsVec::j, gs2pi));
@@ -652,14 +651,11 @@ void MyViewer::build_scene()
 	rightwingshadowGroup->add(rightwingshadow);
 	rightwingshadowGroup->separator(true);
 
-
-
 	ShadowBirdg->add(ShadowBT);
 	ShadowBirdg->add(BirdShadow);
 	ShadowBirdg->add(leftwingshadowGroup);
 	ShadowBirdg->add(rightwingshadowGroup);
 	ShadowBirdg->separator(true);
-
 
 	BirdGroup->add(BirdT);
 	BirdGroup->add(Bird);
@@ -793,7 +789,6 @@ void MyViewer::run_animation()
 	double ti = 0, lt = 0, t0 = gs_time();
 	float increment = gs2pi / 60;
 
-
 	do // run for a while:
 	{
 		while (ti - lt < frdt) { ws_check(); ti = gs_time() - t0; } // wait until it is time for next frame
@@ -826,21 +821,21 @@ void MyViewer::run_animation()
 
 				//RIGHT WING
 				rightwingt.translation(GsVec(-4, 3, 1));
-				winginc = float(-GS_2PI / 20.0);
+				winginc = float(-GS_2PI / 20);
 				wingM.rotz(winginc);
 				rightWT->get().mult(rightwingt, wingM);
 
 
 				//SHADOW ANIMATION FOR LEFT WING
 				shadowleftwingt.translation(4, 3, 2);
-				winginc2 = (GS_2PI / 20);
+				winginc2 = float(GS_2PI / 20);
 				wingM.rotz(winginc2);
 				leftWTShadow->get().mult(shadowleftwingt, wingM);
 
 
 				//SHADOW ANIMATION FOR RIGHT WING
 				shadowrightwingt.translation(GsVec(-7, 4, 1.75f));
-				winginc2 = (-GS_2PI / 10);
+				winginc2 = float(-GS_2PI / 10);
 				wingM.rotz(winginc2);
 				rightWTShadow->get().mult(shadowrightwingt, wingM);
 			}
@@ -860,13 +855,13 @@ void MyViewer::run_animation()
 
 				//SHADOW ANIMATION FOR LEFT WING
 				shadowleftwingt.translation(4, 3, 4);
-				winginc2 = (-GS_2PI / 15);
+				winginc2 = float(-GS_2PI / 15);
 				wingM.rotz(winginc2);
 				leftWTShadow->get().mult(shadowleftwingt, wingM);
 
 				//SHADOW ANIMATION FOR RIGHT WING
 				shadowrightwingt.translation(GsVec(-10, 3.5f, 7));
-				winginc2 = (GS_2PI / 10);
+				winginc2 = float(GS_2PI / 10);
 				wingM.rotz(winginc2);
 				rightWTShadow->get().mult(shadowrightwingt, wingM);
 			}
@@ -919,11 +914,12 @@ void MyViewer::run_animation()
 
 	//every time we move forward, loop floor tiles to give the effect of an endless loop
 	if (moveCount >= 0) {
-		if (moveCount == 0) {
+		
+		if (moveCount%10 == 0) {
 			zmove += 200;
 		}
-		floormoveM[moveCount].translation(GsVec(0, 0, zmove));
-		floormoveT[moveCount]->set(floormoveM[moveCount]);
+		floormoveM[moveCount%10].translation(GsVec(0, 0, zmove));
+		floormoveT[moveCount%10]->set(floormoveM[moveCount%10]);
 	}
 
 	//animate bird above scene while floor is not moving
@@ -956,6 +952,7 @@ void MyViewer::run_animation()
 
 		render();
 		ws_check();
+
 	} while (forward == false);
 
 }
@@ -999,7 +996,7 @@ int MyViewer::handle_keyboard(const GsEvent & e)
 	switch (e.key)
 	{
 	case GsEvent::KeyEsc: gs_exit(); return 1;
-	case 65362: {if (_animating == false) { forward = true; if (moveCount == 9) { moveCount = 0; } else { moveCount++; } run_animation(); render(); } break; }
+	case 65362: {if (_animating == false) { forward = true; moveCount++; run_animation(); render(); } break; }
 	default: gsout << "Key pressed: " << e.key << gsnl;
 	}
 	/*if (update)
