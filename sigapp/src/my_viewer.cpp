@@ -84,6 +84,40 @@ void MyViewer::add_model(SnShape * s, GsVec p)
 
 void MyViewer::build_scene()
 {
+	//Main Menu
+	SnModel* menu = new SnModel;
+	GsPnt p00 = GsVec(-200, 300, 150);
+	GsPnt p01 = GsVec(-200, -300, 150);
+	GsPnt p02 = GsVec(200, -300, 150);
+	GsPnt p03 = GsVec(200, 300, 150);
+	menu->model()->V.push() = p00;
+	menu->model()->V.push() = p01;
+	menu->model()->V.push() = p02;
+	menu->model()->V.push() = p03;
+	menu->model()->F.push() = GsModel::Face(0, 1, 2);
+	menu->model()->F.push() = GsModel::Face(0, 2, 3);
+	menu->model()->N.push() = GsVec(0, 0, 1);
+	menu->model()->N.push() = GsVec(0, 0, 1);
+	menu->model()->N.push() = GsVec(0, 0, 1);
+	menu->model()->N.push() = GsVec(0, 0, 1);
+	GsModel& menuM = *menu->model();
+	GsModel::Group& menuG = *menuM.G.push();
+	menuG.fi = 0;
+	menuG.fn = menuM.F.size();
+	menuG.dmap = new GsModel::Texture;
+	menuG.dmap->fname.set("../src/Models_and_Textures/menu.png");
+	menuM.M.push().init();
+	int nv1 = menuM.V.size();
+	menuM.T.size(nv1);
+	menuM.T[0].set(0, 1);
+	menuM.T[1].set(0, 0);
+	menuM.T[2].set(1, 0);
+	menuM.T[3].set(1, 1);
+	menuM.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
+	menuM.textured = true;
+
+	rootg()->add(menu);
+
 	//The floor of the scene
 	SnModel* floor[10];
 	SnGroup* floortrans[10];
@@ -599,7 +633,7 @@ void MyViewer::build_scene()
 	fencecopy1->model()->load_obj("../src/Models_and_Textures/fence.obj");
 	fencecopy1->model()->centralize();
 	fencecopy1->model()->get_bounding_box(b2);
-	fencecopy1->model()->scale(1.9);
+	fencecopy1->model()->scale(1.9f);
 	fencecopy1->color(GsColor::black);
 	fencecopy1->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fencecopy1->model()->rotate(GsQuat(GsVec::j, gspi));
@@ -609,7 +643,7 @@ void MyViewer::build_scene()
 	fencecopy2->model()->load_obj("../src/Models_and_Textures/fence.obj");
 	fencecopy2->model()->centralize();
 	fencecopy2->model()->get_bounding_box(b2);
-	fencecopy2->model()->scale(1.9);
+	fencecopy2->model()->scale(1.9f);
 	fencecopy2->color(GsColor::black);
 	fencecopy2->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fencecopy2->model()->rotate(GsQuat(GsVec::j, gs2pi));
@@ -619,7 +653,7 @@ void MyViewer::build_scene()
 	fencecopy3->model()->load_obj("../src/Models_and_Textures/fence.obj");
 	fencecopy3->model()->centralize();
 	fencecopy3->model()->get_bounding_box(b2);
-	fencecopy3->model()->scale(1.9);
+	fencecopy3->model()->scale(1.9f);
 	fencecopy3->color(GsColor::black);
 	fencecopy3->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fencecopy3->model()->rotate(GsQuat(GsVec::j, gspi));
@@ -629,7 +663,7 @@ void MyViewer::build_scene()
 	fencecopy4->model()->load_obj("../src/Models_and_Textures/fence.obj");
 	fencecopy4->model()->centralize();
 	fencecopy4->model()->get_bounding_box(b2);
-	fencecopy4->model()->scale(1.9);
+	fencecopy4->model()->scale(1.9f);
 	fencecopy4->color(GsColor::black);
 	fencecopy4->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fencecopy4->model()->rotate(GsQuat(GsVec::j, gs2pi));
@@ -639,7 +673,7 @@ void MyViewer::build_scene()
 	fencecopy5->model()->load_obj("../src/Models_and_Textures/fence.obj");
 	fencecopy5->model()->centralize();
 	fencecopy5->model()->get_bounding_box(b2);
-	fencecopy5->model()->scale(1.9);
+	fencecopy5->model()->scale(1.9f);
 	fencecopy5->color(GsColor::black);
 	fencecopy5->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fencecopy5->model()->rotate(GsQuat(GsVec::j, gspi));
@@ -649,7 +683,7 @@ void MyViewer::build_scene()
 	fencecopy6->model()->load_obj("../src/Models_and_Textures/fence.obj");
 	fencecopy6->model()->centralize();
 	fencecopy6->model()->get_bounding_box(b2);
-	fencecopy6->model()->scale(1.9);
+	fencecopy6->model()->scale(1.9f);
 	fencecopy6->color(GsColor::black);
 	fencecopy6->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fencecopy6->model()->rotate(GsQuat(GsVec::j, gs2pi));
@@ -659,7 +693,7 @@ void MyViewer::build_scene()
 	fencecopy7->model()->load_obj("../src/Models_and_Textures/fence.obj");
 	fencecopy7->model()->centralize();
 	fencecopy7->model()->get_bounding_box(b2);
-	fencecopy7->model()->scale(1.9);
+	fencecopy7->model()->scale(1.9f);
 	fencecopy7->color(GsColor::black);
 	fencecopy7->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fencecopy7->model()->rotate(GsQuat(GsVec::j, gspi));
@@ -669,7 +703,7 @@ void MyViewer::build_scene()
 	fencecopy8->model()->load_obj("../src/Models_and_Textures/fence.obj");
 	fencecopy8->model()->centralize();
 	fencecopy8->model()->get_bounding_box(b2);
-	fencecopy8->model()->scale(1.9);
+	fencecopy8->model()->scale(1.9f);
 	fencecopy8->color(GsColor::black);
 	fencecopy8->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fencecopy8->model()->rotate(GsQuat(GsVec::j, gs2pi));
@@ -680,7 +714,7 @@ void MyViewer::build_scene()
 	fencecopy9->model()->centralize();
 	fencecopy9->model()->get_bounding_box(b2);
 	fencecopy9->color(GsColor::black);
-	fencecopy9->model()->scale(1.9);
+	fencecopy9->model()->scale(1.9f);
 	fencecopy9->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fencecopy9->model()->rotate(GsQuat(GsVec::j, gspi));
 	fencecopy9->model()->translate(GsVec(-90, (b2.dy() / 2) - 1, 170));
@@ -689,7 +723,7 @@ void MyViewer::build_scene()
 	fencecopy10->model()->load_obj("../src/Models_and_Textures/fence.obj");
 	fencecopy10->model()->centralize();
 	fencecopy10->model()->get_bounding_box(b2);
-	fencecopy10->model()->scale(1.9);
+	fencecopy10->model()->scale(1.9f);
 	fencecopy10->color(GsColor::black);
 	fencecopy10->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fencecopy10->model()->rotate(GsQuat(GsVec::j, gs2pi));
@@ -1311,6 +1345,13 @@ int MyViewer::handle_keyboard(const GsEvent & e)
 	switch (e.key)
 	{
 	case GsEvent::KeyEsc: gs_exit(); return 1;
+	case GsEvent::KeyEnter: camera().center.x = 0;
+		camera().center.y = 0;
+		camera().center.z = -35;
+		camera().eye.x = 0;
+		camera().eye.y = 35;
+		camera().eye.z = 10;
+		camera().fovy = gspidiv2; render(); return 1;
 	case 65362: {if (_animating == false) { forward = true; moveCount++; run_animation(); render(); } break; }
 	default: gsout << "Key pressed: " << e.key << gsnl;
 	}
