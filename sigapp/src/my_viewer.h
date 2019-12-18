@@ -29,7 +29,16 @@ public:
 	
 	float floorX = 350.0f, floorY = 0.0f, floorZP = 20.0f, floorZN = 0.0f;
 
+	//Car Stuff
+	float car1x, car2x, car3x, car4x, car5x, car1y, car1z, car2z, car3z, car4z, car5z, car2y, car3y, car4y, car5y;
+	SnTransform* GlobalCarT; //global car transform
+	SnTransform* carT[5]; // individual car Transformations
+	GsMat GlobalCarM; //global car matrix
+	GsMat carM[5]; //individual car Matrices 
+	GsBox c1, c2, c3, c4, c5;
+
 	//player bird stuff
+	int BirdPos;
 	SnTransform* BirdT, *leftWT, *rightWT;
 	GsMat BirdM, wingM;
 	GsBox birdBox;

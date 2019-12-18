@@ -14,6 +14,7 @@ float i = 0.0001f;
 MyViewer::MyViewer(int x, int y, int w, int h, const char* l) : WsViewer(x, y, w, h, l)
 {
 	_nbut = 0;
+	BirdPos = 0;
 	_animating = false;
 	perspective_trans.e12 = -(lightPos.x / lightPos.y);
 	perspective_trans.e32 = -(lightPos.z / lightPos.y);
@@ -526,6 +527,112 @@ void MyViewer::build_scene()
 	pinetrees5->model()->translate(GsVec(-40, (b1.dy() / 2) + 4, 170));
 	floortrans[8]->add(pinetrees5);
 
+	float carScale = 0.05;
+	//CARS
+	SnGroup* carG1 = new SnGroup;
+	carG1->separator(true);
+	SnModel* car1 = new SnModel;
+	SnModel* car2 = new SnModel;
+	SnModel* car3 = new SnModel;
+	SnModel* car4 = new SnModel;
+	SnModel* car5 = new SnModel;
+	carT[0] = new SnTransform;
+	carT[1] = new SnTransform;
+	carT[2] = new SnTransform;
+	carT[3] = new SnTransform;
+	carT[4] = new SnTransform;
+
+
+	car1->model()->load_obj("../src/Models_and_Textures/car1.obj");
+	car1->model()->centralize();
+	car1->model()->scale(carScale);
+	car1->model()->rotate(GsQuat(GsVec::j, -gspidiv2));
+	car1->model()->get_bounding_box(c1);
+	car1->color(GsColor::red);
+	car1x = -5.0f;
+	car1y = c1.dy() / 2;
+	car1z = 30.0f;
+	carM[0].translation(GsVec(car1x, car1y, car1z));
+	carT[0]->set(carM[0]);
+	carG1->add(carT[0]);
+	carG1->add(car1);
+	floortrans[1]->add(carG1);
+
+	SnGroup* carG2 = new SnGroup;
+	float car2scale = 0.03;
+	carG2->separator(true);
+	car2->model()->load_obj("../src/Models_and_Textures/car2.obj");
+	car2->model()->centralize();
+	car2->model()->scale(car2scale);
+	car2->model()->rotate(GsQuat(GsVec::j, -gspidiv2));
+	car2->model()->get_bounding_box(c2);
+	car2->color(GsColor::blue);
+	car2x = -5.0f;
+	//keep as car1
+	car2y = c2.dy() / 2;
+	car2z = 70.0f;
+	carM[1].translation(GsVec(car2x, car2y, car2z));
+	carT[1]->set(carM[1]);
+	carG2->add(carT[1]);
+	carG2->add(car2);
+	floortrans[3]->add(carG2);
+
+	SnGroup* carG3 = new SnGroup;
+	float car3scale = 5;
+	carG3->separator(true);
+	car3->model()->load_obj("../src/Models_and_Textures/car3.obj");
+	car3->model()->centralize();
+	car3->model()->scale(car3scale);
+	car3->model()->rotate(GsQuat(GsVec::j, gspidiv2));
+	car3->model()->get_bounding_box(c3);
+	car3->color(GsColor::magenta);
+	car3x = -5.0f;
+	//keep as car1
+	car3y = c3.dy() / 2;
+	car3z = 110;
+	carM[2].translation(GsVec(car3x, car3y, car3z));
+	carT[2]->set(carM[2]);
+	carG3->add(carT[2]);
+	carG3->add(car3);
+	floortrans[5]->add(carG3);
+
+	SnGroup* carG4 = new SnGroup;
+	float car4scale = 5;
+	carG4->separator(true);
+	car4->model()->load_obj("../src/Models_and_Textures/car4.obj");
+	car4->model()->centralize();
+	car4->model()->scale(carScale);
+	car4->model()->rotate(GsQuat(GsVec::j, gspidiv2));
+	car4->model()->get_bounding_box(c4);
+	car4->color(GsColor::white);
+	car4x = -5.0f;
+	car4y = c4.dy() / 2;
+	car4z = 150;
+	carM[3].translation(GsVec(car4x, car4y, car4z));
+	carT[3]->set(carM[3]);
+	carG4->add(carT[3]);
+	carG4->add(car4);
+	floortrans[7]->add(carG4);
+
+	SnGroup* carG5 = new SnGroup;
+	float car5scale = 5;
+	carG5->separator(true);
+	car5->model()->load_obj("../src/Models_and_Textures/car5.obj");
+	car5->model()->centralize();
+	car5->model()->scale(10);
+	car5->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
+	car5->model()->get_bounding_box(c5);
+	car5->color(GsColor::darkgreen);
+	car5x = -5.0f;
+	car5y = c5.dy() / 2;
+	car5z = 190;
+	carM[4].translation(GsVec(car5x, car5y, car5z));
+	carT[4]->set(carM[4]);
+	carG5->add(carT[4]);
+	carG5->add(car5);
+	floortrans[9]->add(carG5);
+
+	//Nature Stuff
 	SnModel* logs1 = new SnModel;
 	logs1->model()->load_obj("../src/Models_and_Textures/logs.obj");
 	logs1->model()->centralize();
@@ -1130,6 +1237,9 @@ void MyViewer::run_animation()
 
 	do // run for a while:
 	{
+		if (BirdPos < 10) { BirdPos++; }
+		if (BirdPos >= 10) { BirdPos = 0; }
+		gsout << BirdPos << gsnl;
 		while (ti - lt < frdt) { ws_check(); ti = gs_time() - t0; } // wait until it is time for next frame
 		lt = ti;
 		int cnt = 0;
@@ -1143,9 +1253,9 @@ void MyViewer::run_animation()
 		GsMat wingtemp, rightwingt, shadowrightwingt, shadowleftwingt;
 		do // run for a while:
 		{
+			
 			while (t - lt < frdt) { ws_check(); t = gs_time() - t0; } // wait until it is time for next frame
 			double yinc = 0.5f;
-
 			//animating the bird model of the player
 			if (count >= 10.0f) {
 				yinc = -yinc; // after 2 secs: go down
@@ -1209,8 +1319,6 @@ void MyViewer::run_animation()
 				birdY = birdY + (float)yinc;
 				shadowbirdz = shadowbirdz - (float)yinc;
 			}
-			BirdM.translation(GsVec(birdX, birdY, birdZ));
-			BirdT->set(BirdM);
 
 
 			//MOVING THE BIRD'S SHADOW
@@ -1247,9 +1355,74 @@ void MyViewer::run_animation()
 			flyRightT->set(flyRightM);
 			flyRightT->set(flyRightM);
 
+
+			//Car Movement
+			float carInc = 4.5;
+			car1x = car1x + carInc;
+			if (car1x > 400) {
+				car1x = -400;
+			}
+			car1x = car1x + carInc;
+			carM[0].translation(car1x, car1y, car1z);
+			carT[0]->set(carM[0]);
+
+			float car2Inc = -3;
+			if (car2x < -300) {
+				car2x = 300;
+			}
+			car2x = car2x + car2Inc;
+			carM[1].translation(car2x, car2y, car2z);
+			carT[1]->set(carM[1]);
+
+			float car3Inc = 2.1;
+			if (car3x > 300) {
+				car3x = -300;
+			}
+			car3x = car3x + car3Inc;
+			carM[2].translation(car3x, car3y, car3z);
+			carT[2]->set(carM[2]);
+
+			float car4Inc = 8.0f;
+			if (car4x > 450) {
+				car4x = -450;
+			}
+			car4x = car4x + car4Inc;
+			carM[3].translation(car4x, car4y, car4z);
+			carT[3]->set(carM[3]);
+
+			float car5Inc = -3.0f;
+			if (car5x < -300) {
+				car5x = 300;
+			}
+			car5x = car5x + car5Inc;
+			carM[4].translation(car5x, car5y, car5z);
+			carT[4]->set(carM[4]);
+
+
+			if (car1x < 5 && car1x > -5 && BirdPos == 2) {
+				gsout << "COLLISION" << gsnl;
+			}
+			if (car2x < 5 && car2x > -5 && BirdPos == 4) {
+				gsout << "COLLISION" << gsnl;
+			}
+			if (car3x < 5 && car3x > -5 && BirdPos == 6) {
+				gsout << "COLLISION" << gsnl;
+			}
+			if (car4x < 5 && car4x > -5 && BirdPos == 8) {
+				gsout << "COLLISION" << gsnl;
+			}
+			if (car5x < 5 && car5x > -5 && BirdPos == 0) {
+				gsout << "COLLISION" << gsnl;
+			}
+			
+
+			BirdM.translation(GsVec(birdX, birdY, birdZ));
+			BirdT->set(BirdM);
+			
+
 			render();
 			ws_check(); 
-		} while (count < 20);//do this loop while only letting the scene move backward by one floor panel's width
+		} while (count < 20 && forward == true);//do this loop while only letting the scene move backward by one floor panel's width
 
 		//reset variables
 		_animating = false;
@@ -1273,6 +1446,25 @@ void MyViewer::run_animation()
 
 	//animate bird above scene while floor is not moving
 	do {
+		if (car1x < 5 && car1x > -5 && BirdPos == 2) {
+			gsout << "COLLISION" << gsnl;
+		}
+		if (car1x < 5 && car1x > -5 && BirdPos == 2) {
+			gsout << "COLLISION" << gsnl;
+		}
+		if (car2x < 5 && car2x > -5 && BirdPos == 4) {
+			gsout << "COLLISION" << gsnl;
+		}
+		if (car3x < 5 && car3x > -5 && BirdPos == 6) {
+			gsout << "COLLISION" << gsnl;
+		}
+		if (car4x < 5 && car4x > -5 && BirdPos == 8) {
+			gsout << "COLLISION" << gsnl;
+		}
+		if (car5x < 5 && car5x > -5 && BirdPos == 0) {
+			gsout << "COLLISION" << gsnl;
+		}
+		gsout << BirdPos << gsnl;
 		double frdt = 1.0 / 60.0; // delta time to reach given number of frames per second
 		double v = 4; // target velocity is 1 unit per second
 		double t = 0, lt = 0, t0 = gs_time();
@@ -1298,6 +1490,54 @@ void MyViewer::run_animation()
 		flyRightM = flyRightM * flyBack;
 		flyRightT->set(flyRightM);
 		flyRightT->set(flyRightM);
+
+
+		//Car Movement
+		float carInc = 4.5;
+		car1x = car1x + carInc;
+		if (car1x > 400) {
+			car1x = -400;
+		}
+		car1x = car1x + carInc;
+		carM[0].translation(car1x, car1y, car1z);
+		carT[0]->set(carM[0]);
+
+		float car2Inc = -3;
+		if (car2x < -300) {
+			car2x = 300;
+		}
+		car2x = car2x + car2Inc;
+		carM[1].translation(car2x, car2y, car2z);
+		carT[1]->set(carM[1]);
+
+		float car3Inc = 2.1;
+		if (car3x > 300) {
+			car3x = -300;
+		}
+		car3x = car3x + car3Inc;
+		carM[2].translation(car3x, car3y, car3z);
+		carT[2]->set(carM[2]);
+
+		float car4Inc = 8.0f;
+		if (car4x > 450) {
+			car4x = -450;
+		}
+		car4x = car4x + car4Inc;
+		carM[3].translation(car4x, car4y, car4z);
+		carT[3]->set(carM[3]);
+
+		float car5Inc = -3.0f;
+		if (car5x < -300) {
+			car5x = 300;
+		}
+		car5x = car5x + car5Inc;
+		carM[4].translation(car5x, car5y, car5z);
+		carT[4]->set(carM[4]);
+
+		BirdM.translation(GsVec(birdX, birdY, birdZ));
+		BirdT->set(BirdM);
+
+		
 
 		render();
 		ws_check();
@@ -1351,7 +1591,7 @@ int MyViewer::handle_keyboard(const GsEvent & e)
 		camera().eye.x = 0;
 		camera().eye.y = 35;
 		camera().eye.z = 10;
-		camera().fovy = gspidiv2; render(); return 1;
+		camera().fovy = gspidiv2; run_animation(); render(); return 1;
 	case 65362: {if (_animating == false) { forward = true; moveCount++; run_animation(); render(); } break; }
 	default: gsout << "Key pressed: " << e.key << gsnl;
 	}
