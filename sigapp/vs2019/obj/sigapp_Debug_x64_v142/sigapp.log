@@ -1,13 +1,7 @@
 ﻿  my_viewer.cpp
-C:\Users\Johny Xiong\Desktop\CSE170\Project2Test6\sigapp\src\my_viewer.cpp(602,32): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\Johny Xiong\Desktop\CSE170\Project2Test6\sigapp\src\my_viewer.cpp(612,32): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\Johny Xiong\Desktop\CSE170\Project2Test6\sigapp\src\my_viewer.cpp(622,32): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\Johny Xiong\Desktop\CSE170\Project2Test6\sigapp\src\my_viewer.cpp(632,32): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\Johny Xiong\Desktop\CSE170\Project2Test6\sigapp\src\my_viewer.cpp(642,32): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\Johny Xiong\Desktop\CSE170\Project2Test6\sigapp\src\my_viewer.cpp(652,32): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\Johny Xiong\Desktop\CSE170\Project2Test6\sigapp\src\my_viewer.cpp(662,32): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\Johny Xiong\Desktop\CSE170\Project2Test6\sigapp\src\my_viewer.cpp(672,32): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\Johny Xiong\Desktop\CSE170\Project2Test6\sigapp\src\my_viewer.cpp(683,32): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\Johny Xiong\Desktop\CSE170\Project2Test6\sigapp\src\my_viewer.cpp(692,33): warning C4305: 'argument': truncation from 'double' to 'float'
-  sigapp.vcxproj -> C:\Users\Johny Xiong\Desktop\CSE170\Project2Test6\sigapp\vs2019\\obj\sigapp_Debug_x64_v142\sigapp64mdd.exe
+C:\Users\josed\Desktop\CSE170\Project2\sigapp\src\my_viewer.cpp(530,23): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\josed\Desktop\CSE170\Project2\sigapp\src\my_viewer.cpp(562,24): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\josed\Desktop\CSE170\Project2\sigapp\src\my_viewer.cpp(1377,23): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\josed\Desktop\CSE170\Project2\sigapp\src\my_viewer.cpp(1513,22): warning C4305: 'initializing': truncation from 'double' to 'float'
+  sigapp.vcxproj -> C:\Users\josed\Desktop\CSE170\Project2\sigapp\vs2019\\obj\sigapp_Debug_x64_v142\sigapp64mdd.exe
           1 file(s) copied.
