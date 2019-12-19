@@ -437,137 +437,304 @@ void MyViewer::build_scene()
 
 	//fences
 	SnModel* fence1 = new SnModel;
-	fence1->model()->load_obj("../src/Models_and_Textures/fence.obj");
+	fence1->model()->load_obj("../src/Models_and_Textures/rocks.obj");
 	fence1->model()->centralize();
 	fence1->model()->get_bounding_box(b2);
 	fence1->model()->scale(1.9f);
-	fence1->color(GsColor::yellow);
+	fence1->color(GsColor::gray);
 	fence1->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fence1->model()->rotate(GsQuat(GsVec::j, gspi));
-	fence1->model()->translate(GsVec(-90, (b2.dy() / 2) - 1, 10));
+	fence1->model()->translate(GsVec(-90, (b2.dy() / 2) - 3, 10));
 	floortrans[0]->add(fence1);
 	SnModel* fence2 = new SnModel;
-	fence2->model()->load_obj("../src/Models_and_Textures/fence.obj");
+	fence2->model()->load_obj("../src/Models_and_Textures/rocks.obj");
 	fence2->model()->centralize();
 	fence2->model()->get_bounding_box(b2);
 	fence2->model()->scale(1.9f);
-	fence2->color(GsColor::yellow);
+	fence2->color(GsColor::gray);
 	fence2->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fence2->model()->rotate(GsQuat(GsVec::j, gs2pi));
-	fence2->model()->translate(GsVec(90, (b2.dy() / 2) - 1, 10));
+	fence2->model()->translate(GsVec(90, (b2.dy() / 2) - 3, 10));
 	floortrans[0]->add(fence2);
 	SnModel* fence3 = new SnModel;
-	fence3->model()->load_obj("../src/Models_and_Textures/fence.obj");
+	fence3->model()->load_obj("../src/Models_and_Textures/rocks.obj");
 	fence3->model()->centralize();
 	fence3->model()->get_bounding_box(b2);
 	fence3->model()->scale(1.9f);
-	fence3->color(GsColor::yellow);
+	fence3->color(GsColor::gray);
 	fence3->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fence3->model()->rotate(GsQuat(GsVec::j, gspi));
-	fence3->model()->translate(GsVec(-90, (b2.dy() / 2) - 1, 50));
+	fence3->model()->translate(GsVec(-90, (b2.dy() / 2) - 3, 50));
 	floortrans[2]->add(fence3);
 	SnModel* fence4 = new SnModel;
-	fence4->model()->load_obj("../src/Models_and_Textures/fence.obj");
+	fence4->model()->load_obj("../src/Models_and_Textures/rocks.obj");
 	fence4->model()->centralize();
 	fence4->model()->get_bounding_box(b2);
 	fence4->model()->scale(1.9f);
-	fence4->color(GsColor::yellow);
+	fence4->color(GsColor::gray);
 	fence4->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fence4->model()->rotate(GsQuat(GsVec::j, gs2pi));
-	fence4->model()->translate(GsVec(90, (b2.dy() / 2) - 1, 50));
+	fence4->model()->translate(GsVec(90, (b2.dy() / 2) - 3, 50));
 	floortrans[2]->add(fence4);
 	SnModel* fence5 = new SnModel;
-	fence5->model()->load_obj("../src/Models_and_Textures/fence.obj");
+	fence5->model()->load_obj("../src/Models_and_Textures/rocks.obj");
 	fence5->model()->centralize();
 	fence5->model()->get_bounding_box(b2);
 	fence5->model()->scale(1.9f);
-	fence5->color(GsColor::yellow);
+	fence5->color(GsColor::gray);
 	fence5->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fence5->model()->rotate(GsQuat(GsVec::j, gspi));
-	fence5->model()->translate(GsVec(-90, (b2.dy() / 2) - 1, 90));
+	fence5->model()->translate(GsVec(-90, (b2.dy() / 2) - 3, 90));
 	floortrans[4]->add(fence5);
 	SnModel* fence6 = new SnModel;
-	fence6->model()->load_obj("../src/Models_and_Textures/fence.obj");
+	fence6->model()->load_obj("../src/Models_and_Textures/rocks.obj");
 	fence6->model()->centralize();
 	fence6->model()->get_bounding_box(b2);
 	fence6->model()->scale(1.9f);
-	fence6->color(GsColor::yellow);
+	fence6->color(GsColor::gray);
 	fence6->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fence6->model()->rotate(GsQuat(GsVec::j, gs2pi));
-	fence6->model()->translate(GsVec(90, (b2.dy() / 2) - 1, 90));
+	fence6->model()->translate(GsVec(90, (b2.dy() / 2) - 3, 90));
 	floortrans[4]->add(fence6);
 	SnModel* fence7 = new SnModel;
-	fence7->model()->load_obj("../src/Models_and_Textures/fence.obj");
+	fence7->model()->load_obj("../src/Models_and_Textures/rocks.obj");
 	fence7->model()->centralize();
 	fence7->model()->get_bounding_box(b2);
 	fence7->model()->scale(1.9f);
-	fence7->color(GsColor::yellow);
+	fence7->color(GsColor::gray);
 	fence7->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fence7->model()->rotate(GsQuat(GsVec::j, gspi));
-	fence7->model()->translate(GsVec(-90, (b2.dy() / 2) - 1, 130));
+	fence7->model()->translate(GsVec(-90, (b2.dy() / 2) - 3, 130));
 	floortrans[6]->add(fence7);
 	SnModel* fence8 = new SnModel;
-	fence8->model()->load_obj("../src/Models_and_Textures/fence.obj");
+	fence8->model()->load_obj("../src/Models_and_Textures/rocks.obj");
 	fence8->model()->centralize();
 	fence8->model()->get_bounding_box(b2);
 	fence8->model()->scale(1.9f);
-	fence8->color(GsColor::yellow);
+	fence8->color(GsColor::gray);
 	fence8->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fence8->model()->rotate(GsQuat(GsVec::j, gs2pi));
-	fence8->model()->translate(GsVec(90, (b2.dy() / 2) - 1, 130));
+	fence8->model()->translate(GsVec(90, (b2.dy() / 2) - 3, 130));
 	floortrans[6]->add(fence8);
 	SnModel* fence9 = new SnModel;
-	fence9->model()->load_obj("../src/Models_and_Textures/fence.obj");
+	fence9->model()->load_obj("../src/Models_and_Textures/rocks.obj");
 	fence9->model()->centralize();
 	fence9->model()->get_bounding_box(b2);
-	fence9->color(GsColor::yellow);
+	fence9->color(GsColor::gray);
 	fence9->model()->scale(1.9f);
 	fence9->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fence9->model()->rotate(GsQuat(GsVec::j, gspi));
-	fence9->model()->translate(GsVec(-90, (b2.dy() / 2) - 1, 170));
+	fence9->model()->translate(GsVec(-90, (b2.dy() / 2) - 3, 170));
 	floortrans[8]->add(fence9);
 	SnModel* fence10 = new SnModel;
-	fence10->model()->load_obj("../src/Models_and_Textures/fence.obj");
+	fence10->model()->load_obj("../src/Models_and_Textures/rocks.obj");
 	fence10->model()->centralize();
 	fence10->model()->get_bounding_box(b2);
 	fence10->model()->scale(1.9f);
-	fence10->color(GsColor::yellow);
+	fence10->color(GsColor::gray);
 	fence10->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fence10->model()->rotate(GsQuat(GsVec::j, gs2pi));
-	fence10->model()->translate(GsVec(90, (b2.dy() / 2) - 1, 170));
+	fence10->model()->translate(GsVec(90, (b2.dy() / 2) - 3, 170));
 	floortrans[8]->add(fence10);
+
+	//Clouds
+	SnModel* cloud1 = new SnModel;
+	GsModel& cloudM1 = *cloud1->model();
+	GsModel::Group& cloudG1 = *cloudM1.G.push();
+	SnModel* cloud2 = new SnModel;
+	GsModel& cloudM2 = *cloud2->model();
+	GsModel::Group& cloudG2 = *cloudM2.G.push();
+	SnModel* cloud3 = new SnModel;
+	GsModel& cloudM3 = *cloud3->model();
+	GsModel::Group& cloudG3 = *cloudM3.G.push();
+	SnModel* cloud4 = new SnModel;
+	GsModel& cloudM4 = *cloud4->model();
+	GsModel::Group& cloudG4 = *cloudM4.G.push();
+	SnModel* cloud5 = new SnModel;
+	GsModel& cloudM5 = *cloud5->model();
+	GsModel::Group& cloudG5 = *cloudM5.G.push();
+
+	SnGroup* allclouds = new SnGroup;
+
+	GsPnt c00 = GsVec(-25, 25, 25);
+	GsPnt c01 = GsVec(-25, -25, 25);
+	GsPnt c02 = GsVec(25, -25, 25);
+	GsPnt c03 = GsVec(25, 25, 25);
+
+	cloud1->model()->V.push() = c00;
+	cloud1->model()->V.push() = c01;
+	cloud1->model()->V.push() = c02;
+	cloud1->model()->V.push() = c03;
+	cloud1->model()->F.push() = GsModel::Face(0, 1, 2);
+	cloud1->model()->F.push() = GsModel::Face(0, 2, 3);
+	cloud1->model()->N.push() = GsVec(0, 0, 1);
+	cloud1->model()->N.push() = GsVec(0, 0, 1);
+	cloud1->model()->N.push() = GsVec(0, 0, 1);
+	cloud1->model()->N.push() = GsVec(0, 0, 1);
+
+	cloud2->model()->V.push() = c00;
+	cloud2->model()->V.push() = c01;
+	cloud2->model()->V.push() = c02;
+	cloud2->model()->V.push() = c03;
+	cloud2->model()->F.push() = GsModel::Face(0, 1, 2);
+	cloud2->model()->F.push() = GsModel::Face(0, 2, 3);
+	cloud2->model()->N.push() = GsVec(0, 0, 1);
+	cloud2->model()->N.push() = GsVec(0, 0, 1);
+	cloud2->model()->N.push() = GsVec(0, 0, 1);
+	cloud2->model()->N.push() = GsVec(0, 0, 1);
+
+	cloud3->model()->V.push() = c00;
+	cloud3->model()->V.push() = c01;
+	cloud3->model()->V.push() = c02;
+	cloud3->model()->V.push() = c03;
+	cloud3->model()->F.push() = GsModel::Face(0, 1, 2);
+	cloud3->model()->F.push() = GsModel::Face(0, 2, 3);
+	cloud3->model()->N.push() = GsVec(0, 0, 1);
+	cloud3->model()->N.push() = GsVec(0, 0, 1);
+	cloud3->model()->N.push() = GsVec(0, 0, 1);
+	cloud3->model()->N.push() = GsVec(0, 0, 1);
+
+	cloud4->model()->V.push() = c00;
+	cloud4->model()->V.push() = c01;
+	cloud4->model()->V.push() = c02;
+	cloud4->model()->V.push() = c03;
+	cloud4->model()->F.push() = GsModel::Face(0, 1, 2);
+	cloud4->model()->F.push() = GsModel::Face(0, 2, 3);
+	cloud4->model()->N.push() = GsVec(0, 0, 1);
+	cloud4->model()->N.push() = GsVec(0, 0, 1);
+	cloud4->model()->N.push() = GsVec(0, 0, 1);
+	cloud4->model()->N.push() = GsVec(0, 0, 1);
+
+	cloud5->model()->V.push() = c00;
+	cloud5->model()->V.push() = c01;
+	cloud5->model()->V.push() = c02;
+	cloud5->model()->V.push() = c03;
+	cloud5->model()->F.push() = GsModel::Face(0, 1, 2);
+	cloud5->model()->F.push() = GsModel::Face(0, 2, 3);
+	cloud5->model()->N.push() = GsVec(0, 0, 1);
+	cloud5->model()->N.push() = GsVec(0, 0, 1);
+	cloud5->model()->N.push() = GsVec(0, 0, 1);
+	cloud5->model()->N.push() = GsVec(0, 0, 1);
+
+	cloudG1.fi = 0;
+	cloudG1.fn = cloudM1.F.size();
+	cloudG1.dmap = new GsModel::Texture;
+	cloudG1.dmap->fname.set("../src/Models_and_Textures/cloud.png");
+	cloudG2.fi = 0;
+	cloudG2.fn = cloudM2.F.size();
+	cloudG2.dmap = new GsModel::Texture;
+	cloudG2.dmap->fname.set("../src/Models_and_Textures/cloud.png");
+	cloudG3.fi = 0;
+	cloudG3.fn = cloudM3.F.size();
+	cloudG3.dmap = new GsModel::Texture;
+	cloudG3.dmap->fname.set("../src/Models_and_Textures/cloud.png");
+	cloudG4.fi = 0;
+	cloudG4.fn = cloudM3.F.size();
+	cloudG4.dmap = new GsModel::Texture;
+	cloudG4.dmap->fname.set("../src/Models_and_Textures/cloud.png");
+	cloudG5.fi = 0;
+	cloudG5.fn = cloudM1.F.size();
+	cloudG5.dmap = new GsModel::Texture;
+	cloudG5.dmap->fname.set("../src/Models_and_Textures/cloud.png");
+
+	cloudM1.M.push().init();
+	cloudM2.M.push().init();
+	cloudM3.M.push().init();
+	cloudM4.M.push().init();
+	cloudM5.M.push().init();
+	cloudM1.T.size(cloudM1.V.size());
+	cloudM1.T[0].set(0, 1);
+	cloudM1.T[1].set(0, 0);
+	cloudM1.T[2].set(1, 0);
+	cloudM1.T[3].set(1, 1);
+	cloudM1.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
+	cloudM1.textured = true;
+	cloudM2.T.size(cloudM2.V.size());
+	cloudM2.T[0].set(0, 1);
+	cloudM2.T[1].set(0, 0);
+	cloudM2.T[2].set(1, 0);
+	cloudM2.T[3].set(1, 1);
+	cloudM2.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
+	cloudM2.textured = true;
+	cloudM3.T.size(cloudM3.V.size());
+	cloudM3.T[0].set(0, 1);
+	cloudM3.T[1].set(0, 0);
+	cloudM3.T[2].set(1, 0);
+	cloudM3.T[3].set(1, 1);
+	cloudM3.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
+	cloudM3.textured = true;
+	cloudM4.T.size(cloudM4.V.size());
+	cloudM4.T[0].set(0, 1);
+	cloudM4.T[1].set(0, 0);
+	cloudM4.T[2].set(1, 0);
+	cloudM4.T[3].set(1, 1);
+	cloudM4.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
+	cloudM4.textured = true;
+	cloudM5.T.size(cloudM5.V.size());
+	cloudM5.T[0].set(0, 1);
+	cloudM5.T[1].set(0, 0);
+	cloudM5.T[2].set(1, 0);
+	cloudM5.T[3].set(1, 1);
+	cloudM5.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
+	cloudM5.textured = true;
+
+	cloud1->model()->translate(GsVec(-200, 45, -230));
+	cloud2->model()->translate(GsVec(0, 30, -230));
+	cloud3->model()->translate(GsVec(150, 50, -230));
+	cloud4->model()->translate(GsVec(180, 45, -500));
+	cloud5->model()->translate(GsVec(-100, 45, -300));
+
+	SnGroup* cloudAll = new SnGroup;
+
+	cloudAll->add(cloud1);
+	cloudAll->add(cloud2);
+	cloudAll->add(cloud3);
+	cloudAll->add(cloud4);
+	cloudAll->add(cloud5);
 
 	//Nature and other objects in scene
 	SnGroup* nature = new SnGroup;
 	nature->separator(true);
 
 	SnModel* tree1 = new SnModel;
-	tree1->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
+	tree1->model()->load_obj("../src/Models_and_Textures/pinetrees.obj");
 	tree1->model()->centralize();
 	tree1->model()->get_bounding_box(b1);
-	tree1->color(GsColor::green);
-	tree1->model()->translate(GsVec(30, (b1.dy() / 2), 10));
+	tree1->color(GsColor::darkgreen);
+	tree1->model()->scale(2);
+	tree1->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
+	tree1->model()->rotate(GsQuat(GsVec::j, -gspidiv2));
+	tree1->model()->translate(GsVec(30, (b1.dy() / 2) + 4, 10));
 	floortrans[0]->add(tree1);
 	SnModel* tree2 = new SnModel;
-	tree2->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
+	tree2->model()->load_obj("../src/Models_and_Textures/pinetrees.obj");
 	tree2->model()->centralize();
 	tree2->model()->get_bounding_box(b1);
-	tree2->color(GsColor::green);
-	tree2->model()->translate(GsVec(60, (b1.dy() / 2), 90));
+	tree2->color(GsColor::darkgreen);
+	tree2->model()->scale(2);
+	tree2->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
+	tree2->model()->rotate(GsQuat(GsVec::j, -gspidiv2));
+	tree2->model()->translate(GsVec(30, (b1.dy() / 2) + 4, 10));
 	floortrans[4]->add(tree2);
 	SnModel* tree3 = new SnModel;
-	tree3->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
+	tree3->model()->load_obj("../src/Models_and_Textures/pinetrees.obj");
 	tree3->model()->centralize();
 	tree3->model()->get_bounding_box(b2);
-	tree3->color(GsColor::green);
-	tree3->model()->translate(GsVec(-50, (b2.dy() / 2) - 6, 130));
+	tree3->color(GsColor::darkgreen);
+	tree3->model()->scale(2);
+	tree3->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
+	tree3->model()->rotate(GsQuat(GsVec::j, -gspidiv2));
+	tree3->model()->translate(GsVec(30, (b1.dy() / 2) + 4, 10));
 	floortrans[6]->add(tree3);
 	SnModel* tree4 = new SnModel;
-	tree4->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
+	tree4->model()->load_obj("../src/Models_and_Textures/pinetrees.obj");
 	tree4->model()->centralize();
 	tree4->model()->get_bounding_box(b1);
-	tree4->color(GsColor::green);
-	tree4->model()->translate(GsVec(60, (b1.dy() / 2), 170));
+	tree4->color(GsColor::darkgreen);
+	tree4->model()->scale(2);
+	tree4->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
+	tree4->model()->rotate(GsQuat(GsVec::j, -gspidiv2));
+	tree4->model()->translate(GsVec(30, (b1.dy() / 2) + 4, 10));
 	floortrans[8]->add(tree4);
 
 	SnModel* pinetree1 = new SnModel;
@@ -831,7 +998,7 @@ void MyViewer::build_scene()
 
 
 	SnModel* fencecopy1 = new SnModel;
-	fencecopy1->model()->load_obj("../src/Models_and_Textures/fence.obj");
+	fencecopy1->model()->load_obj("../src/Models_and_Textures/rocks.obj");
 	fencecopy1->model()->centralize();
 	fencecopy1->model()->get_bounding_box(b2);
 	fencecopy1->model()->scale(1.9f);
@@ -841,7 +1008,7 @@ void MyViewer::build_scene()
 	fencecopy1->model()->translate(GsVec(-90, (b2.dy() / 2) - 1, 10));
 	floortransshadow[0]->add(fencecopy1);
 	SnModel* fencecopy2 = new SnModel;
-	fencecopy2->model()->load_obj("../src/Models_and_Textures/fence.obj");
+	fencecopy2->model()->load_obj("../src/Models_and_Textures/rocks.obj");
 	fencecopy2->model()->centralize();
 	fencecopy2->model()->get_bounding_box(b2);
 	fencecopy2->model()->scale(1.9f);
@@ -851,7 +1018,7 @@ void MyViewer::build_scene()
 	fencecopy2->model()->translate(GsVec(90, (b2.dy() / 2) - 1, 10));
 	floortransshadow[0]->add(fencecopy2);
 	SnModel* fencecopy3 = new SnModel;
-	fencecopy3->model()->load_obj("../src/Models_and_Textures/fence.obj");
+	fencecopy3->model()->load_obj("../src/Models_and_Textures/rocks.obj");
 	fencecopy3->model()->centralize();
 	fencecopy3->model()->get_bounding_box(b2);
 	fencecopy3->model()->scale(1.9f);
@@ -859,9 +1026,9 @@ void MyViewer::build_scene()
 	fencecopy3->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fencecopy3->model()->rotate(GsQuat(GsVec::j, gspi));
 	fencecopy3->model()->translate(GsVec(-90, (b2.dy() / 2) - 1, 50));
-	//floortrans[2]->add(fence3);
+	floortransshadow[2]->add(fencecopy3);
 	SnModel* fencecopy4 = new SnModel;
-	fencecopy4->model()->load_obj("../src/Models_and_Textures/fence.obj");
+	fencecopy4->model()->load_obj("../src/Models_and_Textures/rocks.obj");
 	fencecopy4->model()->centralize();
 	fencecopy4->model()->get_bounding_box(b2);
 	fencecopy4->model()->scale(1.9f);
@@ -871,7 +1038,7 @@ void MyViewer::build_scene()
 	fencecopy4->model()->translate(GsVec(90, (b2.dy() / 2) - 1, 50));
 	floortransshadow[2]->add(fencecopy4);
 	SnModel* fencecopy5 = new SnModel;
-	fencecopy5->model()->load_obj("../src/Models_and_Textures/fence.obj");
+	fencecopy5->model()->load_obj("../src/Models_and_Textures/rocks.obj");
 	fencecopy5->model()->centralize();
 	fencecopy5->model()->get_bounding_box(b2);
 	fencecopy5->model()->scale(1.9f);
@@ -881,7 +1048,7 @@ void MyViewer::build_scene()
 	fencecopy5->model()->translate(GsVec(-90, (b2.dy() / 2) - 1, 90));
 	floortransshadow[4]->add(fencecopy5);
 	SnModel* fencecopy6 = new SnModel;
-	fencecopy6->model()->load_obj("../src/Models_and_Textures/fence.obj");
+	fencecopy6->model()->load_obj("../src/Models_and_Textures/rocks.obj");
 	fencecopy6->model()->centralize();
 	fencecopy6->model()->get_bounding_box(b2);
 	fencecopy6->model()->scale(1.9f);
@@ -891,7 +1058,7 @@ void MyViewer::build_scene()
 	fencecopy6->model()->translate(GsVec(90, (b2.dy() / 2) - 1, 90));
 	floortransshadow[4]->add(fencecopy6);
 	SnModel* fencecopy7 = new SnModel;
-	fencecopy7->model()->load_obj("../src/Models_and_Textures/fence.obj");
+	fencecopy7->model()->load_obj("../src/Models_and_Textures/rocks.obj");
 	fencecopy7->model()->centralize();
 	fencecopy7->model()->get_bounding_box(b2);
 	fencecopy7->model()->scale(1.9f);
@@ -901,7 +1068,7 @@ void MyViewer::build_scene()
 	fencecopy7->model()->translate(GsVec(-90, (b2.dy() / 2) - 1, 130));
 	floortransshadow[6]->add(fencecopy7);
 	SnModel* fencecopy8 = new SnModel;
-	fencecopy8->model()->load_obj("../src/Models_and_Textures/fence.obj");
+	fencecopy8->model()->load_obj("../src/Models_and_Textures/rocks.obj");
 	fencecopy8->model()->centralize();
 	fencecopy8->model()->get_bounding_box(b2);
 	fencecopy8->model()->scale(1.9f);
@@ -911,7 +1078,7 @@ void MyViewer::build_scene()
 	fencecopy8->model()->translate(GsVec(90, (b2.dy() / 2) - 1, 130));
 	floortransshadow[6]->add(fencecopy8);
 	SnModel* fencecopy9 = new SnModel;
-	fencecopy9->model()->load_obj("../src/Models_and_Textures/fence.obj");
+	fencecopy9->model()->load_obj("../src/Models_and_Textures/rocks.obj");
 	fencecopy9->model()->centralize();
 	fencecopy9->model()->get_bounding_box(b2);
 	fencecopy9->color(GsColor::black);
@@ -921,7 +1088,7 @@ void MyViewer::build_scene()
 	fencecopy9->model()->translate(GsVec(-90, (b2.dy() / 2) - 1, 170));
 	floortransshadow[8]->add(fencecopy9);
 	SnModel* fencecopy10 = new SnModel;
-	fencecopy10->model()->load_obj("../src/Models_and_Textures/fence.obj");
+	fencecopy10->model()->load_obj("../src/Models_and_Textures/rocks.obj");
 	fencecopy10->model()->centralize();
 	fencecopy10->model()->get_bounding_box(b2);
 	fencecopy10->model()->scale(1.9f);
@@ -936,32 +1103,44 @@ void MyViewer::build_scene()
 	//nature->separator(true);
 
 	SnModel* treecopy1 = new SnModel;
-	treecopy1->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
+	treecopy1->model()->load_obj("../src/Models_and_Textures/pinetrees.obj");
 	treecopy1->model()->centralize();
 	treecopy1->model()->get_bounding_box(b1);
 	treecopy1->color(GsColor::black);
-	treecopy1->model()->translate(GsVec(30, (b1.dy() / 2), 10));
+	treecopy1->model()->scale(2);
+	treecopy1->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
+	treecopy1->model()->rotate(GsQuat(GsVec::j, -gspidiv2));
+	treecopy1->model()->translate(GsVec(30, (b1.dy() / 2) + 4, 10));
 	floortransshadow[0]->add(treecopy1);
 	SnModel* treecopy2 = new SnModel;
-	treecopy2->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
+	treecopy2->model()->load_obj("../src/Models_and_Textures/pinetrees.obj");
 	treecopy2->model()->centralize();
 	treecopy2->model()->get_bounding_box(b1);
 	treecopy2->color(GsColor::black);
-	treecopy2->model()->translate(GsVec(60, (b1.dy() / 2), 90));
+	treecopy2->model()->scale(2);
+	treecopy2->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
+	treecopy2->model()->rotate(GsQuat(GsVec::j, -gspidiv2));
+	treecopy2->model()->translate(GsVec(30, (b1.dy() / 2) + 4, 10));
 	floortransshadow[4]->add(treecopy2);
 	SnModel* treecopy3 = new SnModel;
-	treecopy3->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
+	treecopy3->model()->load_obj("../src/Models_and_Textures/pinetrees.obj");
 	treecopy3->model()->centralize();
 	treecopy3->model()->get_bounding_box(b2);
 	treecopy3->color(GsColor::black);
-	treecopy3->model()->translate(GsVec(-50, (b2.dy() / 2) - 6, 130));
+	treecopy3->model()->scale(2);
+	treecopy3->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
+	treecopy3->model()->rotate(GsQuat(GsVec::j, -gspidiv2));
+	treecopy3->model()->translate(GsVec(30, (b1.dy() / 2) + 4, 10));
 	floortransshadow[6]->add(treecopy3);
 	SnModel* treecopy4 = new SnModel;
-	treecopy4->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
+	treecopy4->model()->load_obj("../src/Models_and_Textures/pinetrees.obj");
 	treecopy4->model()->centralize();
 	treecopy4->model()->get_bounding_box(b1);
 	treecopy4->color(GsColor::black);
-	treecopy4->model()->translate(GsVec(60, (b1.dy() / 2), 170));
+	treecopy4->model()->scale(2);
+	treecopy4->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
+	treecopy4->model()->rotate(GsQuat(GsVec::j, -gspidiv2));
+	treecopy4->model()->translate(GsVec(30, (b1.dy() / 2) + 4, 10));
 	floortransshadow[8]->add(treecopy4);
 
 	SnModel* pinetreecopy1 = new SnModel;
@@ -1086,12 +1265,6 @@ void MyViewer::build_scene()
 	signcopy3->model()->rotate(GsQuat(GsVec::j, gspidiv2));
 	signcopy3->model()->translate(GsVec(-80, (b2.dy() / 2) + 4, 179));
 	floortransshadow[8]->add(signcopy3);
-
-
-
-
-
-
 
 
 	//Bird that acts as the player
@@ -1260,6 +1433,7 @@ void MyViewer::build_scene()
 	rootg()->add(SceneShadow);
 	rootg()->add(flyT);
 	rootg()->add(flyWhole);
+	rootg()->add(cloudAll);
 
 }
 
@@ -1432,7 +1606,7 @@ void MyViewer::run_animation()
 
 
 			//animating the bird flying around the scene
-			rot.roty(0.1f * (-1 * float(GS_2PI) / 30.0f));
+			rot.roty(0.05f * (-1 * float(GS_2PI) / 30.0f));
 			flyM = flyT->get() * rot;
 			flyT->set(flyM);
 			rot.rotz(0.1f * (float(GS_2PI) / 30.0f));
@@ -1572,7 +1746,7 @@ void MyViewer::run_animation()
 		while (t - lt < frdt) { ws_check(); t = gs_time() - t0; } // wait until it is time for next frame
 		lt = t;
 
-		rot.roty(0.1f* (-1 * float(GS_2PI) / 30.0f));
+		rot.roty(0.05f* (-1 * float(GS_2PI) / 30.0f));
 		flyM = flyT->get() * rot;
 		flyT->set(flyM);
 
