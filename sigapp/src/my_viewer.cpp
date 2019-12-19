@@ -58,7 +58,7 @@ void MyViewer::build_ui()
 	//p->add(new UiButton("Exit", EvExit)); p->top()->separate();
 }
 
-void MyViewer::add_model(SnShape* s, GsVec p)
+void MyViewer::add_model(SnShape * s, GsVec p)
 {
 	// This method demonstrates how to add some elements to our scene graph: lines,
 	// and a shape, and all in a group under a SnManipulator.
@@ -743,21 +743,21 @@ void MyViewer::build_scene()
 		tree1->color(GsColor::green);
 		tree1->model()->translate(GsVec(30, (b1.dy() / 2), 10));
 		floortrans[0]->add(tree1);
-		SnModel* tree2 = new SnModel;
+		SnModel * tree2 = new SnModel;
 		tree2->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
 		tree2->model()->centralize();
 		tree2->model()->get_bounding_box(b1);
 		tree2->color(GsColor::green);
 		tree2->model()->translate(GsVec(60, (b1.dy() / 2), 90));
 		floortrans[4]->add(tree2);
-		SnModel* tree3 = new SnModel;
+		SnModel * tree3 = new SnModel;
 		tree3->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
 		tree3->model()->centralize();
 		tree3->model()->get_bounding_box(b2);
 		tree3->color(GsColor::green);
 		tree3->model()->translate(GsVec(-50, (b2.dy() / 2) - 6, 130));
 		floortrans[6]->add(tree3);
-		SnModel* tree4 = new SnModel;
+		SnModel * tree4 = new SnModel;
 		tree4->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
 		tree4->model()->centralize();
 		tree4->model()->get_bounding_box(b1);
@@ -1005,7 +1005,7 @@ void MyViewer::build_scene()
 	logs4->model()->rotate(GsQuat(GsVec::j, gspidiv2));
 	logs4->model()->translate(GsVec(30, (b2.dy() / 2) - 1, 170));
 	floortrans[8]->add(logs4);
-
+	
 	SnModel* sign1 = new SnModel;
 	sign1->model()->load_obj("../src/Models_and_Textures/sign.obj");
 	sign1->model()->centralize();
@@ -1038,7 +1038,7 @@ void MyViewer::build_scene()
 	floortrans[8]->add(sign3);
 
 
-
+	
 	//SHADOWS FOR ENVIRONMENT
 
 	SnGroup* floortransshadow[10];
@@ -1181,21 +1181,21 @@ void MyViewer::build_scene()
 		treecopy1->color(GsColor::black);
 		treecopy1->model()->translate(GsVec(30, (b1.dy() / 2), 10));
 		floortransshadow[0]->add(treecopy1);
-		SnModel* treecopy2 = new SnModel;
+		SnModel * treecopy2 = new SnModel;
 		treecopy2->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
 		treecopy2->model()->centralize();
 		treecopy2->model()->get_bounding_box(b1);
 		treecopy2->color(GsColor::black);
 		treecopy2->model()->translate(GsVec(60, (b1.dy() / 2), 90));
 		floortransshadow[4]->add(treecopy2);
-		SnModel* treecopy3 = new SnModel;
+		SnModel * treecopy3 = new SnModel;
 		treecopy3->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
 		treecopy3->model()->centralize();
 		treecopy3->model()->get_bounding_box(b2);
 		treecopy3->color(GsColor::black);
 		treecopy3->model()->translate(GsVec(-50, (b2.dy() / 2) - 6, 130));
 		floortransshadow[6]->add(treecopy3);
-		SnModel* treecopy4 = new SnModel;
+		SnModel * treecopy4 = new SnModel;
 		treecopy4->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
 		treecopy4->model()->centralize();
 		treecopy4->model()->get_bounding_box(b1);
@@ -1378,8 +1378,8 @@ void MyViewer::build_scene()
 
 
 	//Bird that acts as the player
-	SnModel* Bird = new SnModel;
-	SnGroup* BirdGroup = new SnGroup;
+	SnModel * Bird = new SnModel;
+	SnGroup * BirdGroup = new SnGroup;
 	BirdGroup->separator(true);
 	Bird->model()->load_obj("../src/Models_and_Textures/birdbody.obj");
 	Bird->model()->centralize();
@@ -1395,8 +1395,8 @@ void MyViewer::build_scene()
 	BirdM.translation(GsVec(birdX, birdY, birdZ));
 	BirdT->set(BirdM);
 
-	SnModel* leftwing = new SnModel();
-	SnGroup* leftwingGroup = new SnGroup;
+	SnModel * leftwing = new SnModel();
+	SnGroup * leftwingGroup = new SnGroup;
 	leftwing->model()->load("../src/Models_and_Textures/leftwing.obj");
 	leftwing->model()->centralize();
 	leftWT = new SnTransform;
@@ -1408,8 +1408,8 @@ void MyViewer::build_scene()
 	leftwingGroup->add(leftwing);
 	leftwingGroup->separator(true);
 
-	SnModel* rightwing = new SnModel();
-	SnGroup* rightwingGroup = new SnGroup;
+	SnModel * rightwing = new SnModel();
+	SnGroup * rightwingGroup = new SnGroup;
 	rightwing->model()->load("../src/Models_and_Textures/rightwing.obj");
 	rightwing->model()->centralize();
 	rightwing->model()->scale(1);
@@ -1586,10 +1586,6 @@ void MyViewer::run_animation()
 	camera().fovy = gspidiv2;
 
 	//score status
-	if (moveCount % 2 != 0) {
-		score += 1;
-	}
-
 	if (score > highscore) {
 		highscore = score;
 	}
@@ -1626,7 +1622,7 @@ void MyViewer::run_animation()
 		GsMat wingtemp, rightwingt, shadowrightwingt, shadowleftwingt;
 		do // run for a while:
 		{
-
+			
 			while (t - lt < frdt) { ws_check(); t = gs_time() - t0; } // wait until it is time for next frame
 			double yinc = 0.5f;
 			//animating the bird model of the player
@@ -1787,14 +1783,14 @@ void MyViewer::run_animation()
 			if (car5x < 5 && car5x > -5 && BirdPos == 0) {
 				gsout << "COLLISION" << gsnl;
 			}
-
+			
 
 			BirdM.translation(GsVec(birdX, birdY, birdZ));
 			BirdT->set(BirdM);
-
+			
 
 			render();
-			ws_check();
+			ws_check(); 
 		} while (count < 20 && forward == true);//do this loop while only letting the scene move backward by one floor panel's width
 
 		//reset variables
@@ -1805,16 +1801,16 @@ void MyViewer::run_animation()
 
 	//every time we move forward, loop floor tiles to give the effect of an endless loop
 	if (moveCount >= 0) {
-
-		if (moveCount % 10 == 0) {
+		
+		if (moveCount%10 == 0) {
 			zmove += 200;
 			zshadowmove += 200;
 		}
-		floormoveM[moveCount % 10].translation(GsVec(0, 0, zmove));
-		floormoveT[moveCount % 10]->set(floormoveM[moveCount % 10]);
+		floormoveM[moveCount%10].translation(GsVec(0, 0, zmove));
+		floormoveT[moveCount%10]->set(floormoveM[moveCount%10]);
 		SceneShadowMat.translation(GsVec(0, 0.25f, zshadowmove));
-		floormoveshadowT[moveCount % 10]->set(SceneShadowMat);
-		floormoveshadowT[moveCount % 10]->get().mult(floormoveshadowT[moveCount % 10]->get(), perspective_trans2);
+		floormoveshadowT[moveCount%10]->set(SceneShadowMat);
+		floormoveshadowT[moveCount%10]->get().mult(floormoveshadowT[moveCount%10]->get(), perspective_trans2);
 	}
 
 	//enter level 2
@@ -1851,11 +1847,11 @@ void MyViewer::run_animation()
 		while (t - lt < frdt) { ws_check(); t = gs_time() - t0; } // wait until it is time for next frame
 		lt = t;
 
-		rot.roty(0.05f * (-1 * float(GS_2PI) / 30.0f));
+		rot.roty(0.05f* (-1 * float(GS_2PI) / 30.0f));
 		flyM = flyT->get() * rot;
 		flyT->set(flyM);
 
-		rot.rotz(0.1f * (float(GS_2PI) / 30.0f));
+		rot.rotz(0.1f* (float(GS_2PI) / 30.0f));
 		flyTo.translation(GsVec(40.0f, 30.0f, 60.0f));
 		flyLeftM = flyLeftT->get() * flyTo;
 		flyLeftM = flyLeftM * rot;
@@ -1863,7 +1859,7 @@ void MyViewer::run_animation()
 		flyLeftM = flyLeftM * flyBack;
 		flyLeftT->set(flyLeftM);
 
-		rot.rotz(0.1f * (-1 * float(GS_2PI) / 30.0f));
+		rot.rotz(0.1f* (-1 * float(GS_2PI) / 30.0f));
 		flyRightM = flyRightT->get() * flyTo;
 		flyRightM = flyRightM * rot;
 		flyRightM = flyRightM * flyBack;
@@ -1916,7 +1912,7 @@ void MyViewer::run_animation()
 		BirdM.translation(GsVec(birdX, birdY, birdZ));
 		BirdT->set(BirdM);
 
-
+		
 
 		render();
 		ws_check();
@@ -1949,14 +1945,14 @@ void MyViewer::show_normals(bool view)
 			for (int i = 0; i < m.F.size(); i++)
 			{
 				const GsVec& a = m.V[m.F[i].a]; l->push(a, a + (*n++) * f);
-				const GsVec& b = m.V[m.F[i].b]; l->push(b, b + (*n++) * f);
-				const GsVec& c = m.V[m.F[i].c]; l->push(c, c + (*n++) * f);
+				const GsVec & b = m.V[m.F[i].b]; l->push(b, b + (*n++) * f);
+				const GsVec & c = m.V[m.F[i].c]; l->push(c, c + (*n++) * f);
 			}
 		}
 	}
 }
 
-int MyViewer::handle_keyboard(const GsEvent& e)
+int MyViewer::handle_keyboard(const GsEvent & e)
 {
 	int ret = WsViewer::handle_keyboard(e); // 1st let system check events
 	if (ret) return ret;
@@ -1971,7 +1967,7 @@ int MyViewer::handle_keyboard(const GsEvent& e)
 		camera().eye.y = 35;
 		camera().eye.z = 10;
 		camera().fovy = gspidiv2; run_animation(); render(); return 1;
-	case 65362: {if (_animating == false) { if (moveCount % 2 != 0) { score += 1; } forward = true; moveCount++; run_animation(); render(); } break; }
+	case 65362: {if (_animating == false) { if (moveCount % 2 != 0) { score += 1;} forward = true; moveCount++; run_animation(); render(); } break; }
 	default: gsout << "Key pressed: " << e.key << gsnl;
 	}
 	/*if (update)

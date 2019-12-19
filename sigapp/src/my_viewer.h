@@ -16,7 +16,7 @@ protected:
 	double lt, t0;
 	GsVec lightPos = GsVec(0, 5, 5);
 	SnGroup* _gLight;
-
+	
 public:
 	//floor stuff
 	SnTransform* floorT; //floor global transform
@@ -40,7 +40,7 @@ public:
 
 	//player bird stuff
 	int BirdPos;
-	SnTransform* BirdT, * leftWT, * rightWT;
+	SnTransform* BirdT, *leftWT, *rightWT;
 	GsMat BirdM, wingM;
 	GsBox birdBox;
 	float birdX, birdY, birdZ;
@@ -64,7 +64,7 @@ public:
 	int zshadowmove = 0;
 
 	//flying bird stuff
-	SnTransform* flyT, * flyMidT, * flyLeftT, * flyRightT;
+	SnTransform* flyT, *flyMidT, *flyLeftT, *flyRightT;
 	GsMat flyM, flyMidM, flyLeftM, flyRightM;
 	GsMat rot, flyTo, flyBack;
 
