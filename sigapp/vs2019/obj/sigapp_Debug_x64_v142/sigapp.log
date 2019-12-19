@@ -1,7 +1,6 @@
-﻿C:\VisualStudio\MSBuild\Microsoft\VC\v160\Microsoft.CppClean.targets(76,5): warning : The process cannot access the file 'c:\users\josed\desktop\cse170\project2\sigapp\vs2019\obj\sigapp_debug_x64_v142\sigapp64mdd.pdb' because it is being used by another process.
-C:\VisualStudio\MSBuild\Microsoft\VC\v160\Microsoft.CppClean.targets(76,5): warning : The process cannot access the file 'c:\users\josed\desktop\cse170\project2\sigapp\vs2019\obj\sigapp_debug_x64_v142\sigapp64mdd.pdb' because it is being used by another process.
-  main.cpp
-  my_viewer.cpp
-  Generating Code...
-  sigapp.vcxproj -> C:\Users\josed\Desktop\CSE170\Project2\sigapp\vs2019\\obj\sigapp_Debug_x64_v142\sigapp64mdd.exe
+﻿  my_viewer.cpp
+C:\Users\Johny Xiong\Desktop\CSE170\Project2Test11\sigapp\src\my_viewer.cpp(1410,18): warning C4305: '=': truncation from 'double' to 'float'
+C:\Users\Johny Xiong\Desktop\CSE170\Project2Test11\sigapp\src\my_viewer.cpp(1912,29): warning C4305: 'initializing': truncation from 'double' to 'float'
+C:\Users\Johny Xiong\Desktop\CSE170\Project2Test11\sigapp\src\my_viewer.cpp(2084,28): warning C4305: 'initializing': truncation from 'double' to 'float'
+  sigapp.vcxproj -> C:\Users\Johny Xiong\Desktop\CSE170\Project2Test11\sigapp\vs2019\\obj\sigapp_Debug_x64_v142\sigapp64mdd.exe
           1 file(s) copied.

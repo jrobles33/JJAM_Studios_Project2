@@ -1097,7 +1097,7 @@ void MyViewer::build_scene()
 	fencecopy3->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	fencecopy3->model()->rotate(GsQuat(GsVec::j, gspi));
 	fencecopy3->model()->translate(GsVec(-90, (b2.dy() / 2) - 1, 50));
-	//floortrans[2]->add(fence3);
+	floortransshadow[2]->add(fencecopy3);
 	SnModel* fencecopy4 = new SnModel;
 	fencecopy4->model()->load_obj("../src/Models_and_Textures/fence.obj");
 	fencecopy4->model()->centralize();
@@ -1371,7 +1371,114 @@ void MyViewer::build_scene()
 	floortransshadow[8]->add(signcopy3);
 
 
+	//SHADOWS FOR CAR
 
+
+
+
+
+	SnGroup* carShadowG1 = new SnGroup;
+	carShadowG1->separator(true);
+	SnModel* carShadow1 = new SnModel;
+	SnModel* carShadow2 = new SnModel;
+	SnModel* carShadow3 = new SnModel;
+	SnModel* carShadow4 = new SnModel;
+	SnModel* carShadow5 = new SnModel;
+	carShadowT[0] = new SnTransform;
+	carShadowT[1] = new SnTransform;
+	carShadowT[2] = new SnTransform;
+	carShadowT[3] = new SnTransform;
+	carShadowT[4] = new SnTransform;
+
+
+	carShadow1->model()->load_obj("../src/Models_and_Textures/car1.obj");
+	carShadow1->model()->centralize();
+	carShadow1->model()->scale(carScale);
+	carShadow1->model()->rotate(GsQuat(GsVec::j, -gspidiv2));
+	carShadow1->model()->get_bounding_box(c1);
+	carShadow1->color(GsColor::black);
+	carshadow1x = -5.0f;
+	carshadow1y = c1.dy() / 2;
+	carshadow1z = 30.0f;
+	carShadowM[0].translation(GsVec(carshadow1x, carshadow1y, carshadow1z));
+	carShadowT[0]->set(carShadowM[0]);
+	carShadowG1->add(carShadowT[0]);
+	carShadowG1->add(carShadow1);
+	floortransshadow[1]->add(carShadowG1);
+
+	SnGroup* carShadowG2 = new SnGroup;
+	car2scale = 0.03;
+	carShadowG2->separator(true);
+	carShadow2->model()->load_obj("../src/Models_and_Textures/car2.obj");
+	carShadow2->model()->centralize();
+	carShadow2->model()->scale(car2scale);
+	carShadow2->model()->rotate(GsQuat(GsVec::j, -gspidiv2));
+	carShadow2->model()->get_bounding_box(c2);
+	carShadow2->color(GsColor::black);
+	carshadow2x = -5.0f;
+	//keep as car1
+	carshadow2y = c2.dy() / 2;
+	carshadow2z = 70.0f;
+	carShadowM[1].translation(GsVec(carshadow2x, carshadow2y, carshadow2z));
+	carShadowT[1]->set(carShadowM[1]);
+	carShadowG2->add(carShadowT[1]);
+	carShadowG2->add(carShadow2);
+	floortransshadow[3]->add(carShadowG2);
+
+	SnGroup* carShadowG3 = new SnGroup;
+	car3scale = 5;
+	carShadowG3->separator(true);
+	carShadow3->model()->load_obj("../src/Models_and_Textures/car3.obj");
+	carShadow3->model()->centralize();
+	carShadow3->model()->scale(car3scale);
+	carShadow3->model()->rotate(GsQuat(GsVec::j, gspidiv2));
+	carShadow3->model()->get_bounding_box(c3);
+	carShadow3->color(GsColor::black);
+	carshadow3x = -5.0f;
+	//keep as car1
+	carshadow3y = c3.dy() / 2;
+	carshadow3z = 110;
+	carShadowM[2].translation(GsVec(carshadow3x, carshadow3y, carshadow3z));
+	carShadowT[2]->set(carShadowM[2]);
+	carShadowG3->add(carShadowT[2]);
+	carShadowG3->add(carShadow3);
+	floortransshadow[5]->add(carShadowG3);
+
+	SnGroup* carShadowG4 = new SnGroup;
+	car4scale = 5;
+	carShadowG4->separator(true);
+	carShadow4->model()->load_obj("../src/Models_and_Textures/car4.obj");
+	carShadow4->model()->centralize();
+	carShadow4->model()->scale(carScale);
+	carShadow4->model()->rotate(GsQuat(GsVec::j, gspidiv2));
+	carShadow4->model()->get_bounding_box(c4);
+	carShadow4->color(GsColor::black);
+	carshadow4x = -5.0f;
+	carshadow4y = c4.dy() / 2;
+	carshadow4z = 150;
+	carShadowM[3].translation(GsVec(carshadow4x, carshadow4y, carshadow4z));
+	carShadowT[3]->set(carShadowM[3]);
+	carShadowG4->add(carShadowT[3]);
+	carShadowG4->add(carShadow4);
+	floortransshadow[7]->add(carShadowG4);
+
+	SnGroup* carShadowG5 = new SnGroup;
+	car5scale = 5;
+	carShadowG5->separator(true);
+	carShadow5->model()->load_obj("../src/Models_and_Textures/car5.obj");
+	carShadow5->model()->centralize();
+	carShadow5->model()->scale(10);
+	carShadow5->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
+	carShadow5->model()->get_bounding_box(c5);
+	carShadow5->color(GsColor::black);
+	carshadow5x = -5.0f;
+	carshadow5y = c5.dy() / 2;
+	carshadow5z = 190;
+	carShadowM[4].translation(GsVec(carshadow5x, carshadow5y, carshadow5z));
+	carShadowT[4]->set(carShadowM[4]);
+	carShadowG5->add(carShadowT[4]);
+	carShadowG5->add(carShadow5);
+	floortransshadow[9]->add(carShadowG5);
 
 
 
@@ -1784,6 +1891,49 @@ void MyViewer::run_animation()
 				gsout << "COLLISION" << gsnl;
 			}
 			
+			//SHADOW FOR THE CAR
+			float carShadowInc = 4.5;
+			carshadow1x = carshadow1x + carShadowInc;
+			if (carshadow1x > 400) {
+				carshadow1x = -400;
+			}
+			carshadow1x = carshadow1x + carShadowInc;
+			carShadowM[0].translation(carshadow1x, carshadow1y, carshadow1z);
+			carShadowT[0]->set(carShadowM[0]);
+
+			float carShadowInc2 = -3;
+			if (carshadow2x < -300) {
+				carshadow2x = 300;
+			}
+			carshadow2x = carshadow2x + carShadowInc2;
+			carShadowM[1].translation(carshadow2x, carshadow2y, carshadow2z);
+			carShadowT[1]->set(carShadowM[1]);
+
+			float carShadowInc3 = 2.1;
+			if (carshadow3x > 300) {
+				carshadow3x = -300;
+			}
+			carshadow3x = carshadow3x + carShadowInc3;
+			carShadowM[2].translation(carshadow3x, carshadow3y, carshadow3z);
+			carShadowT[2]->set(carShadowM[2]);
+
+			float carShadowInc4 = 8.0f;
+			if (carshadow4x > 450) {
+				carshadow4x = -450;
+			}
+			carshadow4x = carshadow4x + carShadowInc4;
+			carShadowM[3].translation(carshadow4x, carshadow4y, carshadow4z);
+			carShadowT[3]->set(carShadowM[3]);
+
+			float carShadowInc5 = -3.0f;
+			if (carshadow5x < -300) {
+				carshadow5x = 300;
+			}
+			carshadow5x = carshadow5x + carShadowInc5;
+			carShadowM[4].translation(carshadow5x, carshadow5y, carshadow5z);
+			carShadowT[4]->set(carShadowM[4]);
+
+
 
 			BirdM.translation(GsVec(birdX, birdY, birdZ));
 			BirdT->set(BirdM);
@@ -1912,7 +2062,48 @@ void MyViewer::run_animation()
 		BirdM.translation(GsVec(birdX, birdY, birdZ));
 		BirdT->set(BirdM);
 
-		
+		//CAR'S SHADOW MOVEMENT WHEN PLAYER IS NOT MOVING
+		float carShadowInc = 4.5;
+		carshadow1x = carshadow1x + carShadowInc;
+		//carshadow1x = carshadow1x + carShadowInc;
+		if (carshadow1x > 400) {
+			carshadow1x = -400;
+		}
+		carshadow1x = carshadow1x + carShadowInc;
+		carShadowM[0].translation(carshadow1x, carshadow1y, carshadow1z);
+		carShadowT[0]->set(carShadowM[0]);
+
+		float carShadow2Inc = -3;
+		if (carshadow2x < -300) {
+			carshadow2x = 300;
+		}
+		carshadow2x = carshadow2x + carShadow2Inc;
+		carShadowM[1].translation(carshadow2x, carshadow2y, carshadow2z);
+		carShadowT[1]->set(carShadowM[1]);
+
+		float carShadow3Inc = 2.1;
+		if (carshadow3x > 300) {
+			carshadow3x = -300;
+		}
+		carshadow3x = carshadow3x + carShadow3Inc;
+		carShadowM[2].translation(carshadow3x, carshadow3y, carshadow3z);
+		carShadowT[2]->set(carShadowM[2]);
+
+		float carShadow4Inc = 8.0f;
+		if (carshadow4x > 450) {
+			carshadow4x = -450;
+		}
+		carshadow4x = carshadow4x + carShadow4Inc;
+		carShadowM[3].translation(carshadow4x, carshadow4y, carshadow4z);
+		carShadowT[3]->set(carShadowM[3]);
+
+		float carShadow5Inc = -3.0f;
+		if (carshadow5x < -300) {
+			carshadow5x = 300;
+		}
+		carshadow5x = carshadow5x + carShadow5Inc;
+		carShadowM[4].translation(carshadow5x, carshadow5y, carshadow5z);
+		carShadowT[4]->set(carShadowM[4]);
 
 		render();
 		ws_check();
