@@ -560,6 +560,9 @@ void MyViewer::build_scene()
 	SnModel* cloud5 = new SnModel;
 	GsModel& cloudM5 = *cloud5->model();
 	GsModel::Group& cloudG5 = *cloudM5.G.push();
+	SnModel* cloud6 = new SnModel;
+	GsModel& cloudM6 = *cloud6->model();
+	GsModel::Group& cloudG6 = *cloudM6.G.push();
 
 	SnGroup* allclouds = new SnGroup;
 
@@ -623,6 +626,17 @@ void MyViewer::build_scene()
 	cloud5->model()->N.push() = GsVec(0, 0, 1);
 	cloud5->model()->N.push() = GsVec(0, 0, 1);
 
+	cloud6->model()->V.push() = c00;
+	cloud6->model()->V.push() = c01;
+	cloud6->model()->V.push() = c02;
+	cloud6->model()->V.push() = c03;
+	cloud6->model()->F.push() = GsModel::Face(0, 1, 2);
+	cloud6->model()->F.push() = GsModel::Face(0, 2, 3);
+	cloud6->model()->N.push() = GsVec(0, 0, 1);
+	cloud6->model()->N.push() = GsVec(0, 0, 1);
+	cloud6->model()->N.push() = GsVec(0, 0, 1);
+	cloud6->model()->N.push() = GsVec(0, 0, 1);
+
 	cloudG1.fi = 0;
 	cloudG1.fn = cloudM1.F.size();
 	cloudG1.dmap = new GsModel::Texture;
@@ -636,19 +650,24 @@ void MyViewer::build_scene()
 	cloudG3.dmap = new GsModel::Texture;
 	cloudG3.dmap->fname.set("../src/Models_and_Textures/cloud.png");
 	cloudG4.fi = 0;
-	cloudG4.fn = cloudM3.F.size();
+	cloudG4.fn = cloudM4.F.size();
 	cloudG4.dmap = new GsModel::Texture;
 	cloudG4.dmap->fname.set("../src/Models_and_Textures/cloud.png");
 	cloudG5.fi = 0;
-	cloudG5.fn = cloudM1.F.size();
+	cloudG5.fn = cloudM5.F.size();
 	cloudG5.dmap = new GsModel::Texture;
 	cloudG5.dmap->fname.set("../src/Models_and_Textures/cloud.png");
+	cloudG6.fi = 0;
+	cloudG6.fn = cloudM6.F.size();
+	cloudG6.dmap = new GsModel::Texture;
+	cloudG6.dmap->fname.set("../src/Models_and_Textures/cloud.png");
 
 	cloudM1.M.push().init();
 	cloudM2.M.push().init();
 	cloudM3.M.push().init();
 	cloudM4.M.push().init();
 	cloudM5.M.push().init();
+	cloudM6.M.push().init();
 	cloudM1.T.size(cloudM1.V.size());
 	cloudM1.T[0].set(0, 1);
 	cloudM1.T[1].set(0, 0);
@@ -684,12 +703,24 @@ void MyViewer::build_scene()
 	cloudM5.T[3].set(1, 1);
 	cloudM5.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 	cloudM5.textured = true;
+	cloudM6.T.size(cloudM1.V.size());
+	cloudM6.T[0].set(0, 1);
+	cloudM6.T[1].set(0, 0);
+	cloudM6.T[2].set(1, 0);
+	cloudM6.T[3].set(1, 1);
+	cloudM6.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
+	cloudM6.textured = true;
 
 	cloud1->model()->translate(GsVec(-200, 45, -230));
 	cloud2->model()->translate(GsVec(0, 30, -230));
 	cloud3->model()->translate(GsVec(150, 50, -230));
-	cloud4->model()->translate(GsVec(180, 45, -500));
-	cloud5->model()->translate(GsVec(-100, 45, -300));
+
+	cloud4->model()->rotate(GsQuat(GsVec::j, gspi));
+	cloud4->model()->translate(GsVec(-200, 45, 230));
+	cloud5->model()->rotate(GsQuat(GsVec::j, gspi));
+	cloud5->model()->translate(GsVec(0, 45, 230));
+	cloud6->model()->rotate(GsQuat(GsVec::j, gspi));
+	cloud6->model()->translate(GsVec(150, 45, 230));
 
 	SnGroup* cloudAll = new SnGroup;
 
@@ -698,6 +729,7 @@ void MyViewer::build_scene()
 	cloudAll->add(cloud3);
 	cloudAll->add(cloud4);
 	cloudAll->add(cloud5);
+	cloudAll->add(cloud6);
 
 	//Nature and other objects in scene
 	SnGroup* nature = new SnGroup;
@@ -1553,6 +1585,18 @@ void MyViewer::run_animation()
 	camera().eye.z = 10;
 	camera().fovy = gspidiv2;
 
+	//score status
+	if (moveCount % 2 != 0) {
+		score += 1;
+	}
+
+	if (score > highscore) {
+		highscore = score;
+	}
+
+	message().setf("SCORE: % i HIGH SCORE: % i", score, highscore);
+	message_color(GsColor::cyan);
+
 	if (_animating) return; // avoid recursive calls
 	_animating = true;
 
@@ -1927,7 +1971,7 @@ int MyViewer::handle_keyboard(const GsEvent & e)
 		camera().eye.y = 35;
 		camera().eye.z = 10;
 		camera().fovy = gspidiv2; run_animation(); render(); return 1;
-	case 65362: {if (_animating == false) { forward = true; moveCount++; run_animation(); render(); } break; }
+	case 65362: {if (_animating == false) { if (moveCount % 2 != 0) { score += 1; } forward = true; moveCount++; run_animation(); render(); } break; }
 	default: gsout << "Key pressed: " << e.key << gsnl;
 	}
 	/*if (update)

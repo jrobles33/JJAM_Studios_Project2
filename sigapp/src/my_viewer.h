@@ -28,6 +28,7 @@ public:
 	int moveCount = -2, zmove = 0;
 	bool level2;
 	float floorX = 350.0f, floorY = 0.0f, floorZP = 20.0f, floorZN = 0.0f;
+	int score = 0, highscore = 0; //score
 
 	//Car Stuff
 	float car1x, car2x, car3x, car4x, car5x, car1y, car1z, car2z, car3z, car4z, car5z, car2y, car3y, car4y, car5y;
