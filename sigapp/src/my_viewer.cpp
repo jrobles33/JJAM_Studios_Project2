@@ -16,6 +16,7 @@ MyViewer::MyViewer(int x, int y, int w, int h, const char* l) : WsViewer(x, y, w
 	_nbut = 0;
 	BirdPos = 0;
 	_animating = false;
+	level2 = false;
 	perspective_trans.e12 = -(lightPos.x / lightPos.y);
 	perspective_trans.e32 = -(lightPos.z / lightPos.y);
 	perspective_trans.e22 = 0; // e24
@@ -85,6 +86,40 @@ void MyViewer::add_model(SnShape * s, GsVec p)
 
 void MyViewer::build_scene()
 {
+	//reset scene and all matrices and global variables
+	rootg()->remove_all();
+	floorM.isid();
+	GlobalCarM.isid();
+	BirdM.isid();
+	wingM.isid();
+	Shadowmat.isid();
+	Shadowmat2.isid();
+	perspective_trans.isid();
+	perspective_trans2.isid();
+	SceneShadowMat.isid();
+	flyM.isid();
+	flyMidM.isid();
+	flyLeftM.isid();
+	flyRightM.isid();
+	rot.isid();
+	flyTo.isid();
+	flyBack.isid();
+	for (int i = 0; i < 10; i++) {
+		floormoveshadowM[i].isid();
+		floormoveM[i].isid();
+	}
+	for (int i = 0; i < 5; i++) {
+		carM[i].isid();
+	}
+	floorz = 0;
+	moveCount = -2;
+	zmove = 0;
+	zshadowmove = 0;
+	floorX = 350.0f;
+	floorY = 0.0f;
+	floorZP = 20.0f;
+	floorZN = 0.0f;
+
 	//Main Menu
 	SnModel* menu = new SnModel;
 	GsPnt p00 = GsVec(-200, 300, 150);
@@ -116,8 +151,45 @@ void MyViewer::build_scene()
 	menuM.T[3].set(1, 1);
 	menuM.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 	menuM.textured = true;
-
 	rootg()->add(menu);
+
+	//floor stuff
+	SnModel* floorback = new SnModel;
+	GsPnt a = GsVec(-floorX, floorY - 1, 19);
+	GsPnt b = GsVec(-floorX, floorY - 1, -1);
+	GsPnt c = GsVec(floorX, floorY - 1, -1);
+	GsPnt d = GsVec(floorX, floorY - 1, 19);
+	floorback->model()->V.push() = a;
+	floorback->model()->V.push() = b;
+	floorback->model()->V.push() = c;
+	floorback->model()->V.push() = d;
+	floorback->model()->F.push() = GsModel::Face(0, 2, 1);
+	floorback->model()->F.push() = GsModel::Face(0, 3, 2);
+	floorback->model()->N.push() = GsVec(0, 1, 0);
+	floorback->model()->N.push() = GsVec(0, 1, 0);
+	floorback->model()->N.push() = GsVec(0, 1, 0);
+	floorback->model()->N.push() = GsVec(0, 1, 0);
+	GsModel& floorbackM = *floorback->model();
+	GsModel::Group& floorbackG = *floorbackM.G.push();
+	floorbackG.fi = 0;
+	floorbackG.fn = floorbackM.F.size();
+	floorbackG.dmap = new GsModel::Texture;
+	if (!level2) {
+		floorbackG.dmap->fname.set("../src/Models_and_Textures/grass.png");
+	}
+	if (level2) {
+		floorbackG.dmap->fname.set("../src/Models_and_Textures/sand.jpg");
+	}
+	floorbackM.M.push().init();
+	int nv2 = floorbackM.V.size();
+	floorbackM.T.size(nv2);
+	floorbackM.T[0].set(1, 0);
+	floorbackM.T[1].set(0, 0);
+	floorbackM.T[2].set(0, 1);
+	floorbackM.T[3].set(1, 1);
+	floorbackM.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
+	floorbackM.textured = true;
+	rootg()->add(floorback);
 
 	//The floor of the scene
 	SnModel* floor[10];
@@ -178,10 +250,12 @@ void MyViewer::build_scene()
 	floorgroupRoad.fn = m1.F.size();
 	floorgroupGrass.dmap = new GsModel::Texture;
 	floorgroupRoad.dmap = new GsModel::Texture;
-	if (moveCount < 5)
+	if (!level2) {
 		floorgroupGrass.dmap->fname.set("../src/Models_and_Textures/grass.png");
-	if (moveCount >= 5)
-		floorgroupGrass.dmap->fname.set("../src/Models_and_Textures/Netherrack.png");
+	}
+	if (level2) {
+		floorgroupGrass.dmap->fname.set("../src/Models_and_Textures/sand.jpg");
+	}
 	floorgroupRoad.dmap->fname.set("../src/Models_and_Textures/road.jpg");
 
 	floorgroupGrass1.fi = 0;
@@ -190,7 +264,12 @@ void MyViewer::build_scene()
 	floorgroupRoad1.fn = m3.F.size();
 	floorgroupGrass1.dmap = new GsModel::Texture;
 	floorgroupRoad1.dmap = new GsModel::Texture;
-	floorgroupGrass1.dmap->fname.set("../src/Models_and_Textures/grass.png");
+	if (!level2) {
+		floorgroupGrass1.dmap->fname.set("../src/Models_and_Textures/grass.png");
+	}
+	if (level2) {
+		floorgroupGrass1.dmap->fname.set("../src/Models_and_Textures/sand.jpg");
+	}
 	floorgroupRoad1.dmap->fname.set("../src/Models_and_Textures/road.jpg");
 
 	floorgroupGrass2.fi = 0;
@@ -199,7 +278,12 @@ void MyViewer::build_scene()
 	floorgroupRoad2.fn = m5.F.size();
 	floorgroupGrass2.dmap = new GsModel::Texture;
 	floorgroupRoad2.dmap = new GsModel::Texture;
-	floorgroupGrass2.dmap->fname.set("../src/Models_and_Textures/grass.png");
+	if (!level2) {
+		floorgroupGrass2.dmap->fname.set("../src/Models_and_Textures/grass.png");
+	}
+	if (level2) {
+		floorgroupGrass2.dmap->fname.set("../src/Models_and_Textures/sand.jpg");
+	}
 	floorgroupRoad2.dmap->fname.set("../src/Models_and_Textures/road.jpg");
 
 	floorgroupGrass3.fi = 0;
@@ -208,7 +292,12 @@ void MyViewer::build_scene()
 	floorgroupRoad3.fn = m7.F.size();
 	floorgroupGrass3.dmap = new GsModel::Texture;
 	floorgroupRoad3.dmap = new GsModel::Texture;
-	floorgroupGrass3.dmap->fname.set("../src/Models_and_Textures/grass.png");
+	if (!level2) {
+		floorgroupGrass3.dmap->fname.set("../src/Models_and_Textures/grass.png");
+	}
+	if (level2) {
+		floorgroupGrass3.dmap->fname.set("../src/Models_and_Textures/sand.jpg");
+	}
 	floorgroupRoad3.dmap->fname.set("../src/Models_and_Textures/road.jpg");
 
 	floorgroupGrass4.fi = 0;
@@ -217,7 +306,12 @@ void MyViewer::build_scene()
 	floorgroupRoad4.fn = m9.F.size();
 	floorgroupGrass4.dmap = new GsModel::Texture;
 	floorgroupRoad4.dmap = new GsModel::Texture;
-	floorgroupGrass4.dmap->fname.set("../src/Models_and_Textures/grass.png");
+	if (!level2) {
+		floorgroupGrass4.dmap->fname.set("../src/Models_and_Textures/grass.png");
+	}
+	if (level2) {
+		floorgroupGrass4.dmap->fname.set("../src/Models_and_Textures/sand.jpg");
+	}
 	floorgroupRoad4.dmap->fname.set("../src/Models_and_Textures/road.jpg");
 
 	m0.M.push().init();
@@ -514,7 +608,7 @@ void MyViewer::build_scene()
 	pinetree4->color(GsColor::darkgreen);
 	pinetree4->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	pinetree4->model()->rotate(GsQuat(GsVec::j, gspidiv2));
-	pinetree4->model()->translate(GsVec(50, (b1.dy() / 2) + 4, 130));
+	pinetree4->model()->translate(GsVec(50, float(b1.dy() / 2) + 4, 130));
 	floortrans[6]->add(pinetree4);
 	SnModel* pinetrees5 = new SnModel;
 	pinetrees5->model()->load_obj("../src/Models_and_Textures/pinetrees.obj");
@@ -524,10 +618,10 @@ void MyViewer::build_scene()
 	pinetrees5->color(GsColor::darkgreen);
 	pinetrees5->model()->rotate(GsQuat(GsVec::i, -gspidiv2));
 	pinetrees5->model()->rotate(GsQuat(GsVec::j, -gspidiv2));
-	pinetrees5->model()->translate(GsVec(-40, (b1.dy() / 2) + 4, 170));
+	pinetrees5->model()->translate(GsVec(-40, float(b1.dy() / 2) + 4, 170));
 	floortrans[8]->add(pinetrees5);
 
-	float carScale = 0.05;
+	float carScale = 0.05f;
 	//CARS
 	SnGroup* carG1 = new SnGroup;
 	carG1->separator(true);
@@ -559,7 +653,7 @@ void MyViewer::build_scene()
 	floortrans[1]->add(carG1);
 
 	SnGroup* carG2 = new SnGroup;
-	float car2scale = 0.03;
+	float car2scale = 0.03f;
 	carG2->separator(true);
 	car2->model()->load_obj("../src/Models_and_Textures/car2.obj");
 	car2->model()->centralize();
@@ -1239,7 +1333,7 @@ void MyViewer::run_animation()
 	{
 		if (BirdPos < 10) { BirdPos++; }
 		if (BirdPos >= 10) { BirdPos = 0; }
-		gsout << BirdPos << gsnl;
+		//gsout << BirdPos << gsnl;
 		while (ti - lt < frdt) { ws_check(); ti = gs_time() - t0; } // wait until it is time for next frame
 		lt = ti;
 		int cnt = 0;
@@ -1374,7 +1468,7 @@ void MyViewer::run_animation()
 			carM[1].translation(car2x, car2y, car2z);
 			carT[1]->set(carM[1]);
 
-			float car3Inc = 2.1;
+			float car3Inc = 2.1f;
 			if (car3x > 300) {
 				car3x = -300;
 			}
@@ -1444,6 +1538,12 @@ void MyViewer::run_animation()
 		floormoveshadowT[moveCount%10]->get().mult(floormoveshadowT[moveCount%10]->get(), perspective_trans2);
 	}
 
+	//enter level 2
+	if (moveCount == 18 && level2 == false) {
+		level2 = true;
+		build_scene();
+	}
+
 	//animate bird above scene while floor is not moving
 	do {
 		if (car1x < 5 && car1x > -5 && BirdPos == 2) {
@@ -1464,7 +1564,7 @@ void MyViewer::run_animation()
 		if (car5x < 5 && car5x > -5 && BirdPos == 0) {
 			gsout << "COLLISION" << gsnl;
 		}
-		gsout << BirdPos << gsnl;
+		//gsout << BirdPos << gsnl;
 		double frdt = 1.0 / 60.0; // delta time to reach given number of frames per second
 		double v = 4; // target velocity is 1 unit per second
 		double t = 0, lt = 0, t0 = gs_time();
@@ -1510,7 +1610,7 @@ void MyViewer::run_animation()
 		carM[1].translation(car2x, car2y, car2z);
 		carT[1]->set(carM[1]);
 
-		float car3Inc = 2.1;
+		float car3Inc = 2.1f;
 		if (car3x > 300) {
 			car3x = -300;
 		}

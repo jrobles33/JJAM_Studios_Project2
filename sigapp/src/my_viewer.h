@@ -26,7 +26,7 @@ public:
 	GsBox b1, b2;
 	float floorz;
 	int moveCount = -2, zmove = 0;
-	
+	bool level2;
 	float floorX = 350.0f, floorY = 0.0f, floorZP = 20.0f, floorZN = 0.0f;
 
 	//Car Stuff
