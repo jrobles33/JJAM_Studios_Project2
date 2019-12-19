@@ -42,7 +42,7 @@ MyViewer::MyViewer(int x, int y, int w, int h, const char* l) : WsViewer(x, y, w
 
 	build_ui();
 	build_scene();
-	gsout << camera() << gsnl;
+
 
 }
 
@@ -1204,10 +1204,6 @@ void MyViewer::build_scene()
 	fencecopy10->model()->translate(GsVec(90, (b2.dy() / 2) - 1, 170));
 	floortransshadow[8]->add(fencecopy10);
 
-	//Nature and other objects in scene
-	//SnGroup* nature = new SnGroup;
-	//nature->separator(true);
-
 	if (!level2) {
 		SnModel* treecopy1 = new SnModel;
 		treecopy1->model()->load_obj("../src/Models_and_Textures/Lowpoly_tree_sample.obj");
@@ -1442,7 +1438,7 @@ void MyViewer::build_scene()
 	floortransshadow[1]->add(carShadowG1);
 
 	SnGroup* carShadowG2 = new SnGroup;
-	car2scale = 0.03;
+	car2scale = 0.03f;
 	carShadowG2->separator(true);
 	carShadow2->model()->load_obj("../src/Models_and_Textures/car2.obj");
 	carShadow2->model()->centralize();
@@ -1723,22 +1719,8 @@ void MyViewer::update_camera() {
 // Below is an example of how to control the main loop of an animation:
 void MyViewer::run_animation()
 {
-	//camera settings
-	//camera().center.x = 0;
-	//camera().center.y = 0;
-	//camera().center.z = -35;
-	//camera().eye.x = 0;
-	//camera().eye.y = 35;
-	//camera().eye.z = 10;
-	//camera().fovy = gspidiv2;
-
-	//score status
-	if (score > highscore) {
-		highscore = score;
-	}
-
-	message().setf("SCORE: % i HIGH SCORE: % i", score, highscore);
-	message_color(GsColor::cyan);
+	message().setf("SCORE: % i", score);
+	message_color(GsColor::yellow);
 
 	if (_animating) return; // avoid recursive calls
 	_animating = true;
@@ -1959,7 +1941,7 @@ void MyViewer::run_animation()
 			carShadowM[1].translation(carshadow2x, carshadow2y, carshadow2z);
 			carShadowT[1]->set(carShadowM[1]);
 
-			float carShadowInc3 = 2.1;
+			float carShadowInc3 = 2.1f;
 			if (carshadow3x > 300) {
 				carshadow3x = -300;
 			}
@@ -2140,7 +2122,7 @@ void MyViewer::run_animation()
 		carShadowM[1].translation(carshadow2x, carshadow2y, carshadow2z);
 		carShadowT[1]->set(carShadowM[1]);
 
-		float carShadow3Inc = 2.1;
+		float carShadow3Inc = 2.1f;
 		if (carshadow3x > 300) {
 			carshadow3x = -300;
 		}
@@ -2218,14 +2200,9 @@ int MyViewer::handle_keyboard(const GsEvent & e)
 		camera().eye.z = 10;
 		camera().fovy = gspidiv2; run_animation(); render(); return 1;
 	case 65362: if (GameOver == false) { {if (_animating == false) { if (moveCount % 2 != 0) { score += 1; } forward = true; moveCount++; run_animation(); render(); } break; } }
-	default: gsout << "Key pressed: " << e.key << gsnl;
+	default: return 0;
 	}
-	/*if (update)
-	{
-		_gLight->get<SnTransform>(0)->get().setrans(lightPos);
-		update_shadow();
-	}
-*/
+
 	return 0;
 	return 0;
 }
