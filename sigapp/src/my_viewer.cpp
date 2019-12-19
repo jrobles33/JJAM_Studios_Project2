@@ -13,6 +13,7 @@ double tmd = 0;
 float i = 0.0001f;
 MyViewer::MyViewer(int x, int y, int w, int h, const char* l) : WsViewer(x, y, w, h, l)
 {
+	GameOver = false;
 	_nbut = 0;
 	BirdPos = 0;
 	_animating = false;
@@ -41,6 +42,7 @@ MyViewer::MyViewer(int x, int y, int w, int h, const char* l) : WsViewer(x, y, w
 
 	build_ui();
 	build_scene();
+	gsout << camera() << gsnl;
 
 }
 
@@ -159,6 +161,39 @@ void MyViewer::build_scene()
 	menuM.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
 	menuM.textured = true;
 	rootg()->add(menu);
+
+	//Game Over Screen
+	GameOverScreen = new SnModel;
+	GsPnt p000 = GsVec(-40, 40, -10);
+	GsPnt p001 = GsVec(-35, 1, 10);
+	GsPnt p002 = GsVec(40, 1, 10);
+	GsPnt p003 = GsVec(40, 40, -10);
+	GameOverScreen->model()->V.push() = p000;
+	GameOverScreen->model()->V.push() = p001;
+	GameOverScreen->model()->V.push() = p002;
+	GameOverScreen->model()->V.push() = p003;
+	GameOverScreen->model()->F.push() = GsModel::Face(0, 1, 2);
+	GameOverScreen->model()->F.push() = GsModel::Face(0, 2, 3);
+	GameOverScreen->model()->N.push() = GsVec(0, 0, 1);
+	GameOverScreen->model()->N.push() = GsVec(0, 0, 1);
+	GameOverScreen->model()->N.push() = GsVec(0, 0, 1);
+	GameOverScreen->model()->N.push() = GsVec(0, 0, 1);
+	GsModel& GameOverM = *GameOverScreen->model();
+	GsModel::Group& GameOverG = *GameOverM.G.push();
+	GameOverG.fi = 0;
+	GameOverG.fn = GameOverM.F.size();
+	GameOverG.dmap = new GsModel::Texture;
+	GameOverG.dmap->fname.set("../src/Models_and_Textures/GameOver.png");
+	GameOverM.M.push().init();
+	GameOverM.T.size(nv1);
+	GameOverM.T[0].set(0, 1);
+	GameOverM.T[1].set(0, 0);
+	GameOverM.T[2].set(1, 0);
+	GameOverM.T[3].set(1, 1);
+	GameOverM.set_mode(GsModel::Smooth, GsModel::PerGroupMtl);
+	GameOverM.textured = true;
+	rootg()->add(GameOverScreen);
+	GameOverScreen->visible(false);
 
 	//floor stuff
 	SnModel* floorback = new SnModel;
@@ -1544,6 +1579,7 @@ void MyViewer::build_scene()
 	rootg()->add(flyT);
 	rootg()->add(flyWhole);
 	rootg()->add(cloudAll);
+	
 }
 
 void MyViewer::SceneMovement() {
@@ -1573,17 +1609,21 @@ void MyViewer::SceneMovement() {
 	}
 }
 
+void MyViewer::update_camera() {
+
+}
+
 // Below is an example of how to control the main loop of an animation:
 void MyViewer::run_animation()
 {
 	//camera settings
-	camera().center.x = 0;
-	camera().center.y = 0;
-	camera().center.z = -35;
-	camera().eye.x = 0;
-	camera().eye.y = 35;
-	camera().eye.z = 10;
-	camera().fovy = gspidiv2;
+	//camera().center.x = 0;
+	//camera().center.y = 0;
+	//camera().center.z = -35;
+	//camera().eye.x = 0;
+	//camera().eye.y = 35;
+	//camera().eye.z = 10;
+	//camera().fovy = gspidiv2;
 
 	//score status
 	if (moveCount % 2 != 0) {
@@ -1773,19 +1813,29 @@ void MyViewer::run_animation()
 
 
 			if (car1x < 5 && car1x > -5 && BirdPos == 2) {
-				gsout << "COLLISION" << gsnl;
+				GameOver = true;
+				GameOverScreen->visible(true);
+
 			}
 			if (car2x < 5 && car2x > -5 && BirdPos == 4) {
-				gsout << "COLLISION" << gsnl;
+				GameOver = true;
+				GameOverScreen->visible(true);
+
 			}
 			if (car3x < 5 && car3x > -5 && BirdPos == 6) {
-				gsout << "COLLISION" << gsnl;
+				GameOver = true;
+				GameOverScreen->visible(true);
+
 			}
 			if (car4x < 5 && car4x > -5 && BirdPos == 8) {
-				gsout << "COLLISION" << gsnl;
+				GameOver = true;
+				GameOverScreen->visible(true);
+
 			}
 			if (car5x < 5 && car5x > -5 && BirdPos == 0) {
-				gsout << "COLLISION" << gsnl;
+				GameOver = true;
+				GameOverScreen->visible(true);
+
 			}
 
 
@@ -1826,22 +1876,31 @@ void MyViewer::run_animation()
 	//animate bird above scene while floor is not moving
 	do {
 		if (car1x < 5 && car1x > -5 && BirdPos == 2) {
-			gsout << "COLLISION" << gsnl;
+			GameOver = true;
+			GameOverScreen->visible(true);
+
 		}
 		if (car1x < 5 && car1x > -5 && BirdPos == 2) {
-			gsout << "COLLISION" << gsnl;
+			GameOver = true;
+			GameOverScreen->visible(true);
+
 		}
 		if (car2x < 5 && car2x > -5 && BirdPos == 4) {
-			gsout << "COLLISION" << gsnl;
+			GameOver = true;
+			GameOverScreen->visible(true);
 		}
 		if (car3x < 5 && car3x > -5 && BirdPos == 6) {
-			gsout << "COLLISION" << gsnl;
+			GameOver = true;
+			GameOverScreen->visible(true);
 		}
 		if (car4x < 5 && car4x > -5 && BirdPos == 8) {
-			gsout << "COLLISION" << gsnl;
+			GameOver = true;
+			GameOverScreen->visible(true);
 		}
 		if (car5x < 5 && car5x > -5 && BirdPos == 0) {
-			gsout << "COLLISION" << gsnl;
+			GameOver = true;
+			GameOverScreen->visible(true);
+
 		}
 		//gsout << BirdPos << gsnl;
 		double frdt = 1.0 / 60.0; // delta time to reach given number of frames per second
@@ -1971,7 +2030,7 @@ int MyViewer::handle_keyboard(const GsEvent& e)
 		camera().eye.y = 35;
 		camera().eye.z = 10;
 		camera().fovy = gspidiv2; run_animation(); render(); return 1;
-	case 65362: {if (_animating == false) { if (moveCount % 2 != 0) { score += 1; } forward = true; moveCount++; run_animation(); render(); } break; }
+	case 65362: if (GameOver == false) { {if (_animating == false) { if (moveCount % 2 != 0) { score += 1; } forward = true; moveCount++; run_animation(); render(); } break; } }
 	default: gsout << "Key pressed: " << e.key << gsnl;
 	}
 	/*if (update)

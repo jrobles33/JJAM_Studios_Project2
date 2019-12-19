@@ -6,10 +6,12 @@
 # include <sigogl/ui_button.h>
 # include <sigogl/ws_viewer.h>
 #include <sig/sn_shape.h>
+#include <sig/sn_model.h>
 
 // Viewer for this example:
 class MyViewer : public WsViewer {
 protected:
+	bool GameOver;
 	bool _animating;
 	enum MenuEv { EvNormals, EvAnimate, EvExit };
 	UiCheckButton* _nbut;
@@ -37,6 +39,9 @@ public:
 	GsMat GlobalCarM; //global car matrix
 	GsMat carM[5]; //individual car Matrices 
 	GsBox c1, c2, c3, c4, c5;
+
+	//GameOver Menu
+	SnModel* GameOverScreen;
 
 	//player bird stuff
 	int BirdPos;
@@ -74,6 +79,7 @@ public:
 	void build_scene();
 	//void update_shadow();
 	void SceneMovement();
+	void update_camera();
 	void show_normals(bool view);
 	void run_animation();
 	virtual int handle_keyboard(const GsEvent& e) override;
